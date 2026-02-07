@@ -1,4 +1,4 @@
-// Hello World in Banglang
+// Hello World in BanglaCode
 dekho("Hello, West Bengal!");
 dekho("Namaskar!");
 
@@ -6,3 +6,8 @@ dekho("Namaskar!");
 dhoro naam = "Ankan";
 dhoro boyosh = 25;
 dekho("Amar naam", naam, "ebong ami", boyosh, "bochhor boyoshi");
+
+// Type conversion
+dekho("Type of naam:", dhoron(naam));
+dekho("Type of boyosh:", dhoron(boyosh));
+dekho("boyosh as lipi:", lipi(boyosh));

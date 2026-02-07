@@ -508,7 +508,7 @@ kaj handleRequest(req, res) {
     res["body"] = "Hello from BanglaCode!";
 }
 
-http_server(3000, handleRequest);
+server_chalu(3000, handleRequest);
 ```
 
 ### Request Object
@@ -545,7 +545,7 @@ kaj handleRequest(req, res) {
     }
 }
 
-http_server(3000, handleRequest);
+server_chalu(3000, handleRequest);
 ```
 
 ### HTTP Client
@@ -553,7 +553,7 @@ http_server(3000, handleRequest);
 Make HTTP requests:
 
 ```banglacode
-dhoro response = http_get("https://api.example.com/data");
+dhoro response = anun("https://api.example.com/data");
 dekho("Status:", response["status"]);
 dekho("Body:", response["body"]);
 ```
@@ -581,16 +581,16 @@ dekho(fruits[1]);  // Output: Kola
 ### Array Operations
 ```banglacode
 // Get length
-dhoro len = length(fruits);
+dhoro len = dorghyo(fruits);
 
 // Add element
-push(fruits, "Peyara");
+dhokao(fruits, "Peyara");
 
 // Remove last element
-dhoro last = pop(fruits);
+dhoro last = berKoro(fruits);
 
 // Iterate over array
-ghuriye (dhoro i = 0; i < length(fruits); i = i + 1) {
+ghuriye (dhoro i = 0; i < dorghyo(fruits); i = i + 1) {
     dekho(fruits[i]);
 }
 ```
@@ -620,14 +620,14 @@ person["country"] = "West Bengal";
 
 ### Getting Keys
 ```banglacode
-dhoro allKeys = keys(person);
-dekho(allKeys);  // Output: ["naam", "boyosh", "city", "country"]
+dhoro sobChabi = chabi(person);
+dekho(sobChabi);  // Output: ["naam", "boyosh", "city", "country"]
 ```
 
 ### Iterating Over Maps
 ```banglacode
-dhoro personKeys = keys(person);
-ghuriye (dhoro i = 0; i < length(personKeys); i = i + 1) {
+dhoro personKeys = chabi(person);
+ghuriye (dhoro i = 0; i < dorghyo(personKeys); i = i + 1) {
     dhoro key = personKeys[i];
     dekho(key, ":", person[key]);
 }
@@ -645,134 +645,134 @@ dekho("Multiple", "values", "at", "once");
 ```
 
 ### Type Functions
-- `type(x)` - Get type of value
-- `string(x)` - Convert to string
-- `number(x)` - Convert to number
-- `length(x)` - Get length of string/array
+- `dhoron(x)` - ধরন - Get type of value
+- `lipi(x)` - লিপি - Convert to string
+- `sonkha(x)` - সংখ্যা - Convert to number
+- `dorghyo(x)` - দৈর্ঘ্য - Get length of string/array
 
 ```banglacode
-dekho(type(42));           // Output: NUMBER
-dekho(type("hello"));      // Output: STRING
-dekho(string(123));        // Output: "123"
-dekho(number("456"));      // Output: 456
-dekho(length("West Bengal")); // Output: 10
+dekho(dhoron(42));           // Output: NUMBER
+dekho(dhoron("hello"));      // Output: STRING
+dekho(lipi(123));            // Output: "123"
+dekho(sonkha("456"));        // Output: 456
+dekho(dorghyo("West Bengal")); // Output: 10
 ```
 
 ### Array Functions
-- `push(array, value)` - Add element to array
-- `pop(array)` - Remove and return last element
-- `length(array)` - Get array length
+- `dhokao(array, value)` - ঢোকাও - Add element to array
+- `berKoro(array)` - বের করো - Remove and return last element
+- `dorghyo(array)` - দৈর্ঘ্য - Get array length
 
 ```banglacode
 dhoro arr = [1, 2, 3];
-push(arr, 4);
-dekho(arr);        // Output: [1, 2, 3, 4]
-dhoro last = pop(arr);
-dekho(last);       // Output: 4
-dekho(length(arr)); // Output: 3
+dhokao(arr, 4);
+dekho(arr);           // Output: [1, 2, 3, 4]
+dhoro last = berKoro(arr);
+dekho(last);          // Output: 4
+dekho(dorghyo(arr));  // Output: 3
 ```
 
 ### Map Functions
-- `keys(map)` - Get array of keys
+- `chabi(map)` - চাবি - Get array of keys
 
 ```banglacode
 dhoro obj = {"a": 1, "b": 2};
-dhoro k = keys(obj);
+dhoro k = chabi(obj);
 dekho(k);  // Output: ["a", "b"]
 ```
 
 ### Math Functions
-- `sqrt(x)` - Square root
-- `pow(base, exp)` - Power
-- `floor(x)` - Round down
-- `ceil(x)` - Round up
-- `round(x)` - Round to nearest
-- `abs(x)` - Absolute value
-- `min(a, b, ...)` - Minimum value
-- `max(a, b, ...)` - Maximum value
-- `random()` - Random number between 0 and 1
+- `borgomul(x)` - বর্গমূল - Square root
+- `ghat(base, exp)` - ঘাত - Power
+- `niche(x)` - নিচে - Round down (floor)
+- `upore(x)` - উপরে - Round up (ceil)
+- `kache(x)` - কাছে - Round to nearest
+- `niratek(x)` - নিরপেক্ষ - Absolute value
+- `choto(a, b, ...)` - ছোট - Minimum value
+- `boro(a, b, ...)` - বড় - Maximum value
+- `lotto()` - লটো - Random number between 0 and 1
 
 ```banglacode
-dekho(sqrt(16));        // Output: 4
-dekho(pow(2, 3));       // Output: 8
-dekho(floor(4.7));      // Output: 4
-dekho(ceil(4.2));       // Output: 5
-dekho(round(4.5));      // Output: 5
-dekho(abs(-10));        // Output: 10
-dekho(min(5, 2, 8));    // Output: 2
-dekho(max(5, 2, 8));    // Output: 8
-dekho(random());        // Output: 0.xxx (random)
+dekho(borgomul(16));     // Output: 4
+dekho(ghat(2, 3));       // Output: 8
+dekho(niche(4.7));       // Output: 4
+dekho(upore(4.2));       // Output: 5
+dekho(kache(4.5));       // Output: 5
+dekho(niratek(-10));     // Output: 10
+dekho(choto(5, 2, 8));   // Output: 2
+dekho(boro(5, 2, 8));    // Output: 8
+dekho(lotto());          // Output: 0.xxx (random)
 ```
 
 ### String Functions
-- `upper(str)` - Convert to uppercase
-- `lower(str)` - Convert to lowercase
-- `trim(str)` - Remove leading/trailing whitespace
-- `split(str, separator)` - Split string into array
-- `join(array, separator)` - Join array into string
-- `indexOf(str, substring)` - Find index of substring (-1 if not found)
-- `substring(str, start, end)` - Extract substring
-- `replace(str, old, new)` - Replace all occurrences
+- `boroHater(str)` - বড় হাতের - Convert to uppercase
+- `chotoHater(str)` - ছোট হাতের - Convert to lowercase
+- `chhanto(str)` - ছাঁটো - Remove leading/trailing whitespace
+- `bhag(str, separator)` - ভাগ - Split string into array
+- `joro(array, separator)` - জোড়ো - Join array into string
+- `khojo(str, substring)` - খোঁজো - Find index of substring (-1 if not found)
+- `angsho(str, start, end)` - অংশ - Extract substring
+- `bodlo(str, old, new)` - বদলো - Replace all occurrences
 
 ```banglacode
-dekho(upper("hello"));           // Output: HELLO
-dekho(lower("WORLD"));           // Output: world
-dekho(trim("  hello  "));        // Output: hello
-dekho(split("a,b,c", ","));      // Output: [a, b, c]
-dekho(join(["a", "b"], "-"));    // Output: a-b
-dekho(indexOf("hello", "ll"));   // Output: 2
-dekho(substring("hello", 1, 4)); // Output: ell
-dekho(replace("hello", "l", "x")); // Output: hexxo
+dekho(boroHater("hello"));        // Output: HELLO
+dekho(chotoHater("WORLD"));       // Output: world
+dekho(chhanto("  hello  "));      // Output: hello
+dekho(bhag("a,b,c", ","));        // Output: [a, b, c]
+dekho(joro(["a", "b"], "-"));     // Output: a-b
+dekho(khojo("hello", "ll"));      // Output: 2
+dekho(angsho("hello", 1, 4));     // Output: ell
+dekho(bodlo("hello", "l", "x"));  // Output: hexxo
 ```
 
 ### Additional Array Functions
-- `slice(array, start, end)` - Extract subarray
-- `reverse(array)` - Reverse array (returns new array)
-- `sort(array)` - Sort array (returns new array)
-- `includes(array, value)` - Check if value exists in array
+- `kato(array, start, end)` - কাটো - Extract subarray
+- `ulto(array)` - উল্টো - Reverse array (returns new array)
+- `saja(array)` - সাজা - Sort array (returns new array)
+- `ache(array, value)` - আছে - Check if value exists in array
 
 ```banglacode
 dhoro arr = [3, 1, 4, 1, 5];
-dekho(slice(arr, 1, 3));    // Output: [1, 4]
-dekho(reverse(arr));        // Output: [5, 1, 4, 1, 3]
-dekho(sort(arr));           // Output: [1, 1, 3, 4, 5]
-dekho(includes(arr, 4));    // Output: true
-dekho(includes(arr, 9));    // Output: false
+dekho(kato(arr, 1, 3));     // Output: [1, 4]
+dekho(ulto(arr));           // Output: [5, 1, 4, 1, 3]
+dekho(saja(arr));           // Output: [1, 1, 3, 4, 5]
+dekho(ache(arr, 4));        // Output: sotti
+dekho(ache(arr, 9));        // Output: mittha
 ```
 
 ### Utility Functions
-- `time()` - Current timestamp in milliseconds
-- `sleep(ms)` - Pause execution for milliseconds
-- `input(prompt)` - Read user input from console
-- `exit(code)` - Exit program with code
+- `somoy()` - সময় - Current timestamp in milliseconds
+- `ghum(ms)` - ঘুম - Pause execution for milliseconds
+- `nao(prompt)` - নাও - Read user input from console
+- `bondho(code)` - বন্ধ - Exit program with code
 
 ```banglacode
-dekho(time());              // Output: 1234567890123
-sleep(1000);                // Pauses for 1 second
-dhoro name = input("Enter name: ");
-dekho("Hello", name);
+dekho(somoy());             // Output: 1234567890123
+ghum(1000);                 // Pauses for 1 second
+dhoro naam = nao("Tomar naam ki: ");
+dekho("Hello", naam);
 ```
 
 ### File Functions
-- `readFile(path)` - Read file contents as string
-- `writeFile(path, content)` - Write string to file
+- `poro(path)` - পড়ো - Read file contents as string
+- `lekho(path, content)` - লেখো - Write string to file
 
 ```banglacode
 // Write to file
-writeFile("output.txt", "Hello BanglaCode!");
+lekho("output.txt", "Hello BanglaCode!");
 
 // Read from file
-dhoro content = readFile("output.txt");
+dhoro content = poro("output.txt");
 dekho(content);  // Output: Hello BanglaCode!
 ```
 
 ### HTTP Functions
-- `http_server(port, handler)` - Start HTTP server
-- `http_get(url)` - Make HTTP GET request
+- `server_chalu(port, handler)` - সার্ভার চালু - Start HTTP server
+- `anun(url)` - আনুন - Make HTTP GET request
 
 ```banglacode
 // HTTP GET request
-dhoro response = http_get("https://api.example.com/data");
+dhoro response = anun("https://api.example.com/data");
 dekho(response["status"]);  // HTTP status code
 dekho(response["body"]);    // Response body
 ```

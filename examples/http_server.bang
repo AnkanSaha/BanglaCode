@@ -1,35 +1,25 @@
 // Example: HTTP Server in BanglaCode
-// This demonstrates how to create a web server like Node.js
+// Using server_chalu (সার্ভার চালু) builtin
 
-dekho("=== BanglaCode HTTP Server Example ===");
-dekho("");
+dekho("Starting HTTP Server...");
 
-// Define the request handler
 kaj handleRequest(req, res) {
-    dekho("Received request:", req["method"], req["path"]);
+    dekho("Request ashechhe:", req["method"], req["path"]);
     
-    // Handle different routes
     jodi (req["path"] == "/") {
-        res["body"] = "Welcome to BanglaCode Server! 🚀";
+        res["body"] = "Namaskar! BanglaCode server e swagat!";
         res["headers"]["Content-Type"] = "text/plain; charset=utf-8";
-    } nahole jodi (req["path"] == "/api/hello") {
-        res["body"] = "{\"message\": \"Namaskar from BanglaCode!\", \"status\": \"ok\"}";
+    } nahole jodi (req["path"] == "/api/info") {
+        res["body"] = "{\"name\": \"BanglaCode\", \"version\": \"2.0.0\", \"creator\": \"Ankan\", \"origin\": \"West Bengal, India\"}";
         res["headers"]["Content-Type"] = "application/json";
     } nahole jodi (req["path"] == "/api/time") {
-        res["body"] = "{\"timestamp\": " + string(time()) + "}";
+        res["body"] = "{\"timestamp\": " + lipi(somoy()) + "}";
         res["headers"]["Content-Type"] = "application/json";
     } nahole {
         res["status"] = 404;
-        res["body"] = "404 - Page Not Found";
+        res["body"] = "Page not found!";
     }
 }
 
-dekho("Starting server on port 3000...");
-dekho("Try visiting:");
-dekho("  - http://localhost:3000/");
-dekho("  - http://localhost:3000/api/hello");
-dekho("  - http://localhost:3000/api/time");
-dekho("");
-
-// Start the HTTP server
-http_server(3000, handleRequest);
+// Start server on port 3000
+server_chalu(3000, handleRequest);

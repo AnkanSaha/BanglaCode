@@ -169,7 +169,7 @@ kaj handleRequest(req, res) {
     res["body"] = "Hello from BanglaCode!";
 }
 
-http_server(3000, handleRequest);
+server_chalu(3000, handleRequest);
 ```
 
 ## Keywords Reference
@@ -201,62 +201,62 @@ http_server(3000, handleRequest);
 | `shesh` | finally | `shesh { }` |
 | `felo` | throw | `felo "error";` |
 
-## Built-in Functions
+## Built-in Functions (সব Banglish নামে)
 
-### Output
-- `dekho(...)` - Print values
+### Output (আউটপুট)
+- `dekho(...)` - দেখো - Print values
 
-### Type Conversion
-- `type(x)` - Get type of value
-- `string(x)` - Convert to string
-- `number(x)` - Convert to number
-- `length(x)` - Get length of string/array
+### Type Conversion (ধরন পরিবর্তন)
+- `dhoron(x)` - ধরন - Get type of value
+- `lipi(x)` - লিপি - Convert to string
+- `sonkha(x)` - সংখ্যা - Convert to number
+- `dorghyo(x)` - দৈর্ঘ্য - Get length of string/array
 
-### String Functions
-- `upper(str)` - Convert to uppercase
-- `lower(str)` - Convert to lowercase
-- `trim(str)` - Remove whitespace
-- `split(str, sep)` - Split string into array
-- `join(arr, sep)` - Join array into string
-- `indexOf(str, substr)` - Find substring index
-- `substring(str, start, end)` - Extract substring
-- `replace(str, old, new)` - Replace substring
+### String Functions (লেখা সম্পর্কিত)
+- `boroHater(str)` - বড় হাতের - Convert to uppercase
+- `chotoHater(str)` - ছোট হাতের - Convert to lowercase
+- `chhanto(str)` - ছাঁটো - Remove whitespace
+- `bhag(str, sep)` - ভাগ - Split string into array
+- `joro(arr, sep)` - জোড়ো - Join array into string
+- `khojo(str, substr)` - খোঁজো - Find substring index
+- `angsho(str, start, end)` - অংশ - Extract substring
+- `bodlo(str, old, new)` - বদলো - Replace substring
 
-### Array Functions
-- `push(array, value)` - Add element to array
-- `pop(array)` - Remove and return last element
-- `slice(array, start, end)` - Extract subarray
-- `reverse(array)` - Reverse array
-- `sort(array)` - Sort array
-- `includes(array, value)` - Check if contains
+### Array Functions (তালিকা সম্পর্কিত)
+- `dhokao(array, value)` - ঢোকাও - Add element to array
+- `berKoro(array)` - বের করো - Remove and return last element
+- `kato(array, start, end)` - কাটো - Extract subarray
+- `ulto(array)` - উল্টো - Reverse array
+- `saja(array)` - সাজা - Sort array
+- `ache(array, value)` - আছে - Check if contains
 
-### Map Functions
-- `keys(map)` - Get array of keys
+### Map Functions (মানচিত্র সম্পর্কিত)
+- `chabi(map)` - চাবি - Get array of keys
 
-### Math Functions
-- `sqrt(x)` - Square root
-- `pow(base, exp)` - Power
-- `floor(x)` - Round down
-- `ceil(x)` - Round up
-- `round(x)` - Round to nearest
-- `abs(x)` - Absolute value
-- `min(a, b, ...)` - Minimum value
-- `max(a, b, ...)` - Maximum value
-- `random()` - Random number 0-1
+### Math Functions (গণিত সম্পর্কিত)
+- `borgomul(x)` - বর্গমূল - Square root
+- `ghat(base, exp)` - ঘাত - Power
+- `niche(x)` - নিচে - Round down
+- `upore(x)` - উপরে - Round up
+- `kache(x)` - কাছে - Round to nearest
+- `niratek(x)` - নিরপেক্ষ - Absolute value
+- `choto(a, b, ...)` - ছোট - Minimum value
+- `boro(a, b, ...)` - বড় - Maximum value
+- `lotto()` - লটো - Random number 0-1
 
-### Utility Functions
-- `time()` - Current timestamp in milliseconds
-- `sleep(ms)` - Sleep for milliseconds
-- `input(prompt)` - Read user input
-- `exit(code)` - Exit program
+### Utility Functions (সহায়ক)
+- `somoy()` - সময় - Current timestamp in milliseconds
+- `ghum(ms)` - ঘুম - Sleep for milliseconds
+- `nao(prompt)` - নাও - Read user input
+- `bondho(code)` - বন্ধ - Exit program
 
-### File Functions
-- `readFile(path)` - Read file contents
-- `writeFile(path, content)` - Write to file
+### File Functions (ফাইল সম্পর্কিত)
+- `poro(path)` - পড়ো - Read file contents
+- `lekho(path, content)` - লেখো - Write to file
 
-### HTTP Functions
-- `http_server(port, handler)` - Start HTTP server
-- `http_get(url)` - Make HTTP GET request
+### HTTP Functions (ওয়েব সম্পর্কিত)
+- `server_chalu(port, handler)` - সার্ভার চালু - Start HTTP server
+- `anun(url)` - আনুন - Make HTTP GET request
 
 ## Examples
 

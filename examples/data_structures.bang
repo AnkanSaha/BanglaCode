@@ -1,38 +1,38 @@
-// Arrays and Maps in Banglang
+// Arrays and Maps in BanglaCode
 
 // Arrays
-dekho("=== Arrays ===");
+dekho("=== Arrays (তালিকা) ===");
 dhoro fruits = ["Aam", "Kathal", "Lichu", "Kola"];
 dekho("Fruits:", fruits);
 dekho("First fruit:", fruits[0]);
-dekho("Array length:", length(fruits));
+dekho("Array length:", dorghyo(fruits));
 
 // Add items to array
-push(fruits, "Peyara");
-dekho("After push:", fruits);
+dhokao(fruits, "Peyara");
+dekho("After dhokao:", fruits);
 
 // Remove last item
-dhoro last = pop(fruits);
-dekho("Popped:", last);
-dekho("After pop:", fruits);
+dhoro last = berKoro(fruits);
+dekho("Removed:", last);
+dekho("After berKoro:", fruits);
 
 // Iterate over array
 dekho("\nAll fruits:");
-ghuriye (dhoro i = 0; i < length(fruits); i = i + 1) {
+ghuriye (dhoro i = 0; i < dorghyo(fruits); i = i + 1) {
     dekho(i + 1, ".", fruits[i]);
 }
 
 // Nested arrays
 dhoro matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 dekho("\nMatrix:");
-ghuriye (dhoro i = 0; i < length(matrix); i = i + 1) {
-    ghuriye (dhoro j = 0; j < length(matrix[i]); j = j + 1) {
+ghuriye (dhoro i = 0; i < dorghyo(matrix); i = i + 1) {
+    ghuriye (dhoro j = 0; j < dorghyo(matrix[i]); j = j + 1) {
         dekho("matrix[", i, "][", j, "] =", matrix[i][j]);
     }
 }
 
 // Maps (Objects)
-dekho("\n=== Maps ===");
+dekho("\n=== Maps (মানচিত্র) ===");
 dhoro person = {
     "naam": "Ankan",
     "boyosh": 25,
@@ -49,12 +49,12 @@ person["boyosh"] = 26;
 dekho("Updated age:", person["boyosh"]);
 
 // Get all keys
-dhoro personKeys = keys(person);
+dhoro personKeys = chabi(person);
 dekho("\nAll keys:", personKeys);
 
 // Iterate over map
 dekho("\nPerson details:");
-ghuriye (dhoro i = 0; i < length(personKeys); i = i + 1) {
+ghuriye (dhoro i = 0; i < dorghyo(personKeys); i = i + 1) {
     dhoro key = personKeys[i];
     dekho(key, ":", person[key]);
 }
@@ -74,11 +74,11 @@ dekho("\nStudent:", student["naam"]);
 dekho("Math marks:", student["marks"]["math"]);
 
 // Calculate total marks
-dhoro subjects = keys(student["marks"]);
+dhoro subjects = chabi(student["marks"]);
 dhoro total = 0;
-ghuriye (dhoro i = 0; i < length(subjects); i = i + 1) {
+ghuriye (dhoro i = 0; i < dorghyo(subjects); i = i + 1) {
     dhoro subject = subjects[i];
     total = total + student["marks"][subject];
 }
 dekho("Total marks:", total);
-dekho("Average:", total / length(subjects));
+dekho("Average:", total / dorghyo(subjects));

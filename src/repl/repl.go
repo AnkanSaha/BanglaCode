@@ -31,7 +31,7 @@ Type 'clear' to clear screen
 `
 
 const HELP = `
-BanglaCode Keywords:
+BanglaCode Keywords (কীওয়ার্ড):
   dhoro        - variable declaration (let/var)
   jodi         - if condition
   nahole       - else
@@ -56,31 +56,52 @@ BanglaCode Keywords:
   shesh        - finally block
   felo         - throw error
 
-Built-in Functions:
-  dekho(...)        - print values
-  length(x)         - get length of string/array
-  push(arr, val)    - add value to array
-  pop(arr)          - remove last value from array
-  keys(map)         - get keys of map
-  type(x)           - get type of value
-  string(x)         - convert to string
-  number(x)         - convert to number
+Built-in Functions (সাধারণ):
+  dekho(...)       - দেখো - print values
+  dorghyo(x)       - দৈর্ঘ্য - get length
+  dhokao(arr, val) - ঢোকাও - add to array
+  berKoro(arr)     - বের করো - remove last
+  chabi(map)       - চাবি - get keys
+  dhoron(x)        - ধরন - get type
+  lipi(x)          - লিপি - to string
+  sonkha(x)        - সংখ্যা - to number
 
-String Functions:
-  upper(s), lower(s), trim(s), split(s, sep), join(arr, sep)
-  indexOf(s, sub), substring(s, start, end), replace(s, old, new)
+String Functions (লেখা):
+  boroHater(s)     - বড় হাতের - uppercase
+  chotoHater(s)    - ছোট হাতের - lowercase
+  chhanto(s)       - ছাঁটো - trim
+  bhag(s, sep)     - ভাগ - split
+  joro(arr, sep)   - জোড়ো - join
+  khojo(s, sub)    - খোঁজো - indexOf
+  angsho(s, start, end) - অংশ - substring
+  bodlo(s, old, new)    - বদলো - replace
 
-Array Functions:
-  slice(arr, start, end), reverse(arr), sort(arr), includes(arr, val)
+Array Functions (তালিকা):
+  kato(arr, start, end) - কাটো - slice
+  ulto(arr)        - উল্টো - reverse
+  saja(arr)        - সাজা - sort
+  ache(arr, val)   - আছে - includes
 
-Math Functions:
-  sqrt(x), pow(base, exp), floor(x), ceil(x), round(x)
-  abs(x), min(...), max(...), random()
+Math Functions (গণিত):
+  borgomul(x)      - বর্গমূল - sqrt
+  ghat(base, exp)  - ঘাত - pow
+  niche(x)         - নিচে - floor
+  upore(x)         - উপরে - ceil
+  kache(x)         - কাছে - round
+  niratek(x)       - নিরপেক্ষ - abs
+  choto(...)       - ছোট - min
+  boro(...)        - বড় - max
+  lotto()          - লটো - random
 
-Utility Functions:
-  time(), sleep(ms), input(prompt), exit(code)
-  readFile(path), writeFile(path, content)
-  http_server(port, handler), http_get(url)
+Utility Functions (সহায়ক):
+  somoy()          - সময় - timestamp
+  ghum(ms)         - ঘুম - sleep
+  nao(prompt)      - নাও - input
+  bondho(code)     - বন্ধ - exit
+  poro(path)       - পড়ো - read file
+  lekho(path, content) - লেখো - write file
+  server_chalu(port, handler) - সার্ভার চালু - HTTP server
+  anun(url)        - আনুন - HTTP GET
 
 REPL Commands:
   help         - show this help

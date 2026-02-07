@@ -1,62 +1,85 @@
-// Example: New Built-in Functions in BanglaCode
-// Demonstrates string, array, and utility functions
+// Example: BanglaCode Built-in Functions Demo
+// All function names are in Banglish (pure Bengali)
 
 dekho("=== BanglaCode Built-in Functions Demo ===");
 dekho("");
 
 // ===== STRING FUNCTIONS =====
-dekho("--- String Functions ---");
+dekho("--- String Functions (লেখা সম্পর্কিত) ---");
 
 dhoro text = "  Hello, BanglaCode World!  ";
 dekho("Original:", "'" + text + "'");
-dekho("trim():", "'" + trim(text) + "'");
-dekho("upper():", upper("hello"));
-dekho("lower():", lower("HELLO"));
+dekho("chhanto():", "'" + chhanto(text) + "'");
+dekho("boroHater():", boroHater("hello"));
+dekho("chotoHater():", chotoHater("HELLO"));
 dekho("");
 
 dhoro sentence = "apple,banana,cherry,date";
 dekho("Original:", sentence);
-dhoro fruits = split(sentence, ",");
-dekho("split(','):", fruits);
-dekho("join(' | '):", join(fruits, " | "));
+dhoro fruits = bhag(sentence, ",");
+dekho("bhag(','):", fruits);
+dekho("joro(' | '):", joro(fruits, " | "));
 dekho("");
 
 dhoro message = "Hello World";
-dekho("indexOf('World'):", indexOf(message, "World"));
-dekho("substring(0, 5):", substring(message, 0, 5));
-dekho("replace('World', 'BanglaCode'):", replace(message, "World", "BanglaCode"));
+dekho("khojo('World'):", khojo(message, "World"));
+dekho("angsho(0, 5):", angsho(message, 0, 5));
+dekho("bodlo('World', 'BanglaCode'):", bodlo(message, "World", "BanglaCode"));
 dekho("");
 
 // ===== ARRAY FUNCTIONS =====
-dekho("--- Array Functions ---");
+dekho("--- Array Functions (তালিকা সম্পর্কিত) ---");
 
 dhoro numbers = [5, 2, 8, 1, 9, 3];
 dekho("Original:", numbers);
-dekho("sort():", sort(numbers));
-dekho("reverse():", reverse(numbers));
-dekho("slice(1, 4):", slice(numbers, 1, 4));
-dekho("includes(8):", includes(numbers, 8));
-dekho("includes(100):", includes(numbers, 100));
+dekho("saja():", saja(numbers));
+dekho("ulto():", ulto(numbers));
+dekho("kato(1, 4):", kato(numbers, 1, 4));
+dekho("ache(8):", ache(numbers, 8));
+dekho("ache(100):", ache(numbers, 100));
+dekho("");
+
+// ===== MATH FUNCTIONS =====
+dekho("--- Math Functions (গণিত সম্পর্কিত) ---");
+
+dekho("borgomul(16):", borgomul(16));
+dekho("ghat(2, 3):", ghat(2, 3));
+dekho("niche(4.7):", niche(4.7));
+dekho("upore(4.2):", upore(4.2));
+dekho("kache(4.5):", kache(4.5));
+dekho("niratek(-10):", niratek(-10));
+dekho("choto(5, 2, 8):", choto(5, 2, 8));
+dekho("boro(5, 2, 8):", boro(5, 2, 8));
 dekho("");
 
 // ===== UTILITY FUNCTIONS =====
-dekho("--- Utility Functions ---");
+dekho("--- Utility Functions (সহায়ক) ---");
 
-dekho("time():", time(), "ms");
-dekho("random():", random());
-dekho("random():", random());
+dekho("somoy():", somoy(), "ms");
+dekho("lotto():", lotto());
+dekho("lotto():", lotto());
+dekho("");
+
+// ===== TYPE FUNCTIONS =====
+dekho("--- Type Functions (ধরন সম্পর্কিত) ---");
+
+dekho("dhoron(42):", dhoron(42));
+dekho("dhoron('hello'):", dhoron("hello"));
+dekho("lipi(123):", lipi(123));
+dekho("sonkha('456'):", sonkha("456"));
+dekho("dorghyo('West Bengal'):", dorghyo("West Bengal"));
 dekho("");
 
 // ===== FILE OPERATIONS =====
-dekho("--- File Operations ---");
+dekho("--- File Operations (ফাইল সম্পর্কিত) ---");
 
 // Write a file
 dhoro content = "This is a test file created by BanglaCode!";
-writeFile("test_output.txt", content);
+lekho("test_output.txt", content);
 dekho("File written: test_output.txt");
 
 // Read the file back
-dhoro fileContent = readFile("test_output.txt");
+dhoro fileContent = poro("test_output.txt");
 dekho("File content:", fileContent);
 dekho("");
 
