@@ -31,7 +31,4 @@ export const metadata: Metadata = {
     site: "@banglacode",
     creator: "@nexoral",
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
 };

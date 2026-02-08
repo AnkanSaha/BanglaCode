@@ -7,6 +7,8 @@ import { Menu, X, Github } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
 
+import { DOCS_CONFIG } from "@/lib/docs-config";
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -62,20 +64,55 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-border p-4"
+          className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-border flex flex-col max-h-[calc(100vh-4rem)] overflow-y-auto"
         >
-          <div className="flex flex-col space-y-4">
+          <div className="p-4 space-y-4">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium hover:text-primary"
+                className={clsx(
+                  "block text-lg font-medium hover:text-primary",
+                  pathname === link.href ? "text-primary" : "text-foreground"
+                )}
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </Link>
             ))}
           </div>
+
+          {/* Docs Navigation for Mobile */}
+          {pathname?.startsWith("/docs") && (
+            <div className="p-4 border-t border-border bg-muted/10">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Documentation</h4>
+              <div className="space-y-6">
+                {DOCS_CONFIG.map((section) => (
+                  <div key={section.section}>
+                    <div className="flex items-center gap-2 mb-2 text-primary">
+                      <section.icon className="w-4 h-4" />
+                      <span className="font-semibold text-sm">{section.section}</span>
+                    </div>
+                    <div className="pl-6 space-y-2">
+                      {section.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={clsx(
+                            "block text-sm transition-colors",
+                            pathname === item.href ? "text-foreground font-medium" : "text-muted-foreground"
+                          )}
+                          onClick={() => setIsOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
     </nav>
