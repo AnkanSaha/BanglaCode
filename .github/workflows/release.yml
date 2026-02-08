@@ -97,6 +97,9 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.check_release.outputs.exists == 'false' }}
+      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -148,6 +151,10 @@ jobs:
             - `banglacode-linux-amd64.deb` - Debian/Ubuntu
             - `banglacode-linux-amd64.rpm` - Fedora/RHEL
             - `banglacode-linux-amd64.tgz` - Generic Linux
+
+            ### VSCode Extension
+            - Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=AnkanSaha.banglacode)
+            - Or download `banglacode-${{ steps.version.outputs.version }}.vsix` below
           files: |
             dist/banglacode-windows-amd64.zip
             dist/banglacode-windows-386.zip
@@ -160,3 +167,60 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-vscode-extension:
+    needs: release
+    if: needs.release.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if VSCode extension version changed
+        id: check_vscode
+        run: |
+          # Get current and previous version from package.json
+          CURRENT_VERSION=$(cat VSCode_Extension/package.json | grep '"version"' | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+
+          # Check if this version already exists on marketplace (will fail if not published yet)
+          # We'll publish if the release was just created
+          VERSION=$(cat VERSION)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "vscode_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Check if versions match (they should if versionController was used)
+          if [ "$VERSION" = "$CURRENT_VERSION" ]; then
+            echo "versions_match=true" >> $GITHUB_OUTPUT
+          else
+            echo "versions_match=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Install extension dependencies
+        working-directory: VSCode_Extension
+        run: npm install
+
+      - name: Package VSCode Extension
+        working-directory: VSCode_Extension
+        run: vsce package
+
+      - name: Publish to VS Code Marketplace
+        working-directory: VSCode_Extension
+        run: vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}
+
+      - name: Upload VSIX to Release
+        run: |
+          VERSION=$(cat VERSION)
+          VSIX_FILE=$(ls VSCode_Extension/*.vsix)
+          gh release upload "v$VERSION" "$VSIX_FILE" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

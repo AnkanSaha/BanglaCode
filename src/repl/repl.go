@@ -11,124 +11,155 @@ import (
 	"strings"
 )
 
-const PROMPT = ">> "
+const Version = "3.0.0"
 
-const BANNER = `
- ____                   _        _____          _
-|  _ \                 | |      / ____|        | |
-| |_) | __ _ _ __   __ | | __ _| |     ___   __| | ___
-|  _ < / _' | '_ \ / _' |/ _' | |    / _ \ / _' |/ _ \
-| |_) | (_| | | | | (_| | (_| | |___| (_) | (_| |  __/
-|____/ \__,_|_| |_|\__, |\__,_|\_____\___/ \__,_|\___|
-                    __/ |
-                   |___/
+const PROMPT = "\033[1;33m>> \033[0m"
 
-Welcome to BanglaCode - Bengali Programming Language
-Created by Ankan from West Bengal, India
-Type 'baire' or Ctrl+C to quit (বাইরে - exit)
-Type 'sahajjo' for a list of keywords (সাহায্য - help)
-Type 'mochho' to clear screen (মোছো - clear)
-`
+// Color codes
+const (
+	Reset     = "\033[0m"
+	Bold      = "\033[1m"
+	Dim       = "\033[2m"
+	Cyan      = "\033[1;36m"
+	Green     = "\033[1;32m"
+	Yellow    = "\033[1;33m"
+	Blue      = "\033[1;34m"
+	Magenta   = "\033[1;35m"
+	Red       = "\033[1;31m"
+	White     = "\033[1;37m"
+)
+
+func printBanner(out io.Writer) {
+	width := 70
+	line := strings.Repeat("═", width-2)
+
+	fmt.Fprintln(out)
+	fmt.Fprintf(out, "%s╔%s╗%s\n", Cyan, line, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s ____                   _        _____          _       %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s|  _ \\                 | |      / ____|        | |      %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s| |_) | __ _ _ __   __ | | __ _| |     ___   __| | ___  %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s|  _ < / _' | '_ \\ / _' |/ _' | |    / _ \\ / _' |/ _ \\ %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s| |_) | (_| | | | | (_| | (_| | |___| (_) | (_| |  __/ %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s|____/ \\__,_|_| |_|\\__, |\\__,_|\\_____\\___/ \\__,_|\\___| %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s                    __/ |                              %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s", Cyan, Reset)
+	fmt.Fprintf(out, "  %s                   |___/                               %s", Yellow, Reset)
+	fmt.Fprintf(out, "       %s║%s\n", Cyan, Reset)
+	fmt.Fprintf(out, "%s╠%s╣%s\n", Cyan, line, Reset)
+
+	// Tagline
+	tagline := "A PROGRAMMING LANGUAGE IN BENGALI (BANGLISH)"
+	padding := (width - 2 - len(tagline)) / 2
+	fmt.Fprintf(out, "%s║%s%s%s%s%s%s║%s\n", Cyan, Reset, strings.Repeat(" ", padding), White, tagline, strings.Repeat(" ", width-2-padding-len(tagline)), Cyan, Reset)
+
+	fmt.Fprintf(out, "%s╠%s╣%s\n", Cyan, line, Reset)
+
+	// Info section
+	fmt.Fprintf(out, "%s║%s  📦 %sVersion:%s      %s%-55s%s║%s\n", Cyan, Reset, Bold, Reset, Green, Version, Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  👨‍💻 %sAuthor:%s       %s%-55s%s║%s\n", Cyan, Reset, Bold, Reset, Magenta, "Ankan Saha", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  🌍 %sFrom:%s         %s%-55s%s║%s\n", Cyan, Reset, Bold, Reset, White, "West Bengal, India", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  🔗 %sGitHub:%s       %s%-55s%s║%s\n", Cyan, Reset, Bold, Reset, Blue, "https://github.com/nexoral/BanglaCode", Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  📄 %sLicense:%s      %s%-55s%s║%s\n", Cyan, Reset, Bold, Reset, White, "MIT License", Cyan, Reset)
+
+	fmt.Fprintf(out, "%s╠%s╣%s\n", Cyan, line, Reset)
+
+	// Commands section
+	fmt.Fprintf(out, "%s║%s  %ssahajjo%s   │ Show help & keywords                              %s║%s\n", Cyan, Reset, Blue, Reset, Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  %smochho%s    │ Clear screen                                      %s║%s\n", Cyan, Reset, Blue, Reset, Cyan, Reset)
+	fmt.Fprintf(out, "%s║%s  %sbaire%s     │ Exit REPL                                         %s║%s\n", Cyan, Reset, Blue, Reset, Cyan, Reset)
+
+	fmt.Fprintf(out, "%s╚%s╝%s\n", Cyan, line, Reset)
+	fmt.Fprintln(out)
+}
 
 const HELP = `
-BanglaCode Keywords (কীওয়ার্ড):
-  dhoro        - variable declaration (let/var)
-  jodi         - if condition
-  nahole       - else
-  jotokkhon    - while loop
-  ghuriye      - for loop
-  kaj          - function definition
-  ferao        - return statement
-  sreni        - শ্রেণী - class definition
-  notun        - new instance
-  shuru        - শুরু - constructor method
-  sotti        - true
-  mittha       - false
-  khali        - null
-  ebong        - logical and (&&)
-  ba           - logical or (||)
-  na           - logical not (!)
-  thamo        - break
-  chharo       - continue
-  ano          - import module
-  pathao       - export function/class
-  hisabe       - হিসাবে - import alias (as)
-  chesta       - try block
-  dhoro_bhul   - catch block
-  shesh        - finally block
-  felo         - throw error
+` + Cyan + `╔════════════════════════════════════════════════════════════════════╗
+║                        BanglaCode Help                             ║
+╚════════════════════════════════════════════════════════════════════╝` + Reset + `
 
-Built-in Functions (সাধারণ):
-  dekho(...)       - দেখো - print values
-  dorghyo(x)       - দৈর্ঘ্য - get length
-  dhokao(arr, val) - ঢোকাও - add to array
-  berKoro(arr)     - বের করো - remove last
-  chabi(map)       - চাবি - get keys
-  dhoron(x)        - ধরন - get type
-  lipi(x)          - লিপি - to string
-  sonkha(x)        - সংখ্যা - to number
+` + Yellow + `▸ Keywords:` + Reset + `
+  ` + Green + `dhoro` + Reset + `        variable declaration (let/var)
+  ` + Green + `jodi` + Reset + `         if condition
+  ` + Green + `nahole` + Reset + `       else
+  ` + Green + `jotokkhon` + Reset + `    while loop
+  ` + Green + `ghuriye` + Reset + `      for loop
+  ` + Green + `kaj` + Reset + `          function definition
+  ` + Green + `ferao` + Reset + `        return statement
+  ` + Green + `sreni` + Reset + `        class definition
+  ` + Green + `notun` + Reset + `        new instance
+  ` + Green + `shuru` + Reset + `        constructor
+  ` + Green + `sotti` + Reset + `        true
+  ` + Green + `mittha` + Reset + `       false
+  ` + Green + `khali` + Reset + `        null
+  ` + Green + `ebong` + Reset + `        logical and (&&)
+  ` + Green + `ba` + Reset + `           logical or (||)
+  ` + Green + `na` + Reset + `           logical not (!)
+  ` + Green + `thamo` + Reset + `        break
+  ` + Green + `chharo` + Reset + `       continue
+  ` + Green + `ano` + Reset + `          import module
+  ` + Green + `pathao` + Reset + `       export
+  ` + Green + `chesta` + Reset + `       try block
+  ` + Green + `dhoro_bhul` + Reset + `   catch block
+  ` + Green + `felo` + Reset + `         throw error
 
-String Functions (লেখা):
-  boroHater(s)     - বড় হাতের - uppercase
-  chotoHater(s)    - ছোট হাতের - lowercase
-  chhanto(s)       - ছাঁটো - trim
-  bhag(s, sep)     - ভাগ - split
-  joro(arr, sep)   - জোড়ো - join
-  khojo(s, sub)    - খোঁজো - indexOf
-  angsho(s, start, end) - অংশ - substring
-  bodlo(s, old, new)    - বদলো - replace
+` + Yellow + `▸ Built-in Functions:` + Reset + `
+  ` + Blue + `dekho(...)` + Reset + `       print values
+  ` + Blue + `dorghyo(x)` + Reset + `       get length
+  ` + Blue + `dhokao(arr,v)` + Reset + `    push to array
+  ` + Blue + `berKoro(arr)` + Reset + `     pop from array
+  ` + Blue + `dhoron(x)` + Reset + `        get type
+  ` + Blue + `lipi(x)` + Reset + `          to string
+  ` + Blue + `sonkha(x)` + Reset + `        to number
 
-Array Functions (তালিকা):
-  kato(arr, start, end) - কাটো - slice
-  ulto(arr)        - উল্টো - reverse
-  saja(arr)        - সাজা - sort
-  ache(arr, val)   - আছে - includes
+` + Yellow + `▸ String Functions:` + Reset + `
+  ` + Blue + `boroHater(s)` + Reset + `     uppercase
+  ` + Blue + `chotoHater(s)` + Reset + `    lowercase
+  ` + Blue + `chhanto(s)` + Reset + `       trim
+  ` + Blue + `bhag(s,sep)` + Reset + `      split
+  ` + Blue + `joro(arr,sep)` + Reset + `    join
+  ` + Blue + `khojo(s,sub)` + Reset + `     indexOf
 
-Math Functions (গণিত):
-  borgomul(x)      - বর্গমূল - sqrt
-  ghat(base, exp)  - ঘাত - pow
-  niche(x)         - নিচে - floor
-  upore(x)         - উপরে - ceil
-  kache(x)         - কাছে - round
-  niratek(x)       - নিরপেক্ষ - abs
-  choto(...)       - ছোট - min
-  boro(...)        - বড় - max
-  lotto()          - লটো - random
+` + Yellow + `▸ Math Functions:` + Reset + `
+  ` + Blue + `borgomul(x)` + Reset + `      sqrt
+  ` + Blue + `ghat(b,e)` + Reset + `        power
+  ` + Blue + `niche(x)` + Reset + `         floor
+  ` + Blue + `upore(x)` + Reset + `         ceil
+  ` + Blue + `kache(x)` + Reset + `         round
+  ` + Blue + `lotto()` + Reset + `          random
 
-Utility Functions (সহায়ক):
-  somoy()          - সময় - timestamp
-  ghum(ms)         - ঘুম - sleep
-  nao(prompt)      - নাও - input
-  bondho(code)     - বন্ধ - exit
-  poro(path)       - পড়ো - read file
-  lekho(path, content) - লেখো - write file
-  server_chalu(port, handler) - সার্ভার চালু - HTTP server
-  anun(url)        - আনুন - HTTP GET
+` + Yellow + `▸ Utility Functions:` + Reset + `
+  ` + Blue + `somoy()` + Reset + `          timestamp
+  ` + Blue + `ghum(ms)` + Reset + `         sleep
+  ` + Blue + `nao(prompt)` + Reset + `      user input
+  ` + Blue + `poro(path)` + Reset + `       read file
+  ` + Blue + `lekho(p,c)` + Reset + `       write file
+  ` + Blue + `server_chalu` + Reset + `     HTTP server
 
-JSON Functions (JSON):
-  json_poro(str)   - JSON পড়ো - parse JSON string to object
-  json_banao(obj)  - JSON বানাও - convert object to JSON string
+` + Cyan + `╔════════════════════════════════════════════════════════════════════╗
+║                            Example                                 ║
+╚════════════════════════════════════════════════════════════════════╝` + Reset + `
+  ` + Yellow + `>>` + Reset + ` dhoro naam = "Ankan"
+  ` + Yellow + `>>` + Reset + ` dekho("Namaskar", naam)
+  ` + Green + `Namaskar Ankan` + Reset + `
 
-HTTP Response Helpers (সার্ভার উত্তর):
-  uttor(res, body, [status], [contentType]) - উত্তর - simple response
-  json_uttor(res, data, [status])           - JSON উত্তর - JSON response
-
-REPL Commands (REPL কমান্ড):
-  sahajjo      - সাহায্য - show this help
-  mochho       - মোছো - clear screen
-  baire        - বাইরে - exit REPL
-
-Example:
-  >> dhoro naam = "Ankan"
-  >> dekho("Namaskar", naam)
-  Namaskar Ankan
-
-  >> sreni Manush {
-  ..     kaj shuru(naam) { ei.naam = naam; }
-  .. }
-  >> dhoro m = notun Manush("Rana")
-  >> dekho(m.naam)
-  Rana
+  ` + Yellow + `>>` + Reset + ` sreni Manush { kaj shuru(naam) { ei.naam = naam; } }
+  ` + Yellow + `>>` + Reset + ` dhoro m = notun Manush("Rana")
+  ` + Yellow + `>>` + Reset + ` dekho(m.naam)
+  ` + Green + `Rana` + Reset + `
 `
 
 // Start begins the REPL
@@ -136,7 +167,7 @@ func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	env := object.NewEnvironment()
 
-	fmt.Fprint(out, BANNER)
+	printBanner(out)
 
 	for {
 		fmt.Fprint(out, PROMPT)
@@ -150,7 +181,12 @@ func Start(in io.Reader, out io.Writer) {
 
 		// Handle special commands (Banglish and English aliases)
 		if line == "baire" || line == "exit" || line == "quit" {
-			fmt.Fprintln(out, "Dhonnobad! Abar dekha hobe! (Thank you! See you again!)")
+			fmt.Fprintln(out, Green)
+			fmt.Fprintln(out, "╔════════════════════════════════════════════╗")
+			fmt.Fprintln(out, "║  Dhonnobad! Abar dekha hobe!               ║")
+			fmt.Fprintln(out, "║  Thank you! See you again!                 ║")
+			fmt.Fprintln(out, "╚════════════════════════════════════════════╝")
+			fmt.Fprintln(out, Reset)
 			return
 		}
 
@@ -190,9 +226,9 @@ func Start(in io.Reader, out io.Writer) {
 				io.WriteString(out, evaluated.Inspect())
 				io.WriteString(out, "\n")
 			} else if evaluated.Type() == object.ERROR_OBJ {
-				io.WriteString(out, "\033[31m") // Red color
+				io.WriteString(out, Red)
 				io.WriteString(out, evaluated.Inspect())
-				io.WriteString(out, "\033[0m\n") // Reset color
+				io.WriteString(out, Reset+"\n")
 			}
 		}
 	}
@@ -222,17 +258,20 @@ func readMultiLine(scanner *bufio.Scanner, initial string) string {
 		if !needsMoreInput(builder.String()) {
 			break
 		}
-		fmt.Print(".. ")
+		fmt.Print(Yellow + ".. " + Reset)
 	}
 
 	return builder.String()
 }
 
 func printParserErrors(out io.Writer, errors []string) {
-	io.WriteString(out, "\033[31m") // Red color
-	io.WriteString(out, "Oops! Parser errors:\n")
+	io.WriteString(out, Red)
+	io.WriteString(out, "╔════════════════════════════════════════════╗\n")
+	io.WriteString(out, "║  Bhul! Parser Errors                       ║\n")
+	io.WriteString(out, "╚════════════════════════════════════════════╝\n")
+	io.WriteString(out, "\033[0;31m") // Regular Red
 	for _, msg := range errors {
-		io.WriteString(out, "\t"+msg+"\n")
+		io.WriteString(out, "  ▸ "+msg+"\n")
 	}
-	io.WriteString(out, "\033[0m") // Reset color
+	io.WriteString(out, Reset)
 }

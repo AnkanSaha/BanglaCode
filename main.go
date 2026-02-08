@@ -42,29 +42,40 @@ func main() {
 }
 
 func printHelp() {
-	help := `
-BanglaCode - Bengali Programming Language
-Created by Ankan from West Bengal, India
-
-Usage:
-  banglacode                  Start interactive REPL
-  banglacode <file.bang>      Execute a BanglaCode file
-  banglacode --help, -h       Show this help message
-  banglacode --version, -v    Show version information
-
-Examples:
-  banglacode                  # Start REPL
-  banglacode hello.bang       # Run hello.bang file
-
-For more information, see SYNTAX.md
-`
-	fmt.Println(help)
+	fmt.Println("\033[1;36m╔══════════════════════════════════════════════════════════════════╗")
+	fmt.Println("║                           BanglaCode                             ║")
+	fmt.Println("║           A Programming Language in Bengali (Banglish)           ║")
+	fmt.Println("╠══════════════════════════════════════════════════════════════════╣\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  👨‍💻 \033[1mAuthor:\033[0m  \033[1;35mAnkan Saha\033[0m                                          \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  🌍 \033[1mFrom:\033[0m    \033[1;37mWest Bengal, India\033[0m                                   \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m╠══════════════════════════════════════════════════════════════════╣\033[0m")
+	fmt.Println("")
+	fmt.Println("\033[1;33m▸ Usage:\033[0m")
+	fmt.Println("  \033[1;32mbanglacode\033[0m                  Start interactive REPL")
+	fmt.Println("  \033[1;32mbanglacode <file.bang>\033[0m      Execute a BanglaCode file")
+	fmt.Println("  \033[1;32mbanglacode --help, -h\033[0m       Show this help message")
+	fmt.Println("  \033[1;32mbanglacode --version, -v\033[0m    Show version information")
+	fmt.Println("")
+	fmt.Println("\033[1;33m▸ Examples:\033[0m")
+	fmt.Println("  \033[0;34m$\033[0m banglacode                  \033[2m# Start REPL\033[0m")
+	fmt.Println("  \033[0;34m$\033[0m banglacode hello.bang       \033[2m# Run hello.bang file\033[0m")
+	fmt.Println("")
+	fmt.Println("\033[1;36m╚══════════════════════════════════════════════════════════════════╝\033[0m")
+	fmt.Println("  📄 For more information, see \033[1;35mSYNTAX.md\033[0m")
+	fmt.Println("  🔗 GitHub: \033[1;34mhttps://github.com/nexoral/BanglaCode\033[0m")
 }
 
 func printVersion() {
-	fmt.Println("BanglaCode v2.0.0")
-	fmt.Println("Bengali Programming Language")
-	fmt.Println("Created by Ankan from West Bengal, India")
+	fmt.Println("\033[1;36m╔════════════════════════════════════════════════════════╗")
+	fmt.Println("║               BanglaCode v3.0.0                        ║")
+	fmt.Println("║     A Programming Language in Bengali (Banglish)      ║")
+	fmt.Println("╠════════════════════════════════════════════════════════╣\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  📦 \033[1mVersion:\033[0m      \033[1;32m3.0.0\033[0m                                 \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  👨‍💻 \033[1mAuthor:\033[0m       \033[1;35mAnkan Saha\033[0m                            \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  🌍 \033[1mFrom:\033[0m         \033[1;37mWest Bengal, India\033[0m                    \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  🔗 \033[1mGitHub:\033[0m       \033[1;34mhttps://github.com/nexoral/BanglaCode\033[0m \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  📄 \033[1mLicense:\033[0m      \033[1;37mMIT License\033[0m                           \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m╚════════════════════════════════════════════════════════╝\033[0m")
 }
 
 func runFile(filename string) {
