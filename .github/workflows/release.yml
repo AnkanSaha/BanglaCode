@@ -154,7 +154,6 @@ jobs:
 
             ### VSCode Extension
             - Install from [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=AnkanSaha.banglacode)
-            - Or download `banglacode-${{ steps.version.outputs.version }}.vsix` below
           files: |
             dist/banglacode-windows-amd64.zip
             dist/banglacode-windows-386.zip
@@ -220,24 +219,3 @@ jobs:
       - name: Publish to VS Code Marketplace
         working-directory: VSCode_Extension
         run: vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}
-
-      - name: Upload VSIX to Release
-        working-directory: VSCode_Extension
-        run: |
-          VERSION=$(cat ../VERSION)
-          VSIX_FILE="banglacode-${VERSION}.vsix"
-          echo "Looking for: $VSIX_FILE"
-          ls -la *.vsix || true
-          if [ -f "$VSIX_FILE" ]; then
-            gh release upload "v$VERSION" "$VSIX_FILE" --clobber
-          else
-            echo "Expected file not found, uploading first available vsix"
-            for f in *.vsix; do
-              if [ -f "$f" ]; then
-                gh release upload "v$VERSION" "$f" --clobber
-                break
-              fi
-            done
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

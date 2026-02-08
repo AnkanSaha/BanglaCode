@@ -22,6 +22,7 @@ VERSION_FILE="$PROJECT_ROOT/VERSION"
 VSCODE_PACKAGE="$PROJECT_ROOT/VSCode_Extension/package.json"
 MAIN_GO="$PROJECT_ROOT/main.go"
 REPL_GO="$PROJECT_ROOT/src/repl/repl.go"
+DOCS_PACKAGE="$PROJECT_ROOT/Documentation/package.json"
 
 # Get current version
 get_current_version() {
@@ -60,6 +61,11 @@ print_current_versions() {
     if [ -f "$REPL_GO" ]; then
         repl_ver=$(grep 'const Version' "$REPL_GO" | head -1 | sed 's/.*"\([^"]*\)".*/\1/')
         echo -e "  ${BLUE}repl.go:${NC}           $repl_ver"
+    fi
+
+    if [ -f "$DOCS_PACKAGE" ]; then
+        docs_ver=$(grep '"version"' "$DOCS_PACKAGE" | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+        echo -e "  ${BLUE}Documentation:${NC}     $docs_ver"
     fi
     echo ""
 }
@@ -118,6 +124,17 @@ update_repl_go() {
         echo -e "  ${GREEN}✓${NC} repl.go updated"
     else
         echo -e "  ${YELLOW}⚠${NC} repl.go not found"
+    fi
+}
+
+# Update Documentation package.json
+update_docs_package() {
+    local new_version=$1
+    if [ -f "$DOCS_PACKAGE" ]; then
+        sed -i "s/\"version\": *\"[^\"]*\"/\"version\": \"$new_version\"/" "$DOCS_PACKAGE"
+        echo -e "  ${GREEN}✓${NC} Documentation package.json updated"
+    else
+        echo -e "  ${YELLOW}⚠${NC} Documentation package.json not found"
     fi
 }
 
@@ -193,7 +210,9 @@ main() {
     update_version_file "$NEW_VERSION"
     update_vscode_package "$NEW_VERSION"
     update_main_go "$NEW_VERSION"
+    update_main_go "$NEW_VERSION"
     update_repl_go "$NEW_VERSION"
+    update_docs_package "$NEW_VERSION"
 
     echo ""
     echo -e "${GREEN}${BOLD}Version updated successfully!${NC}"
