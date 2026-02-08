@@ -209,6 +209,10 @@ jobs:
         working-directory: VSCode_Extension
         run: npm install
 
+      - name: Clean old VSIX files
+        working-directory: VSCode_Extension
+        run: rm -f *.vsix
+
       - name: Package VSCode Extension
         working-directory: VSCode_Extension
         run: vsce package
@@ -218,9 +222,22 @@ jobs:
         run: vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}
 
       - name: Upload VSIX to Release
+        working-directory: VSCode_Extension
         run: |
-          VERSION=$(cat VERSION)
-          VSIX_FILE=$(ls VSCode_Extension/*.vsix)
-          gh release upload "v$VERSION" "$VSIX_FILE" --clobber
+          VERSION=$(cat ../VERSION)
+          VSIX_FILE="banglacode-${VERSION}.vsix"
+          echo "Looking for: $VSIX_FILE"
+          ls -la *.vsix || true
+          if [ -f "$VSIX_FILE" ]; then
+            gh release upload "v$VERSION" "$VSIX_FILE" --clobber
+          else
+            echo "Expected file not found, uploading first available vsix"
+            for f in *.vsix; do
+              if [ -f "$f" ]; then
+                gh release upload "v$VERSION" "$f" --clobber
+                break
+              fi
+            done
+          fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
