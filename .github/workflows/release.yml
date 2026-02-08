@@ -26,7 +26,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version: "1.21"
 
       - name: Build for Windows (64-bit)
         run: |
@@ -167,6 +167,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Delete older releases (keep last 3)
+        if: steps.check_release.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Fetching releases..."
+          # List releases, keep top 3, delete the rest
+          releases=$(gh release list --limit 100 --json tagName,createdAt --order desc --template '{{range .}}{{printf "%s\n" .tagName}}{{end}}')
+
+          # Count releases
+          count=$(echo "$releases" | wc -l)
+          echo "Total releases found: $count"
+
+          if [ "$count" -gt 3 ]; then
+            echo "cleaning up older releases..."
+            # Get all releases except the top 3
+            releases_to_delete=$(echo "$releases" | tail -n +4)
+            
+            for tag in $releases_to_delete; do
+              echo "Deleting release: $tag"
+              gh release delete "$tag" --cleanup-tag -y || echo "Failed to delete $tag"
+            done
+          else
+            echo "No releases to cleanup (count <= 3)"
+          fi
+
   publish-vscode-extension:
     needs: release
     if: needs.release.outputs.release_created == 'true'
@@ -199,7 +225,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install vsce
         run: npm install -g @vscode/vsce
