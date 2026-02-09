@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nexoral/BanglaCode/main/assets/logo.png" alt="BanglaCode Logo" width="200"/>
+  <img src="https://raw.githubusercontent.com/nexoral/BanglaCode/main/Documentation/public/banglacode.svg" alt="BanglaCode Logo" width="200"/>
 </p>
 
 <h1 align="center">BanglaCode</h1>
