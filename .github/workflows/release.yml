@@ -207,7 +207,7 @@ jobs:
         id: check_vscode
         run: |
           # Get current and previous version from package.json
-          CURRENT_VERSION=$(cat VSCode_Extension/package.json | grep '"version"' | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          CURRENT_VERSION=$(cat Extension/package.json | grep '"version"' | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
 
           # Check if this version already exists on marketplace (will fail if not published yet)
           # We'll publish if the release was just created
@@ -231,17 +231,17 @@ jobs:
         run: npm install -g @vscode/vsce
 
       - name: Install extension dependencies
-        working-directory: VSCode_Extension
+        working-directory: Extension
         run: npm install
 
       - name: Clean old VSIX files
-        working-directory: VSCode_Extension
+        working-directory: Extension
         run: rm -f *.vsix
 
       - name: Package VSCode Extension
-        working-directory: VSCode_Extension
+        working-directory: Extension
         run: vsce package
 
       - name: Publish to VS Code Marketplace
-        working-directory: VSCode_Extension
+        working-directory: Extension
         run: vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}

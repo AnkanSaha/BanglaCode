@@ -639,7 +639,7 @@ BanglaCode/
 │   └── repl/
 │       └── repl.go           # Interactive shell
 ├── examples/                  # Example programs
-├── VSCode_Extension/          # IDE support
+├── Extension/                 # VSCode extension
 └── Documentation/             # Docs website
 ```
 

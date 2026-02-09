@@ -195,7 +195,7 @@ BanglaCode/
 │   ├── evaluator/      # Interpreter (evaluator.go, builtins.go)
 │   └── repl/           # Interactive shell (repl.go)
 ├── examples/           # Example programs
-├── VSCode_Extension/   # VSCode extension
+├── Extension/          # VSCode extension
 └── Documentation/      # Documentation website
 ```
 

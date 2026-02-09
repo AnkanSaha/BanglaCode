@@ -40,7 +40,7 @@ Custom `.bang` file icon that makes your BanglaCode files easily recognizable.
 
 1. Package the extension:
    ```bash
-   cd VSCode_Extension
+   cd Extension
    npm install
    npx vsce package
    ```
@@ -52,7 +52,7 @@ Custom `.bang` file icon that makes your BanglaCode files easily recognizable.
 
 ### Manual Installation
 
-1. Copy the `VSCode_Extension` folder to:
+1. Copy the `Extension` folder to:
    - **Windows**: `%USERPROFILE%\.vscode\extensions\banglacode`
    - **macOS/Linux**: `~/.vscode/extensions/banglacode`
 

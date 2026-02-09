@@ -19,7 +19,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Files to update
 VERSION_FILE="$PROJECT_ROOT/VERSION"
-VSCODE_PACKAGE="$PROJECT_ROOT/VSCode_Extension/package.json"
+VSCODE_PACKAGE="$PROJECT_ROOT/Extension/package.json"
 MAIN_GO="$PROJECT_ROOT/main.go"
 REPL_GO="$PROJECT_ROOT/src/repl/repl.go"
 DOCS_PACKAGE="$PROJECT_ROOT/Documentation/package.json"

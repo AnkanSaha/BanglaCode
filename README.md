@@ -512,7 +512,7 @@ Install the official BanglaCode extension for Visual Studio Code:
 Or install from VSIX:
 
 ```bash
-cd VSCode_Extension
+cd Extension
 npm install
 npx vsce package
 # Install the generated .vsix file
@@ -558,7 +558,7 @@ BanglaCode/
 │       └── repl.go         # REPL implementation
 │
 ├── examples/               # Example programs
-├── VSCode_Extension/       # IDE support
+├── Extension/              # VSCode extension
 ├── Documentation/          # Documentation website
 ├── Scripts/                # Build scripts
 └── .github/                # CI/CD workflows

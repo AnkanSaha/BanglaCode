@@ -30,4 +30,4 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
-./VSCode_Extensions/node_modules/
+./Extension/node_modules/
