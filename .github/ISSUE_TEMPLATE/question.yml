@@ -1,0 +1,85 @@
+name: Question
+description: Ask a question about BanglaCode
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about BanglaCode? We're here to help!
+
+        **Note**: For general questions and discussions, consider using [GitHub Discussions](https://github.com/nexoral/BanglaCode/discussions) instead.
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Question Topic
+      description: What is your question about?
+      options:
+        - Installation / Setup
+        - Language Syntax
+        - Built-in Functions
+        - Module System
+        - Error Handling
+        - HTTP / Web Features
+        - VSCode Extension
+        - Performance
+        - Best Practices
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: Please describe your question in detail.
+      placeholder: |
+        I'm trying to understand...
+        How do I...
+        What is the best way to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What are you trying to achieve? What have you already tried?
+      placeholder: |
+        I'm building...
+        I tried...
+        I expected...
+    validations:
+      required: false
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Related Code (if applicable)
+      description: If your question involves code, please share it.
+      render: banglacode
+      placeholder: |
+        dhoro x = 5;
+        // Your code here
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: BanglaCode Version
+      description: What version are you using?
+      placeholder: "3.3.0"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have checked the documentation (README.md, SYNTAX.md)
+          required: true
+        - label: I have searched existing issues and discussions
+          required: true

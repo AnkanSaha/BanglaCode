@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: BanglaCode
+message: >-
+  If you use BanglaCode in your research or teaching,
+  please cite it using the metadata from this file.
+type: software
+authors:
+  - family-names: Saha
+    given-names: Ankan
+    affiliation: Independent Developer
+    country: IN
+repository-code: 'https://github.com/nexoral/BanglaCode'
+url: 'https://banglacode.dev'
+abstract: >-
+  BanglaCode is a Bengali-syntax programming language
+  designed to make programming accessible to Bengali
+  speakers. It uses Banglish (Bengali words written in
+  English script) keywords with C-like syntax, making
+  it ideal for students learning programming in their
+  native language context.
+keywords:
+  - programming-language
+  - bengali
+  - education
+  - interpreter
+  - go
+  - banglish
+license: GPL-3.0
+version: 3.3.0
+date-released: '2024-01-01'
