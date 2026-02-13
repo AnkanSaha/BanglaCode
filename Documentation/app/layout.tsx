@@ -11,7 +11,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className="bg-background text-foreground antialiased min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1 pt-16">
