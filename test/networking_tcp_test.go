@@ -46,22 +46,22 @@ func TestTCPServerChalu(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "TCP server missing arguments",
-			input: `tcp_server_chalu(8082);`,
+			name:    "TCP server missing arguments",
+			input:   `tcp_server_chalu(8082);`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "TCP server invalid port type",
-			input: `tcp_server_chalu("not a port", kaj(conn) {});`,
+			name:    "TCP server invalid port type",
+			input:   `tcp_server_chalu("not a port", kaj(conn) {});`,
 			wantErr: true,
-			errMsg: "must be NUMBER",
+			errMsg:  "must be NUMBER",
 		},
 		{
-			name: "TCP server invalid handler type",
-			input: `tcp_server_chalu(8083, "not a function");`,
+			name:    "TCP server invalid handler type",
+			input:   `tcp_server_chalu(8083, "not a function");`,
 			wantErr: true,
-			errMsg: "must be FUNCTION",
+			errMsg:  "must be FUNCTION",
 		},
 	}
 
@@ -158,28 +158,28 @@ func TestTCPPathao(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "TCP pathao missing arguments",
-			input: `tcp_pathao({});`,
+			name:    "TCP pathao missing arguments",
+			input:   `tcp_pathao({});`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "TCP pathao invalid connection type",
-			input: `tcp_pathao("not a map", "data");`,
+			name:    "TCP pathao invalid connection type",
+			input:   `tcp_pathao("not a map", "data");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "TCP pathao invalid data type",
-			input: `tcp_pathao({}, 123);`,
+			name:    "TCP pathao invalid data type",
+			input:   `tcp_pathao({}, 123);`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 		{
-			name: "TCP pathao missing connection ID",
-			input: `tcp_pathao({}, "data");`,
+			name:    "TCP pathao missing connection ID",
+			input:   `tcp_pathao({}, "data");`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
@@ -208,22 +208,22 @@ func TestTCPShuno(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "TCP shuno missing arguments",
-			input: `tcp_shuno();`,
+			name:    "TCP shuno missing arguments",
+			input:   `tcp_shuno();`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "TCP shuno invalid connection type",
-			input: `tcp_shuno("not a map");`,
+			name:    "TCP shuno invalid connection type",
+			input:   `tcp_shuno("not a map");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "TCP shuno missing connection ID",
-			input: `tcp_shuno({});`,
+			name:    "TCP shuno missing connection ID",
+			input:   `tcp_shuno({});`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
@@ -252,22 +252,22 @@ func TestTCPBondho(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "TCP bondho missing arguments",
-			input: `tcp_bondho();`,
+			name:    "TCP bondho missing arguments",
+			input:   `tcp_bondho();`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "TCP bondho invalid connection type",
-			input: `tcp_bondho("not a map");`,
+			name:    "TCP bondho invalid connection type",
+			input:   `tcp_bondho("not a map");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "TCP bondho missing connection ID",
-			input: `tcp_bondho({});`,
+			name:    "TCP bondho missing connection ID",
+			input:   `tcp_bondho({});`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
@@ -306,8 +306,8 @@ func TestTCPLekho(t *testing.T) {
 func tcpContains(s, substr string) bool {
 	return len(s) >= len(substr) && (fmt.Sprintf("%s", s) != "" &&
 		(len(s) == len(substr) && s == substr ||
-		(len(s) >= len(substr) && (s[0:len(substr)] == substr ||
-		(len(s) > len(substr) && tcpContains(s[1:], substr))))))
+			(len(s) >= len(substr) && (s[0:len(substr)] == substr ||
+				(len(s) > len(substr) && tcpContains(s[1:], substr))))))
 }
 
 // Benchmark TCP operations

@@ -49,22 +49,22 @@ func TestWebSocketServerChalu(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "WebSocket server missing arguments",
-			input: `websocket_server_chalu(3002);`,
+			name:    "WebSocket server missing arguments",
+			input:   `websocket_server_chalu(3002);`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "WebSocket server invalid port type",
-			input: `websocket_server_chalu("not a port", kaj(conn) {});`,
+			name:    "WebSocket server invalid port type",
+			input:   `websocket_server_chalu("not a port", kaj(conn) {});`,
 			wantErr: true,
-			errMsg: "must be NUMBER",
+			errMsg:  "must be NUMBER",
 		},
 		{
-			name: "WebSocket server invalid handler type",
-			input: `websocket_server_chalu(3003, "not a function");`,
+			name:    "WebSocket server invalid handler type",
+			input:   `websocket_server_chalu(3003, "not a function");`,
 			wantErr: true,
-			errMsg: "must be FUNCTION",
+			errMsg:  "must be FUNCTION",
 		},
 	}
 
@@ -134,16 +134,16 @@ func TestWebSocketJukto(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "WebSocket jukto missing arguments",
-			input: `websocket_jukto();`,
+			name:    "WebSocket jukto missing arguments",
+			input:   `websocket_jukto();`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "WebSocket jukto invalid URL type",
-			input: `websocket_jukto(123);`,
+			name:    "WebSocket jukto invalid URL type",
+			input:   `websocket_jukto(123);`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 	}
 
@@ -210,28 +210,28 @@ func TestWebSocketPathao(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "WebSocket pathao missing arguments",
-			input: `websocket_pathao({});`,
+			name:    "WebSocket pathao missing arguments",
+			input:   `websocket_pathao({});`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "WebSocket pathao invalid connection type",
-			input: `websocket_pathao("not a map", "message");`,
+			name:    "WebSocket pathao invalid connection type",
+			input:   `websocket_pathao("not a map", "message");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "WebSocket pathao invalid message type",
-			input: `websocket_pathao({}, 123);`,
+			name:    "WebSocket pathao invalid message type",
+			input:   `websocket_pathao({}, 123);`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 		{
-			name: "WebSocket pathao missing connection ID",
-			input: `websocket_pathao({}, "message");`,
+			name:    "WebSocket pathao missing connection ID",
+			input:   `websocket_pathao({}, "message");`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
@@ -260,22 +260,22 @@ func TestWebSocketBondho(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "WebSocket bondho missing arguments",
-			input: `websocket_bondho();`,
+			name:    "WebSocket bondho missing arguments",
+			input:   `websocket_bondho();`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "WebSocket bondho invalid connection type",
-			input: `websocket_bondho("not a map");`,
+			name:    "WebSocket bondho invalid connection type",
+			input:   `websocket_bondho("not a map");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "WebSocket bondho missing connection ID",
-			input: `websocket_bondho({});`,
+			name:    "WebSocket bondho missing connection ID",
+			input:   `websocket_bondho({});`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 

@@ -45,22 +45,22 @@ func TestUDPServerChalu(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "UDP server missing arguments",
-			input: `udp_server_chalu(9002);`,
+			name:    "UDP server missing arguments",
+			input:   `udp_server_chalu(9002);`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "UDP server invalid port type",
-			input: `udp_server_chalu("not a port", kaj(packet) {});`,
+			name:    "UDP server invalid port type",
+			input:   `udp_server_chalu("not a port", kaj(packet) {});`,
 			wantErr: true,
-			errMsg: "must be NUMBER",
+			errMsg:  "must be NUMBER",
 		},
 		{
-			name: "UDP server invalid handler type",
-			input: `udp_server_chalu(9003, "not a function");`,
+			name:    "UDP server invalid handler type",
+			input:   `udp_server_chalu(9003, "not a function");`,
 			wantErr: true,
-			errMsg: "must be FUNCTION",
+			errMsg:  "must be FUNCTION",
 		},
 	}
 
@@ -128,28 +128,28 @@ func TestUDPPathao(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "UDP pathao missing arguments",
-			input: `udp_pathao("localhost", 9010);`,
+			name:    "UDP pathao missing arguments",
+			input:   `udp_pathao("localhost", 9010);`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "UDP pathao invalid host type",
-			input: `udp_pathao(123, 9010, "data");`,
+			name:    "UDP pathao invalid host type",
+			input:   `udp_pathao(123, 9010, "data");`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 		{
-			name: "UDP pathao invalid port type",
-			input: `udp_pathao("localhost", "port", "data");`,
+			name:    "UDP pathao invalid port type",
+			input:   `udp_pathao("localhost", "port", "data");`,
 			wantErr: true,
-			errMsg: "must be NUMBER",
+			errMsg:  "must be NUMBER",
 		},
 		{
-			name: "UDP pathao invalid data type",
-			input: `udp_pathao("localhost", 9010, 123);`,
+			name:    "UDP pathao invalid data type",
+			input:   `udp_pathao("localhost", 9010, 123);`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 	}
 
@@ -194,28 +194,28 @@ func TestUDPUttor(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "UDP uttor missing arguments",
-			input: `udp_uttor({});`,
+			name:    "UDP uttor missing arguments",
+			input:   `udp_uttor({});`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "UDP uttor invalid packet type",
-			input: `udp_uttor("not a map", "data");`,
+			name:    "UDP uttor invalid packet type",
+			input:   `udp_uttor("not a map", "data");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "UDP uttor invalid data type",
-			input: `udp_uttor({}, 123);`,
+			name:    "UDP uttor invalid data type",
+			input:   `udp_uttor({}, 123);`,
 			wantErr: true,
-			errMsg: "must be STRING",
+			errMsg:  "must be STRING",
 		},
 		{
-			name: "UDP uttor missing packet ID",
-			input: `udp_uttor({}, "data");`,
+			name:    "UDP uttor missing packet ID",
+			input:   `udp_uttor({}, "data");`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
@@ -258,22 +258,22 @@ func TestUDPBondho(t *testing.T) {
 		errMsg  string
 	}{
 		{
-			name: "UDP bondho missing arguments",
-			input: `udp_bondho();`,
+			name:    "UDP bondho missing arguments",
+			input:   `udp_bondho();`,
 			wantErr: true,
-			errMsg: "wrong number of arguments",
+			errMsg:  "wrong number of arguments",
 		},
 		{
-			name: "UDP bondho invalid connection type",
-			input: `udp_bondho("not a map");`,
+			name:    "UDP bondho invalid connection type",
+			input:   `udp_bondho("not a map");`,
 			wantErr: true,
-			errMsg: "must be MAP",
+			errMsg:  "must be MAP",
 		},
 		{
-			name: "UDP bondho missing connection ID",
-			input: `udp_bondho({});`,
+			name:    "UDP bondho missing connection ID",
+			input:   `udp_bondho({});`,
 			wantErr: true,
-			errMsg: "missing 'id' field",
+			errMsg:  "missing 'id' field",
 		},
 	}
 
