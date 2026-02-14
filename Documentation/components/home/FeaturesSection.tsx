@@ -14,31 +14,31 @@ import {
 const features = [
   {
     icon: Code2,
-    title: "27 Bengali Keywords",
+    title: "29 Bengali Keywords",
     description:
-      "Natural syntax with keywords like 'dhoro' (let), 'jodi' (if), 'ghuriye' (for) that feel intuitive to Bengali speakers.",
+      "Natural syntax with keywords like 'dhoro' (let), 'jodi' (if), 'ghuriye' (for), 'proyash' (async) that feel intuitive to Bengali speakers.",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     icon: Cpu,
-    title: "Built on Go",
+    title: "3-4x Faster than Python",
     description:
-      "Lightning-fast execution with a robust tree-walking interpreter. Compiles to native binaries for any platform.",
+      "Lightning-fast execution with a Go-powered tree-walking interpreter. 6x faster startup, efficient memory usage.",
     gradient: "from-purple-500 to-pink-500",
   },
   {
     icon: Terminal,
-    title: "Interactive REPL",
+    title: "80+ Built-in Functions",
     description:
-      "Learn and experiment with an interactive shell. Multi-line support, syntax highlighting, and helpful error messages.",
-    gradient: "from-green-500 to-emerald-500",
+      "Comprehensive standard library: math, strings, arrays, HTTP, JSON, file I/O, and complete OS-level system access.",
+    gradient: "from-yellow-500 to-orange-500",
   },
   {
     icon: Zap,
-    title: "50+ Built-in Functions",
+    title: "Async/Await Support",
     description:
-      "Rich standard library with functions for math, strings, arrays, I/O, and more. All documented in Bengali.",
-    gradient: "from-yellow-500 to-orange-500",
+      "Modern async programming with 'proyash' and 'opekha' keywords. Handle promises and asynchronous operations naturally.",
+    gradient: "from-green-500 to-emerald-500",
   },
   {
     icon: Shield,
@@ -58,7 +58,7 @@ const features = [
     icon: Layers,
     title: "Module System",
     description:
-      "Import and export code with 'ano' and 'pathao'. Organize your code into reusable modules.",
+      "Import and export code with 'ano' and 'pathao'. Organize your code into reusable modules with aliases.",
     gradient: "from-teal-500 to-cyan-500",
   },
   {

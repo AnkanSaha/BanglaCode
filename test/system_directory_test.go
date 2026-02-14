@@ -89,8 +89,8 @@ func TestDirectoryAkar(t *testing.T) {
 	defer os.RemoveAll(testDir)
 
 	// Create files with known sizes
-	content1 := "Hello"        // 5 bytes
-	content2 := "World!"       // 6 bytes
+	content1 := "Hello"  // 5 bytes
+	content2 := "World!" // 6 bytes
 	os.WriteFile(testDir+"/file1.txt", []byte(content1), 0644)
 	os.WriteFile(testDir+"/file2.txt", []byte(content2), 0644)
 

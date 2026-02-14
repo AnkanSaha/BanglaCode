@@ -13,8 +13,8 @@ export default function Builtins() {
       <h1>Built-in Functions Reference</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        BanglaCode provides 50+ built-in functions for I/O, type conversion, string manipulation,
-        array operations, math, file handling, and HTTP.
+        BanglaCode provides 80+ built-in functions for I/O, type conversion, string manipulation,
+        array operations, math, file handling, HTTP, JSON, and complete OS-level system access.
       </p>
 
       <h2>Input/Output</h2>
@@ -663,8 +663,8 @@ parallel();`}
       <h2>System Operations</h2>
 
       <p className="text-muted-foreground">
-        BanglaCode provides 50+ system-level functions for file operations, process management,
-        network information, and system statistics.
+        BanglaCode provides 53 system-level functions for file operations, process management,
+        network information, system statistics, environment variables, and temporary file handling.
       </p>
 
       <h3>File Metadata</h3>

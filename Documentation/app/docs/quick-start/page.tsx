@@ -243,7 +243,7 @@ kaj validateAge(age) {
 
       <h2>Built-in Functions</h2>
 
-      <p>BanglaCode comes with 50+ built-in functions:</p>
+      <p>BanglaCode comes with 80+ built-in functions:</p>
 
       <CodeBlock
         code={`// Output
@@ -277,8 +277,9 @@ dekho(kache(3.7));       // 4 (round)`}
       </p>
 
       <ul>
-        <li><Link href="/docs/keywords" className="text-primary hover:underline">All 27 Bengali keywords</Link></li>
-        <li><Link href="/docs/builtins" className="text-primary hover:underline">50+ built-in functions</Link></li>
+        <li><Link href="/docs/keywords" className="text-primary hover:underline">All 29 Bengali keywords</Link></li>
+        <li><Link href="/docs/builtins" className="text-primary hover:underline">80+ built-in functions</Link></li>
+        <li><Link href="/docs/async-await" className="text-primary hover:underline">Async/Await programming</Link></li>
         <li><Link href="/docs/modules" className="text-primary hover:underline">Module system (import/export)</Link></li>
         <li><Link href="/docs/http-server" className="text-primary hover:underline">Building HTTP servers</Link></li>
       </ul>

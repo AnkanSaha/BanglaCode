@@ -108,12 +108,12 @@ dekho("5 squared =", square(5));`}
           </thead>
           <tbody>
             <tr>
-              <td><strong>27 Bengali Keywords</strong></td>
-              <td>All control flow and declarations in Bengali</td>
+              <td><strong>29 Bengali Keywords</strong></td>
+              <td>All control flow, declarations, and async/await in Bengali</td>
             </tr>
             <tr>
-              <td><strong>50+ Built-in Functions</strong></td>
-              <td>String, array, math, file I/O, HTTP, and more</td>
+              <td><strong>80+ Built-in Functions</strong></td>
+              <td>String, array, math, file I/O, HTTP, JSON, and complete OS-level system access</td>
             </tr>
             <tr>
               <td><strong>Object-Oriented</strong></td>

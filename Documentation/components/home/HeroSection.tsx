@@ -74,7 +74,7 @@ export default function HeroSection({ version }: HeroSectionProps) {
                 "Write code in your mother tongue.",
                 "Learn programming concepts naturally.",
                 "Built for 300 million Bengali speakers.",
-                "From West Bengal to Bangladesh.",
+                "Made in West Bengal, India 🇮🇳",
               ],
               autoStart: true,
               loop: true,
