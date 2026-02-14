@@ -89,6 +89,8 @@ const (
 	DHORO_BHUL = "DHORO_BHUL" // catch
 	SHESH      = "SHESH"      // finally
 	FELO       = "FELO"       // throw
+	PROYASH    = "PROYASH"    // async (প্রয়াস - attempt/endeavor)
+	OPEKHA     = "OPEKHA"     // await (অপেক্ষা - wait)
 )
 
 // keywords maps Banglish keywords to their token types
@@ -120,6 +122,8 @@ var keywords = map[string]TokenType{
 	"dhoro_bhul": DHORO_BHUL,
 	"shesh":      SHESH,
 	"felo":       FELO,
+	"proyash":    PROYASH,
+	"opekha":     OPEKHA,
 }
 
 // LookupIdent checks if an identifier is a keyword

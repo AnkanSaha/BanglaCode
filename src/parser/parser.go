@@ -49,6 +49,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(lexer.LBRACKET, p.parseArrayLiteral)
 	p.registerPrefix(lexer.LBRACE, p.parseMapLiteral)
 	p.registerPrefix(lexer.KAJ, p.parseFunctionLiteral)
+	p.registerPrefix(lexer.PROYASH, p.parseAsyncFunctionLiteral)
+	p.registerPrefix(lexer.OPEKHA, p.parseAwaitExpression)
 	p.registerPrefix(lexer.NOTUN, p.parseNewExpression)
 	p.registerPrefix(lexer.DOTDOTDOT, p.parseSpreadElement)
 

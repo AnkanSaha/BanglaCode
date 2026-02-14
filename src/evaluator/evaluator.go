@@ -177,6 +177,14 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.SpreadElement:
 		return evalSpreadElement(node, env)
+
+	// ==================== Async/Await ====================
+
+	case *ast.AsyncFunctionLiteral:
+		return evalAsyncFunctionLiteral(node, env)
+
+	case *ast.AwaitExpression:
+		return evalAwaitExpression(node, env)
 	}
 
 	return nil

@@ -1,0 +1,34 @@
+// Async/Await Demo for BanglaCode
+// প্রয়াস (proyash) = async, অপেক্ষা (opekha) = await
+
+// Async function demo
+proyash kaj fetchData() {
+    dekho("Starting async operation...");
+    opekha ghumaao(1000); // Sleep for 1 second
+    dekho("Async operation complete!");
+    ferao "Data fetched successfully";
+}
+
+// Call async function and await result
+dhoro result = opekha fetchData();
+dekho("Result:", result);
+
+// Demo with multiple async operations
+proyash kaj multipleAsync() {
+    dekho("Starting multiple async operations...");
+
+    // Create multiple promises
+    dhoro promise1 = ghumaao(500);
+    dhoro promise2 = ghumaao(800);
+    dhoro promise3 = ghumaao(300);
+
+    // Wait for all promises with sob_proyash (Promise.all)
+    dhoro promises = [promise1, promise2, promise3];
+    opekha sob_proyash(promises);
+
+    dekho("All async operations complete!");
+    ferao "All done";
+}
+
+dhoro multiResult = opekha multipleAsync();
+dekho("Multi result:", multiResult);

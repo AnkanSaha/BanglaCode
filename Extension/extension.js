@@ -38,12 +38,14 @@ const keywords = [
     { label: 'dhoro_bhul', kind: vscode.CompletionItemKind.Keyword, detail: 'ভুল ধরো (ধরো ভুল) - Catch', insertText: 'dhoro_bhul (${1:err}) {\n\t${2}\n}' },
     { label: 'shesh', kind: vscode.CompletionItemKind.Keyword, detail: 'শেষে (শেষ) - Finally', insertText: 'shesh {\n\t${1}\n}' },
     { label: 'felo', kind: vscode.CompletionItemKind.Keyword, detail: 'ত্রুটি ফেলো (ফেলো) - Throw', insertText: 'felo "${1:error message}";' },
+    { label: 'proyash', kind: vscode.CompletionItemKind.Keyword, detail: 'প্রয়াস (প্রয়াস) - Async', insertText: 'proyash kaj ${1:functionName}(${2:params}) {\n\t${3:// async code}\n\tferao ${4:result};\n}', documentation: 'অ্যাসিঙ্ক্রোনাস ফাংশন তৈরি করে' },
+    { label: 'opekha', kind: vscode.CompletionItemKind.Keyword, detail: 'অপেক্ষা (অপেক্ষা) - Await', insertText: 'opekha ${1:promise}', documentation: 'প্রমিসের জন্য অপেক্ষা করে' },
 ];
 
 // Built-in functions
 const builtinFunctions = [
-    // আউটপুট
-    { label: 'dekho', kind: vscode.CompletionItemKind.Function, detail: 'দেখো - মান প্রিন্ট করো', insertText: 'dekho(${1:value});', documentation: 'কনসোলে মান প্রিন্ট করে' },
+    // আউটপুট (variadic - accepts any number of arguments)
+    { label: 'dekho', kind: vscode.CompletionItemKind.Function, detail: 'দেখো - মান প্রিন্ট করো', insertText: 'dekho(${1:value});', documentation: 'কনসোলে যেকোনো সংখ্যক মান প্রিন্ট করে (variadic)' },
 
     // টাইপ ফাংশন
     { label: 'dhoron', kind: vscode.CompletionItemKind.Function, detail: 'ধরন - ডেটা টাইপ জানো', insertText: 'dhoron(${1:value})', documentation: 'মানের ধরন রিটার্ন করে' },
@@ -77,8 +79,8 @@ const builtinFunctions = [
     { label: 'upore', kind: vscode.CompletionItemKind.Function, detail: 'উপরে - সিলিং', insertText: 'upore(${1:x})', documentation: 'উপরের দিকে রাউন্ড করে' },
     { label: 'kache', kind: vscode.CompletionItemKind.Function, detail: 'কাছে - রাউন্ড', insertText: 'kache(${1:x})', documentation: 'কাছের পূর্ণসংখ্যায় রাউন্ড করে' },
     { label: 'niratek', kind: vscode.CompletionItemKind.Function, detail: 'নিরপেক্ষ - এবসোলিউট', insertText: 'niratek(${1:x})', documentation: 'নিরপেক্ষ মান রিটার্ন করে' },
-    { label: 'choto', kind: vscode.CompletionItemKind.Function, detail: 'ছোট - মিনিমাম', insertText: 'choto(${1:a}, ${2:b})', documentation: 'ছোট মান রিটার্ন করে' },
-    { label: 'boro', kind: vscode.CompletionItemKind.Function, detail: 'বড় - ম্যাক্সিমাম', insertText: 'boro(${1:a}, ${2:b})', documentation: 'বড় মান রিটার্ন করে' },
+    { label: 'choto', kind: vscode.CompletionItemKind.Function, detail: 'ছোট - মিনিমাম', insertText: 'choto(${1:a}, ${2:b})', documentation: 'সবচেয়ে ছোট মান রিটার্ন করে (variadic - ২+ আর্গুমেন্ট নেয়)' },
+    { label: 'boro', kind: vscode.CompletionItemKind.Function, detail: 'বড় - ম্যাক্সিমাম', insertText: 'boro(${1:a}, ${2:b})', documentation: 'সবচেয়ে বড় মান রিটার্ন করে (variadic - ২+ আর্গুমেন্ট নেয়)' },
     { label: 'lotto', kind: vscode.CompletionItemKind.Function, detail: 'লটো - র্যান্ডম', insertText: 'lotto()', documentation: '০ থেকে ১ এর মধ্যে র্যান্ডম নাম্বার রিটার্ন করে' },
 
     // ইউটিলিটি ফাংশন
@@ -94,6 +96,13 @@ const builtinFunctions = [
     // HTTP ফাংশন
     { label: 'server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'সার্ভার চালু - HTTP সার্ভার', insertText: 'server_chalu(${1:3000}, ${2:handler})', documentation: 'নির্দিষ্ট পোর্টে HTTP সার্ভার চালু করে' },
     { label: 'anun', kind: vscode.CompletionItemKind.Function, detail: 'আনুন - HTTP GET রিকোয়েস্ট', insertText: 'anun(${1:"url"})', documentation: 'HTTP GET রিকোয়েস্ট করে' },
+
+    // অ্যাসিঙ্ক্রোনাস ফাংশন
+    { label: 'ghumaao', kind: vscode.CompletionItemKind.Function, detail: 'ঘুমাও - অ্যাসিঙ্ক স্লিপ', insertText: 'ghumaao(${1:milliseconds})', documentation: 'নির্দিষ্ট মিলিসেকেন্ড এর জন্য অপেক্ষা করে (প্রমিস রিটার্ন করে)' },
+    { label: 'anun_async', kind: vscode.CompletionItemKind.Function, detail: 'আনুন অ্যাসিঙ্ক - HTTP GET অ্যাসিঙ্ক', insertText: 'anun_async(${1:"url"})', documentation: 'অ্যাসিঙ্ক্রোনাস HTTP GET রিকোয়েস্ট করে (প্রমিস রিটার্ন করে)' },
+    { label: 'poro_async', kind: vscode.CompletionItemKind.Function, detail: 'পড়ো অ্যাসিঙ্ক - ফাইল পড়ো অ্যাসিঙ্ক', insertText: 'poro_async(${1:"filename"})', documentation: 'অ্যাসিঙ্ক্রোনাস ফাইল পড়ে (প্রমিস রিটার্ন করে)' },
+    { label: 'lekho_async', kind: vscode.CompletionItemKind.Function, detail: 'লেখো অ্যাসিঙ্ক - ফাইল লেখো অ্যাসিঙ্ক', insertText: 'lekho_async(${1:"filename"}, ${2:content})', documentation: 'অ্যাসিঙ্ক্রোনাস ফাইলে লেখে (প্রমিস রিটার্ন করে)' },
+    { label: 'sob_proyash', kind: vscode.CompletionItemKind.Function, detail: 'সব প্রয়াস - Promise.all', insertText: 'sob_proyash(${1:promisesArray})', documentation: 'সব প্রমিসের জন্য অপেক্ষা করে (Promise.all এর মতো)' },
 ];
 
 /**
@@ -1195,19 +1204,25 @@ function activate(context) {
             // Check built-in functions with known parameter requirements
             const builtinFunc = builtinFunctions.find(f => f.label === funcName);
             if (builtinFunc) {
-                // Extract expected param count from insertText
-                const paramMatch = builtinFunc.insertText.match(/\$\{(\d+)(?::([^}]+))?\}/g);
-                if (paramMatch) {
-                    const expectedCount = paramMatch.length;
+                // Define variadic built-in functions that accept any number of arguments
+                const variadicBuiltins = new Set(['dekho', 'choto', 'boro']);
 
-                    if (argCount !== expectedCount) {
-                        const pos = document.positionAt(match.index);
-                        const range = new vscode.Range(pos, pos.translate(0, funcName.length));
-                        diagnostics.push(new vscode.Diagnostic(
-                            range,
-                            `Built-in function '${funcName}' expects ${expectedCount} argument(s) but got ${argCount}`,
-                            vscode.DiagnosticSeverity.Error
-                        ));
+                // Skip validation for variadic functions
+                if (!variadicBuiltins.has(funcName)) {
+                    // Extract expected param count from insertText
+                    const paramMatch = builtinFunc.insertText.match(/\$\{(\d+)(?::([^}]+))?\}/g);
+                    if (paramMatch) {
+                        const expectedCount = paramMatch.length;
+
+                        if (argCount !== expectedCount) {
+                            const pos = document.positionAt(match.index);
+                            const range = new vscode.Range(pos, pos.translate(0, funcName.length));
+                            diagnostics.push(new vscode.Diagnostic(
+                                range,
+                                `Built-in function '${funcName}' expects ${expectedCount} argument(s) but got ${argCount}`,
+                                vscode.DiagnosticSeverity.Error
+                            ));
+                        }
                     }
                 }
                 continue; // Skip to next iteration

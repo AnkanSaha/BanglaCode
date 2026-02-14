@@ -157,3 +157,18 @@ func (se *SpreadElement) String() string {
 	out.WriteString(se.Argument.String())
 	return out.String()
 }
+
+// AwaitExpression represents: opekha promise
+type AwaitExpression struct {
+	Token      lexer.Token // the OPEKHA token
+	Expression Expression
+}
+
+func (ae *AwaitExpression) expressionNode()      {}
+func (ae *AwaitExpression) TokenLiteral() string { return ae.Token.Literal }
+func (ae *AwaitExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("opekha ")
+	out.WriteString(ae.Expression.String())
+	return out.String()
+}

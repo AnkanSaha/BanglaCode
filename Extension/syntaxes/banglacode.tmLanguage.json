@@ -95,6 +95,14 @@
           "match": "\\b(kaj)\\b"
         },
         {
+          "name": "storage.modifier.async.js",
+          "match": "\\b(proyash)\\b"
+        },
+        {
+          "name": "keyword.control.flow.await.js",
+          "match": "\\b(opekha)\\b"
+        },
+        {
           "name": "keyword.control.flow.js",
           "match": "\\b(ferao)\\b"
         },
@@ -205,6 +213,10 @@
         {
           "name": "support.function.js",
           "match": "\\b(json_poro|json_banao)\\b"
+        },
+        {
+          "name": "support.function.builtin.async.js",
+          "match": "\\b(ghumaao|anun_async|poro_async|lekho_async|sob_proyash)\\b"
         }
       ]
     },

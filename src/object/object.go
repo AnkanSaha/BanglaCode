@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
+	"sync"
 )
 
 // ObjectType represents the type of an object
@@ -27,6 +28,7 @@ const (
 	CONTINUE_OBJ  = "CONTINUE"
 	EXCEPTION_OBJ = "EXCEPTION"
 	MODULE_OBJ    = "MODULE"
+	PROMISE_OBJ   = "PROMISE"
 )
 
 // Object represents any runtime value
@@ -95,6 +97,7 @@ type Function struct {
 	Body          *ast.BlockStatement
 	Env           *Environment
 	Name          string
+	IsAsync       bool // true for async functions (proyash kaj)
 }
 
 func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
@@ -218,6 +221,45 @@ type Module struct {
 
 func (m *Module) Type() ObjectType { return MODULE_OBJ }
 func (m *Module) Inspect() string  { return "module " + m.Name }
+
+// PromiseState represents the state of a promise
+type PromiseState string
+
+const (
+	PROMISE_PENDING  PromiseState = "PENDING"
+	PROMISE_RESOLVED PromiseState = "RESOLVED"
+	PROMISE_REJECTED PromiseState = "REJECTED"
+)
+
+// Promise represents an async operation that will complete in the future
+type Promise struct {
+	State      PromiseState
+	Value      Object      // resolved value
+	Error      Object      // rejection error
+	ResultChan chan Object // for goroutine communication
+	ErrorChan  chan Object // for error communication
+	Mu         sync.RWMutex
+}
+
+func (p *Promise) Type() ObjectType { return PROMISE_OBJ }
+func (p *Promise) Inspect() string {
+	p.Mu.RLock()
+	defer p.Mu.RUnlock()
+	switch p.State {
+	case PROMISE_RESOLVED:
+		if p.Value != nil {
+			return fmt.Sprintf("Promise(RESOLVED: %s)", p.Value.Inspect())
+		}
+		return "Promise(RESOLVED)"
+	case PROMISE_REJECTED:
+		if p.Error != nil {
+			return fmt.Sprintf("Promise(REJECTED: %s)", p.Error.Inspect())
+		}
+		return "Promise(REJECTED)"
+	default:
+		return "Promise(PENDING)"
+	}
+}
 
 // Singleton objects for common values
 var (

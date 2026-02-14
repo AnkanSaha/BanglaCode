@@ -784,6 +784,158 @@ var builtins = map[string]*object.Builtin{
 			return resMap
 		},
 	},
+	// Async built-in functions
+	// ghumaao (ঘুমাও) - async sleep
+	"ghumaao": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.NUMBER_OBJ {
+				return newError("argument to `ghumaao` must be NUMBER, got %s", args[0].Type())
+			}
+
+			ms := int64(args[0].(*object.Number).Value)
+			promise := createPromise()
+
+			go func() {
+				time.Sleep(time.Duration(ms) * time.Millisecond)
+				resolvePromise(promise, object.NULL)
+			}()
+
+			return promise
+		},
+	},
+	// anun_async (আনুন_async) - async HTTP GET
+	"anun_async": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to `anun_async` must be STRING, got %s", args[0].Type())
+			}
+
+			url := args[0].(*object.String).Value
+			promise := createPromise()
+
+			go func() {
+				resp, err := http.Get(url)
+				if err != nil {
+					rejectPromise(promise, newError("HTTP error: %s", err.Error()))
+					return
+				}
+				defer resp.Body.Close()
+
+				body, err := io.ReadAll(resp.Body)
+				if err != nil {
+					rejectPromise(promise, newError("error reading response: %s", err.Error()))
+					return
+				}
+
+				result := &object.Map{Pairs: make(map[string]object.Object)}
+				result.Pairs["status"] = &object.Number{Value: float64(resp.StatusCode)}
+				result.Pairs["body"] = &object.String{Value: string(body)}
+
+				resolvePromise(promise, result)
+			}()
+
+			return promise
+		},
+	},
+	// poro_async (পড়ো_async) - async file read
+	"poro_async": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to `poro_async` must be STRING, got %s", args[0].Type())
+			}
+
+			path := args[0].(*object.String).Value
+			promise := createPromise()
+
+			go func() {
+				content, err := os.ReadFile(path)
+				if err != nil {
+					rejectPromise(promise, newError("error reading file: %s", err.Error()))
+					return
+				}
+				resolvePromise(promise, &object.String{Value: string(content)})
+			}()
+
+			return promise
+		},
+	},
+	// lekho_async (লেখো_async) - async file write
+	"lekho_async": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 2 {
+				return newError("wrong number of arguments. got=%d, want=2", len(args))
+			}
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("first argument to `lekho_async` must be STRING, got %s", args[0].Type())
+			}
+
+			path := args[0].(*object.String).Value
+			content := args[1].Inspect()
+			promise := createPromise()
+
+			go func() {
+				err := os.WriteFile(path, []byte(content), 0644)
+				if err != nil {
+					rejectPromise(promise, newError("error writing file: %s", err.Error()))
+					return
+				}
+				resolvePromise(promise, object.TRUE)
+			}()
+
+			return promise
+		},
+	},
+	// sob_proyash (সব_প্রয়াস) - Promise.all
+	"sob_proyash": {
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			if args[0].Type() != object.ARRAY_OBJ {
+				return newError("argument to `sob_proyash` must be ARRAY, got %s", args[0].Type())
+			}
+
+			arr := args[0].(*object.Array)
+			promises := make([]*object.Promise, len(arr.Elements))
+
+			// Validate all elements are promises
+			for i, el := range arr.Elements {
+				p, ok := el.(*object.Promise)
+				if !ok {
+					return newError("all elements must be promises, got %s at index %d", el.Type(), i)
+				}
+				promises[i] = p
+			}
+
+			resultPromise := createPromise()
+
+			go func() {
+				results := make([]object.Object, len(promises))
+				for i, p := range promises {
+					// Wait for each promise
+					select {
+					case res := <-p.ResultChan:
+						results[i] = res
+					case err := <-p.ErrorChan:
+						rejectPromise(resultPromise, err)
+						return
+					}
+				}
+				resolvePromise(resultPromise, &object.Array{Elements: results})
+			}()
+
+			return resultPromise
+		},
+	},
 }
 
 // parseJSON converts a JSON string to BanglaCode objects

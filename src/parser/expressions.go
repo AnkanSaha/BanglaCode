@@ -165,6 +165,50 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 	return lit
 }
 
+// parseAsyncFunctionLiteral parses proyash kaj name(params) { body }
+func (p *Parser) parseAsyncFunctionLiteral() ast.Expression {
+	token := p.curToken // PROYASH token
+
+	// Must be followed by 'kaj'
+	if !p.expectPeek(lexer.KAJ) {
+		return nil
+	}
+
+	lit := &ast.AsyncFunctionLiteral{Token: token}
+
+	// Check if function has a name
+	if p.peekTokenIs(lexer.IDENT) {
+		p.nextToken()
+		lit.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	}
+
+	if !p.expectPeek(lexer.LPAREN) {
+		return nil
+	}
+
+	params, restParam := p.parseFunctionParametersWithRest()
+	lit.Parameters = params
+	lit.RestParameter = restParam
+
+	if !p.expectPeek(lexer.LBRACE) {
+		return nil
+	}
+
+	lit.Body = p.parseBlockStatement()
+
+	return lit
+}
+
+// parseAwaitExpression parses opekha expression
+func (p *Parser) parseAwaitExpression() ast.Expression {
+	exp := &ast.AwaitExpression{Token: p.curToken}
+
+	p.nextToken()
+	exp.Expression = p.parseExpression(PREFIX)
+
+	return exp
+}
+
 // parseFunctionParameters parses function parameter list (legacy, kept for compatibility)
 func (p *Parser) parseFunctionParameters() []*ast.Identifier {
 	params, _ := p.parseFunctionParametersWithRest()

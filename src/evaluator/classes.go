@@ -121,6 +121,13 @@ func applyFunctionWithPosition(fn object.Object, args []object.Object, env *obje
 				return newErrorAt(line, col, "function '%s' expects at least %d argument(s) but got %d", funcName, minParams, actual)
 			}
 		}
+
+		// Check if function is async - if so, execute in goroutine and return promise
+		if fn.IsAsync {
+			return evalAsyncFunctionCall(fn, args, env)
+		}
+
+		// Regular synchronous function execution
 		extendedEnv := extendFunctionEnv(fn, args)
 		evaluated := Eval(fn.Body, extendedEnv)
 		return unwrapReturnValue(evaluated)

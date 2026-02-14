@@ -122,3 +122,34 @@ func (fl *FunctionLiteral) String() string {
 	out.WriteString(fl.Body.String())
 	return out.String()
 }
+
+// AsyncFunctionLiteral represents: proyash kaj(a, b) { ... }
+type AsyncFunctionLiteral struct {
+	Token         lexer.Token // the PROYASH token
+	Name          *Identifier // optional function name
+	Parameters    []*Identifier
+	RestParameter *Identifier // optional rest parameter (...args)
+	Body          *BlockStatement
+}
+
+func (afl *AsyncFunctionLiteral) expressionNode()      {}
+func (afl *AsyncFunctionLiteral) TokenLiteral() string { return afl.Token.Literal }
+func (afl *AsyncFunctionLiteral) String() string {
+	var out bytes.Buffer
+	params := []string{}
+	for _, p := range afl.Parameters {
+		params = append(params, p.String())
+	}
+	if afl.RestParameter != nil {
+		params = append(params, "..."+afl.RestParameter.String())
+	}
+	out.WriteString("proyash kaj")
+	if afl.Name != nil {
+		out.WriteString(" " + afl.Name.String())
+	}
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") ")
+	out.WriteString(afl.Body.String())
+	return out.String()
+}
