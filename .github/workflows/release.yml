@@ -5,107 +5,137 @@ on:
     branches:
       - main
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
 jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.21"
-
-      - name: Download dependencies
-        run: go mod download
-
-      - name: Run all tests
-        run: go test ./test/... -v -race -timeout 120s
-
-      - name: Run tests with coverage
-        run: |
-          go test ./test/... -coverprofile=coverage.out -coverpkg=./src/...
-          echo "--- Coverage Summary ---"
-          go tool cover -func=coverage.out | grep -E "(total:|src/)"
-
-      - name: Verify build compiles
-        run: go build -v .
-
-  build:
-    needs: test
+  version-check:
+    name: Check Version Update
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version_changed: ${{ steps.check.outputs.version_changed }}
+      version: ${{ steps.check.outputs.version }}
+      extension_changed: ${{ steps.check.outputs.extension_changed }}
+      docs_changed: ${{ steps.check.outputs.docs_changed }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check if version updated
+        id: check
+        run: |
+          # Get current version
+          CURRENT_VERSION=$(cat VERSION)
+          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Get previous version (from parent commit)
+          git show HEAD^:VERSION > /tmp/prev_version 2>/dev/null || echo "0.0.0" > /tmp/prev_version
+          PREV_VERSION=$(cat /tmp/prev_version | tr -d '\n')
+
+          echo "Current version: $CURRENT_VERSION"
+          echo "Previous version: $PREV_VERSION"
+
+          # Check if VERSION file changed
+          if [ "$CURRENT_VERSION" != "$PREV_VERSION" ]; then
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Version changed: $PREV_VERSION → $CURRENT_VERSION"
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+            echo "⏭️ No version change detected, skipping release"
+          fi
+
+          # Check if Extension version matches
+          EXT_VERSION=$(grep '"version"' Extension/package.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          if [ "$CURRENT_VERSION" = "$EXT_VERSION" ]; then
+            echo "extension_changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Extension version matches: $EXT_VERSION"
+          else
+            echo "extension_changed=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Extension version mismatch: expected $CURRENT_VERSION, got $EXT_VERSION"
+          fi
+
+          # Check if Documentation version matches
+          DOCS_VERSION=$(grep '"version"' Documentation/package.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          if [ "$CURRENT_VERSION" = "$DOCS_VERSION" ]; then
+            echo "docs_changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Documentation version matches: $DOCS_VERSION"
+          else
+            echo "docs_changed=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Documentation version mismatch: expected $CURRENT_VERSION, got $DOCS_VERSION"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Version Check Results" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check.outputs.version_changed }}" = "true" ]; then
+            echo "✅ **Version updated to v${{ steps.check.outputs.version }}**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⏭️ **No version change - Release skipped**" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Extension | ${{ steps.check.outputs.extension_changed == 'true' && '✅ Synced' || '⚠️ Out of sync' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Documentation | ${{ steps.check.outputs.docs_changed == 'true' && '✅ Synced' || '⚠️ Out of sync' }} |" >> $GITHUB_STEP_SUMMARY
+
+  test-and-build:
+    name: Test & Build
+    needs: version-check
+    if: needs.version-check.outputs.version_changed == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ needs.version-check.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get version
-        id: version
-        run: |
-          VERSION=$(cat VERSION)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.21"
+          go-version: "1.25.6"
+          cache: true
 
-      - name: Build for Windows (64-bit)
+      - name: Test with coverage
         run: |
-          GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/banglacode.exe .
-          cd dist/windows-amd64 && zip -r ../banglacode-windows-amd64.zip banglacode.exe
+          go test ./test/... -race -coverprofile=coverage.out -coverpkg=./src/... -timeout 120s
+          go tool cover -func=coverage.out | grep total
 
-      - name: Build for Windows (32-bit)
+      - name: Install packaging tools
         run: |
-          GOOS=windows GOARCH=386 go build -o dist/windows-386/banglacode.exe .
-          cd dist/windows-386 && zip -r ../banglacode-windows-386.zip banglacode.exe
+          sudo apt-get update && sudo apt-get install -y ruby ruby-dev rubygems rpm -qq &
+          curl -fsSL https://raw.githubusercontent.com/nexoral/xpack/main/Scripts/installer.sh | sudo bash - &
+          wait
+          sudo gem install fpm --no-document
 
-      - name: Build for macOS (Intel)
+      - name: Build all platforms
         run: |
-          GOOS=darwin GOARCH=amd64 go build -o dist/macos-intel/banglacode .
-          cd dist/macos-intel && zip -r ../banglacode-macos-amd64.zip banglacode
+          mkdir -p dist/{windows-amd64,windows-386,macos-intel,macos-arm,linux}
+          GOOS=windows GOARCH=amd64 go build -o dist/windows-amd64/banglacode.exe . &
+          GOOS=windows GOARCH=386 go build -o dist/windows-386/banglacode.exe . &
+          GOOS=darwin GOARCH=amd64 go build -o dist/macos-intel/banglacode . &
+          GOOS=darwin GOARCH=arm64 go build -o dist/macos-arm/banglacode . &
+          GOOS=linux GOARCH=amd64 go build -o dist/linux/banglacode . &
+          wait
 
-      - name: Build for macOS (Apple Silicon)
+      - name: Package artifacts
         run: |
-          GOOS=darwin GOARCH=arm64 go build -o dist/macos-arm/banglacode .
-          cd dist/macos-arm && zip -r ../banglacode-macos-arm64.zip banglacode
-
-      - name: Build for Linux
-        run: |
-          GOOS=linux GOARCH=amd64 go build -o dist/linux/banglacode .
-
-      - name: Install xpack
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/nexoral/xpack/main/Scripts/installer.sh | sudo bash -
-
-      - name: Install fpm for RPM
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ruby ruby-dev rubygems rpm
-          sudo gem install fpm
-
-      - name: Create Linux packages with xpack
-        run: |
-          VERSION=$(cat VERSION)
-          cd dist/linux
-          xpack -i ./banglacode -app banglacode -arch amd64 -v $VERSION
-          mv dist/*.deb ../banglacode-linux-amd64.deb
-          tar -czvf ../banglacode-linux-amd64.tgz banglacode
-
-      - name: Create RPM package with fpm
-        run: |
-          VERSION=$(cat VERSION)
-          fpm -s dir -t rpm -n banglacode -v $VERSION \
-            --architecture x86_64 \
+          VERSION=${{ needs.version-check.outputs.version }}
+          (cd dist/windows-amd64 && zip -r ../banglacode-windows-amd64.zip banglacode.exe) &
+          (cd dist/windows-386 && zip -r ../banglacode-windows-386.zip banglacode.exe) &
+          (cd dist/macos-intel && zip -r ../banglacode-macos-amd64.zip banglacode) &
+          (cd dist/macos-arm && zip -r ../banglacode-macos-arm64.zip banglacode) &
+          wait
+          (cd dist/linux && xpack -i ./banglacode -app banglacode -arch amd64 -v $VERSION && mv dist/*.deb ../banglacode-linux-amd64.deb)
+          tar -czvf dist/banglacode-linux-amd64.tgz -C dist/linux banglacode
+          fpm -s dir -t rpm -n banglacode -v $VERSION --architecture x86_64 \
             --description "BanglaCode - Bengali Programming Language" \
-            --url "https://github.com/AKN414-IND/BanglaCode" \
-            --license "MIT" \
+            --url "https://github.com/AKN414-IND/BanglaCode" --license "MIT" \
             dist/linux/banglacode=/usr/local/bin/banglacode
           mv *.rpm dist/banglacode-linux-amd64.rpm
 
@@ -113,6 +143,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-artifacts
+          retention-days: 1
           path: |
             dist/banglacode-windows-amd64.zip
             dist/banglacode-windows-386.zip
@@ -123,47 +154,41 @@ jobs:
             dist/banglacode-linux-amd64.tgz
 
   release:
-    needs: build
+    needs: [version-check, test-and-build]
+    if: needs.version-check.outputs.version_changed == 'true'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.check_release.outputs.exists == 'false' }}
-      version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: VERSION
+
+      - name: Check if release exists
+        id: check_release
+        run: |
+          VERSION=${{ needs.version-check.outputs.version }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          gh release view "v$VERSION" &>/dev/null && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download artifacts
+        if: steps.check_release.outputs.exists == 'false'
         uses: actions/download-artifact@v4
         with:
           name: release-artifacts
           path: dist/
 
-      - name: Get version
-        id: version
-        run: |
-          VERSION=$(cat VERSION)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Check if release exists
-        id: check_release
-        run: |
-          VERSION=$(cat VERSION)
-          if gh release view "v$VERSION" &>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release
         if: steps.check_release.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: BanglaCode v${{ steps.version.outputs.version }}
+          tag_name: v${{ needs.version-check.outputs.version }}
+          name: BanglaCode v${{ needs.version-check.outputs.version }}
           body: |
-            ## BanglaCode v${{ steps.version.outputs.version }}
+            ## BanglaCode v${{ needs.version-check.outputs.version }}
 
             ### Downloads
 
@@ -195,81 +220,38 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete older releases (keep last 3)
+      - name: Cleanup old releases (keep last 3)
         if: steps.check_release.outputs.exists == 'false'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Fetching releases..."
-          # List releases, keep top 3, delete the rest
-          releases=$(gh release list --limit 100 --json tagName,createdAt --order desc --template '{{range .}}{{printf "%s\n" .tagName}}{{end}}')
-
-          # Count releases
+          releases=$(gh release list --limit 100 --json tagName --jq '.[].tagName')
           count=$(echo "$releases" | wc -l)
-          echo "Total releases found: $count"
-
-          if [ "$count" -gt 3 ]; then
-            echo "cleaning up older releases..."
-            # Get all releases except the top 3
-            releases_to_delete=$(echo "$releases" | tail -n +4)
-            
-            for tag in $releases_to_delete; do
-              echo "Deleting release: $tag"
-              gh release delete "$tag" --cleanup-tag -y || echo "Failed to delete $tag"
-            done
-          else
-            echo "No releases to cleanup (count <= 3)"
-          fi
+          [ "$count" -gt 3 ] && echo "$releases" | tail -n +4 | xargs -I {} gh release delete {} --cleanup-tag -y || true
 
   publish-vscode-extension:
-    needs: release
-    if: needs.release.outputs.release_created == 'true'
+    needs: [version-check, release]
+    if: |
+      needs.version-check.outputs.version_changed == 'true' &&
+      needs.version-check.outputs.extension_changed == 'true' &&
+      needs.release.outputs.release_created == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-
-      - name: Check if VSCode extension version changed
-        id: check_vscode
-        run: |
-          # Get current and previous version from package.json
-          CURRENT_VERSION=$(cat Extension/package.json | grep '"version"' | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
-
-          # Check if this version already exists on marketplace (will fail if not published yet)
-          # We'll publish if the release was just created
-          VERSION=$(cat VERSION)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "vscode_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-
-          # Check if versions match (they should if versionController was used)
-          if [ "$VERSION" = "$CURRENT_VERSION" ]; then
-            echo "versions_match=true" >> $GITHUB_OUTPUT
-          else
-            echo "versions_match=false" >> $GITHUB_OUTPUT
-          fi
+          sparse-checkout: Extension
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
+          cache-dependency-path: Extension/package-lock.json
 
-      - name: Install vsce
-        run: npm install -g @vscode/vsce
-
-      - name: Install extension dependencies
+      - name: Build and publish extension
         working-directory: Extension
-        run: npm install
-
-      - name: Clean old VSIX files
-        working-directory: Extension
-        run: rm -f *.vsix
-
-      - name: Package VSCode Extension
-        working-directory: Extension
-        run: vsce package
-
-      - name: Publish to VS Code Marketplace
-        working-directory: Extension
-        run: vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}
+        run: |
+          npm ci --prefer-offline
+          npx vsce package
+          npx vsce publish -p ${{ secrets.AZURE_DEVOPS_VS_CODE_EXTENSION_PUBLISH_TOKEN }}

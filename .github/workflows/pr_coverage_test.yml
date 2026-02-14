@@ -1,0 +1,82 @@
+name: PR Tests & Coverage
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.pr_number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-build:
+    name: Test, Lint & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.25.6"
+          cache: true
+
+      - name: Version check
+        run: |
+          VERSION=$(cat VERSION)
+          EXT_VERSION=$(grep '"version"' Extension/package.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+          if [ "$VERSION" != "$EXT_VERSION" ]; then
+            echo "❌ Version mismatch: VERSION ($VERSION) != Extension ($EXT_VERSION)"
+            exit 1
+          fi
+          echo "✅ Version: v$VERSION" >> $GITHUB_STEP_SUMMARY
+
+      - name: Lint
+        run: |
+          test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+          go vet ./...
+
+      - name: Test with coverage
+        run: |
+          go test ./test/... -race -coverprofile=coverage.out -coverpkg=./src/... -timeout 120s
+          COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print $3}')
+          echo "## Coverage: $COVERAGE" >> $GITHUB_STEP_SUMMARY
+
+      - name: Cross-platform build
+        run: |
+          GOOS=windows GOARCH=amd64 go build -o /dev/null . &
+          GOOS=darwin GOARCH=amd64 go build -o /dev/null . &
+          GOOS=darwin GOARCH=arm64 go build -o /dev/null . &
+          GOOS=linux GOARCH=amd64 go build -o /dev/null . &
+          wait
+          echo "✅ All builds passed" >> $GITHUB_STEP_SUMMARY
+
+  extension-and-docs:
+    name: Extension & Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            Extension/package-lock.json
+            Documentation/package-lock.json
+
+      - name: Build extension & docs
+        run: |
+          (cd Extension && npm ci --prefer-offline && npx vsce package) &
+          (cd Documentation && npm ci --prefer-offline && npm run build) &
+          wait
+          echo "✅ Extension & Documentation built" >> $GITHUB_STEP_SUMMARY

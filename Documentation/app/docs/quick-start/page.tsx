@@ -283,11 +283,6 @@ dekho(kache(3.7));       // 4 (round)`}
         <li><Link href="/docs/http-server" className="text-primary hover:underline">Building HTTP servers</Link></li>
       </ul>
 
-      <p>
-        Or try the <Link href="/playground" className="text-primary hover:underline">interactive playground</Link> to
-        experiment with code directly in your browser!
-      </p>
-
       <DocNavigation currentPath="/docs/quick-start" />
     </div>
   );

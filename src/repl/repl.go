@@ -17,16 +17,16 @@ const PROMPT = "\033[1;33m>> \033[0m"
 
 // Color codes
 const (
-	Reset     = "\033[0m"
-	Bold      = "\033[1m"
-	Dim       = "\033[2m"
-	Cyan      = "\033[1;36m"
-	Green     = "\033[1;32m"
-	Yellow    = "\033[1;33m"
-	Blue      = "\033[1;34m"
-	Magenta   = "\033[1;35m"
-	Red       = "\033[1;31m"
-	White     = "\033[1;37m"
+	Reset   = "\033[0m"
+	Bold    = "\033[1m"
+	Dim     = "\033[2m"
+	Cyan    = "\033[1;36m"
+	Green   = "\033[1;32m"
+	Yellow  = "\033[1;33m"
+	Blue    = "\033[1;34m"
+	Magenta = "\033[1;35m"
+	Red     = "\033[1;31m"
+	White   = "\033[1;37m"
 )
 
 func printBanner(out io.Writer) {

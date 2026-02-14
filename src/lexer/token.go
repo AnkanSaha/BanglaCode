@@ -61,51 +61,51 @@ const (
 	RBRACKET = "]"
 
 	// Keywords (Banglish)
-	DHORO       = "DHORO"       // variable declaration (let/var)
-	JODI        = "JODI"        // if
-	NAHOLE      = "NAHOLE"      // else
-	JOTOKKHON   = "JOTOKKHON"   // while
-	GHURIYE     = "GHURIYE"     // for
-	KAJ         = "KAJ"         // function
-	FERAO       = "FERAO"       // return
-	SRENI       = "SRENI"       // class (শ্রেণী)
-	SHURU       = "SHURU"       // constructor (শুরু)
-	NOTUN       = "NOTUN"       // new
-	SOTTI       = "SOTTI"       // true
-	MITTHA      = "MITTHA"      // false
-	KHALI       = "KHALI"       // null
-	EBONG       = "EBONG"       // and (&&)
-	BA          = "BA"          // or (||)
-	NA          = "NA"          // not (!)
-	THAMO       = "THAMO"       // break
-	CHHARO      = "CHHARO"      // continue
-	ANO         = "ANO"         // import (আনো - bring)
-	PATHAO      = "PATHAO"      // export (পাঠাও - send)
-	HISABE      = "HISABE"      // as (হিসাবে - as/alias)
-	CHESTA      = "CHESTA"      // try
-	DHORO_BHUL  = "DHORO_BHUL"  // catch
-	SHESH       = "SHESH"       // finally
-	FELO        = "FELO"        // throw
+	DHORO      = "DHORO"      // variable declaration (let/var)
+	JODI       = "JODI"       // if
+	NAHOLE     = "NAHOLE"     // else
+	JOTOKKHON  = "JOTOKKHON"  // while
+	GHURIYE    = "GHURIYE"    // for
+	KAJ        = "KAJ"        // function
+	FERAO      = "FERAO"      // return
+	SRENI      = "SRENI"      // class (শ্রেণী)
+	SHURU      = "SHURU"      // constructor (শুরু)
+	NOTUN      = "NOTUN"      // new
+	SOTTI      = "SOTTI"      // true
+	MITTHA     = "MITTHA"     // false
+	KHALI      = "KHALI"      // null
+	EBONG      = "EBONG"      // and (&&)
+	BA         = "BA"         // or (||)
+	NA         = "NA"         // not (!)
+	THAMO      = "THAMO"      // break
+	CHHARO     = "CHHARO"     // continue
+	ANO        = "ANO"        // import (আনো - bring)
+	PATHAO     = "PATHAO"     // export (পাঠাও - send)
+	HISABE     = "HISABE"     // as (হিসাবে - as/alias)
+	CHESTA     = "CHESTA"     // try
+	DHORO_BHUL = "DHORO_BHUL" // catch
+	SHESH      = "SHESH"      // finally
+	FELO       = "FELO"       // throw
 )
 
 // keywords maps Banglish keywords to their token types
 var keywords = map[string]TokenType{
-	"dhoro":     DHORO,
-	"jodi":      JODI,
-	"nahole":    NAHOLE,
-	"jotokkhon": JOTOKKHON,
-	"ghuriye":   GHURIYE,
-	"kaj":       KAJ,
-	"ferao":     FERAO,
-	"sreni":     SRENI,
-	"shuru":     SHURU,
-	"notun":     NOTUN,
-	"sotti":     SOTTI,
-	"mittha":    MITTHA,
-	"khali":     KHALI,
-	"ebong":     EBONG,
-	"ba":        BA,
-	"na":        NA,
+	"dhoro":      DHORO,
+	"jodi":       JODI,
+	"nahole":     NAHOLE,
+	"jotokkhon":  JOTOKKHON,
+	"ghuriye":    GHURIYE,
+	"kaj":        KAJ,
+	"ferao":      FERAO,
+	"sreni":      SRENI,
+	"shuru":      SHURU,
+	"notun":      NOTUN,
+	"sotti":      SOTTI,
+	"mittha":     MITTHA,
+	"khali":      KHALI,
+	"ebong":      EBONG,
+	"ba":         BA,
+	"na":         NA,
 	"thamo":      THAMO,
 	"chharo":     CHHARO,
 	"ano":        ANO,
