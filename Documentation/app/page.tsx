@@ -4,6 +4,7 @@ import StorySection from "@/components/home/StorySection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import CodeShowcase from "@/components/home/CodeShowcase";
 import ContributeSection from "@/components/home/ContributeSection";
+import ContributorsSection from "@/components/home/ContributorsSection";
 import CreatorSection from "@/components/home/CreatorSection";
 import Footer from "@/components/home/Footer";
 import packageJson from "../package.json";
@@ -44,7 +45,7 @@ async function getGitHubRepoData() {
         next: { revalidate: 3600 },
         headers: { Accept: "application/vnd.github.v3+json" },
       }),
-      fetch("https://api.github.com/repos/nexoral/BanglaCode/contributors", {
+      fetch("https://api.github.com/repos/nexoral/BanglaCode/contributors?per_page=10", {
         next: { revalidate: 3600 },
         headers: { Accept: "application/vnd.github.v3+json" },
       }),
@@ -66,6 +67,65 @@ async function getGitHubRepoData() {
     };
   } catch {
     return { stars: 0, forks: 0, watchers: 0, contributors: 0, openIssues: 0 };
+  }
+}
+
+// Fetch top contributors with their profile info
+async function getTopContributors() {
+  try {
+    const contributorsResponse = await fetch(
+      "https://api.github.com/repos/nexoral/BanglaCode/contributors?per_page=10",
+      {
+        next: { revalidate: 3600 },
+        headers: { Accept: "application/vnd.github.v3+json" },
+      }
+    );
+
+    if (!contributorsResponse.ok) throw new Error("Failed to fetch contributors");
+
+    const contributors = await contributorsResponse.json();
+
+    if (!Array.isArray(contributors)) return [];
+
+    // Fetch user details for each contributor to get their name
+    const contributorsWithDetails = await Promise.all(
+      contributors.map(async (contributor: { login: string; avatar_url: string; html_url: string; contributions: number }) => {
+        try {
+          const userResponse = await fetch(
+            `https://api.github.com/users/${contributor.login}`,
+            {
+              next: { revalidate: 3600 },
+              headers: { Accept: "application/vnd.github.v3+json" },
+            }
+          );
+
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            return {
+              login: contributor.login,
+              avatar_url: contributor.avatar_url,
+              html_url: contributor.html_url,
+              contributions: contributor.contributions,
+              name: userData.name || contributor.login,
+            };
+          }
+        } catch {
+          // Fall back to basic info if user fetch fails
+        }
+
+        return {
+          login: contributor.login,
+          avatar_url: contributor.avatar_url,
+          html_url: contributor.html_url,
+          contributions: contributor.contributions,
+          name: contributor.login,
+        };
+      })
+    );
+
+    return contributorsWithDetails;
+  } catch {
+    return [];
   }
 }
 
@@ -145,10 +205,11 @@ async function getNexoralProjects() {
 
 export default async function Home() {
   // Fetch all data in parallel
-  const [repoData, userData, nexoralProjects] = await Promise.all([
+  const [repoData, userData, nexoralProjects, topContributors] = await Promise.all([
     getGitHubRepoData(),
     getGitHubUserData(),
     getNexoralProjects(),
+    getTopContributors(),
   ]);
 
   const creatorInfo = {
@@ -219,6 +280,7 @@ export default async function Home() {
       <FeaturesSection />
       <CodeShowcase />
       <ContributeSection stats={communityStats} />
+      <ContributorsSection contributors={topContributors} />
       <CreatorSection creator={creatorInfo} />
       <Footer />
     </div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   GitBranch,
@@ -72,25 +71,15 @@ export default function ContributeSection({ stats }: ContributeSectionProps) {
     <section className="py-32 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-500/5 rounded-full blur-2xl" />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-20"
-        >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-block px-4 py-2 text-sm font-semibold text-primary bg-primary/10 rounded-full border border-primary/20 mb-6"
-          >
+        <div className="text-center mb-20 animate-fade-in-up">
+          <span className="inline-block px-4 py-2 text-sm font-semibold text-primary bg-primary/10 rounded-full border border-primary/20 mb-6">
             Open Source
-          </motion.span>
+          </span>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Built by the{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
@@ -101,48 +90,35 @@ export default function ContributeSection({ stats }: ContributeSectionProps) {
             BanglaCode is 100% open source. Every line of code is available on GitHub.
             Join us in making programming accessible to every Bengali speaker.
           </p>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
           {statsDisplay.map((stat, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-card border border-border rounded-2xl p-6 text-center hover:border-primary/50 transition-all duration-300"
+              className="bg-card border border-border rounded-2xl p-6 text-center hover:border-primary/50 hover:-translate-y-1 hover:scale-[1.02] transition-all duration-200 will-change-transform animate-fade-in-up"
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <stat.icon className="w-8 h-8 text-primary mx-auto mb-3" />
               <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
                 {stat.value}
               </div>
               <div className="text-muted-foreground mt-1">{stat.label}</div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Contribution Ways */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {contributionWays.map((way, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="group"
+              className="group animate-fade-in-up"
+              style={{ animationDelay: `${0.2 + index * 0.05}s` }}
             >
-              <div className="h-full bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col">
-                <div className={`w-14 h-14 rounded-xl ${way.bgColor} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+              <div className="h-full bg-card border border-border rounded-2xl p-6 hover:border-primary/50 hover:-translate-y-2 transition-all duration-200 hover:shadow-xl flex flex-col will-change-transform">
+                <div className={`w-14 h-14 rounded-xl ${way.bgColor} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-200`}>
                   <way.icon className={`w-7 h-7 ${way.color}`} />
                 </div>
                 <h3 className="text-xl font-bold mb-3">{way.title}</h3>
@@ -155,21 +131,16 @@ export default function ContributeSection({ stats }: ContributeSectionProps) {
                   {way.linkText} →
                 </Link>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
+        <div className="text-center animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
           <Link
             href="https://github.com/nexoral/BanglaCode"
             target="_blank"
-            className="inline-flex items-center gap-3 px-10 py-5 text-xl font-semibold text-white bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 rounded-full transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,0,0,0.3)] border border-gray-700"
+            className="inline-flex items-center gap-3 px-10 py-5 text-xl font-semibold text-white bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 rounded-full transition-all duration-200 hover:shadow-[0_0_40px_rgba(0,0,0,0.3)] border border-gray-700 hover:-translate-y-1 will-change-transform"
           >
             <FaGithub className="w-7 h-7" />
             Star us on GitHub
@@ -177,7 +148,7 @@ export default function ContributeSection({ stats }: ContributeSectionProps) {
           <p className="mt-4 text-muted-foreground">
             Your star helps us reach more students and educators!
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

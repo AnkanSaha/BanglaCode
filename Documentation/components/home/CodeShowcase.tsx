@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Play, Copy, Check } from "lucide-react";
 
@@ -90,12 +89,10 @@ function SyntaxHighlightedCode({ code }: { code: string }) {
   const lines = code.split("\n");
 
   const highlightLine = (line: string, lineIndex: number) => {
-    const tokens: React.ReactNode[] = [];
-    let remaining = line;
     let keyIndex = 0;
 
     // Check if it's a comment line
-    if (remaining.trim().startsWith("//")) {
+    if (line.trim().startsWith("//")) {
       return (
         <div key={lineIndex} className="flex">
           <span className="text-gray-600 w-8 select-none text-right pr-4">{lineIndex + 1}</span>
@@ -189,20 +186,10 @@ export default function CodeShowcase() {
   return (
     <section className="py-32 bg-gradient-to-b from-background via-accent/5 to-background relative overflow-hidden">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="inline-block px-4 py-2 text-sm font-semibold text-primary bg-primary/10 rounded-full border border-primary/20 mb-6"
-          >
+        <div className="text-center mb-16 animate-fade-in-up">
+          <span className="inline-block px-4 py-2 text-sm font-semibold text-primary bg-primary/10 rounded-full border border-primary/20 mb-6">
             See It In Action
-          </motion.span>
+          </span>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Code That{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
@@ -212,23 +199,16 @@ export default function CodeShowcase() {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Clean, intuitive syntax that feels natural. See how BanglaCode makes programming accessible.
           </p>
-        </motion.div>
+        </div>
 
         <div className="max-w-6xl mx-auto">
           {/* Tab Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-wrap justify-center gap-3 mb-8"
-          >
+          <div className="flex flex-wrap justify-center gap-3 mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
             {codeExamples.map((example, index) => (
-              <motion.button
+              <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-200 hover:scale-105 active:scale-95 will-change-transform ${
                   activeIndex === index
                     ? "bg-primary text-white shadow-lg shadow-primary/25"
                     : "bg-card border border-border hover:border-primary/50 text-muted-foreground hover:text-foreground"
@@ -238,20 +218,15 @@ export default function CodeShowcase() {
                   {example.category}:
                 </span>
                 {example.title}
-              </motion.button>
+              </button>
             ))}
-          </motion.div>
+          </div>
 
           {/* Code Display */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 gap-6"
-          >
+          <div className="grid md:grid-cols-2 gap-6 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             {/* Code Editor */}
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-opacity" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-opacity duration-200" />
               <div className="relative bg-[#1a1a2e] rounded-2xl overflow-hidden border border-border">
                 {/* Editor Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 bg-black/20">
@@ -267,7 +242,7 @@ export default function CodeShowcase() {
                   </div>
                   <button
                     onClick={copyCode}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
                   >
                     {copied ? (
                       <Check className="w-4 h-4 text-green-500" />
@@ -278,24 +253,15 @@ export default function CodeShowcase() {
                 </div>
 
                 {/* Code Content */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeIndex}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-6 overflow-x-auto"
-                  >
-                    <SyntaxHighlightedCode code={codeExamples[activeIndex].code} />
-                  </motion.div>
-                </AnimatePresence>
+                <div className="p-6 overflow-x-auto">
+                  <SyntaxHighlightedCode code={codeExamples[activeIndex].code} />
+                </div>
               </div>
             </div>
 
             {/* Output */}
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-opacity" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-opacity duration-200" />
               <div className="relative bg-[#0d1117] rounded-2xl overflow-hidden border border-border h-full">
                 {/* Terminal Header */}
                 <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50 bg-black/20">
@@ -304,31 +270,17 @@ export default function CodeShowcase() {
                 </div>
 
                 {/* Output Content */}
-                <AnimatePresence mode="wait">
-                  <motion.pre
-                    key={activeIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 }}
-                    className="p-6 text-sm font-mono text-green-400 leading-relaxed"
-                  >
-                    {codeExamples[activeIndex].output.split("\n").map((line, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 + i * 0.1 }}
-                      >
-                        <span className="text-gray-600 mr-2">&gt;</span>
-                        {line}
-                      </motion.div>
-                    ))}
-                  </motion.pre>
-                </AnimatePresence>
+                <pre className="p-6 text-sm font-mono text-green-400 leading-relaxed">
+                  {codeExamples[activeIndex].output.split("\n").map((line, i) => (
+                    <div key={i}>
+                      <span className="text-gray-600 mr-2">&gt;</span>
+                      {line}
+                    </div>
+                  ))}
+                </pre>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

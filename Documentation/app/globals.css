@@ -128,3 +128,74 @@ body {
 .prose td strong {
   color: hsl(var(--foreground));
 }
+
+/* Custom animations for smoother performance - GPU accelerated */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes pulse-slower {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 10s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 15s ease-in-out infinite;
+  will-change: opacity;
+}
+
+/* Smooth fade-in animation - optimized */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .animate-fade-in-up {
+    opacity: 1;
+    animation: none;
+  }
+}
