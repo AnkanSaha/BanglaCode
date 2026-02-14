@@ -126,12 +126,12 @@ jobs:
       - name: Package artifacts
         run: |
           VERSION=${{ needs.version-check.outputs.version }}
-          cd dist/windows-amd64 && zip -r ../banglacode-windows-amd64.zip banglacode.exe &
-          cd dist/windows-386 && zip -r ../banglacode-windows-386.zip banglacode.exe &
-          cd dist/macos-intel && zip -r ../banglacode-macos-amd64.zip banglacode &
-          cd dist/macos-arm && zip -r ../banglacode-macos-arm64.zip banglacode &
+          (cd dist/windows-amd64 && zip -r ../banglacode-windows-amd64.zip banglacode.exe) &
+          (cd dist/windows-386 && zip -r ../banglacode-windows-386.zip banglacode.exe) &
+          (cd dist/macos-intel && zip -r ../banglacode-macos-amd64.zip banglacode) &
+          (cd dist/macos-arm && zip -r ../banglacode-macos-arm64.zip banglacode) &
           wait
-          cd dist/linux && xpack -i ./banglacode -app banglacode -arch amd64 -v $VERSION && mv dist/*.deb ../banglacode-linux-amd64.deb
+          (cd dist/linux && xpack -i ./banglacode -app banglacode -arch amd64 -v $VERSION && mv dist/*.deb ../banglacode-linux-amd64.deb)
           tar -czvf dist/banglacode-linux-amd64.tgz -C dist/linux banglacode
           fpm -s dir -t rpm -n banglacode -v $VERSION --architecture x86_64 \
             --description "BanglaCode - Bengali Programming Language" \

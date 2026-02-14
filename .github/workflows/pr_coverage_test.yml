@@ -76,7 +76,7 @@ jobs:
 
       - name: Build extension & docs
         run: |
-          cd Extension && npm ci --prefer-offline && npx vsce package &
-          cd Documentation && npm ci --prefer-offline && npm run build &
+          (cd Extension && npm ci --prefer-offline && npx vsce package) &
+          (cd Documentation && npm ci --prefer-offline && npm run build) &
           wait
           echo "✅ Extension & Documentation built" >> $GITHUB_STEP_SUMMARY
