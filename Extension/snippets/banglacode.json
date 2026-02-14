@@ -449,5 +449,374 @@
       "}"
     ],
     "description": "Class with documentation"
+  },
+  "File Size": {
+    "prefix": "file_akar",
+    "body": [
+      "dhoro ${1:size} = file_akar(\"${2:path/to/file}\");",
+      "dekho(\"File size:\", ${1:size}, \"bytes\");"
+    ],
+    "description": "Get file size in bytes (ফাইল আকার)"
+  },
+  "File Permissions": {
+    "prefix": "file_permission",
+    "body": [
+      "dhoro ${1:perms} = file_permission(\"${2:path/to/file}\");",
+      "dekho(\"Permissions:\", ${1:perms});"
+    ],
+    "description": "Get file permissions (ফাইল পারমিশন)"
+  },
+  "Set File Permissions": {
+    "prefix": "file_permission_set",
+    "body": [
+      "file_permission_set(\"${1:path/to/file}\", \"${2:0644}\");"
+    ],
+    "description": "Set file permissions (ফাইল পারমিশন সেট)"
+  },
+  "File Metadata": {
+    "prefix": "file-metadata",
+    "body": [
+      "dhoro path = \"${1:path/to/file}\";",
+      "dekho(\"Size:\", file_akar(path), \"bytes\");",
+      "dekho(\"Permissions:\", file_permission(path));",
+      "dekho(\"Type:\", file_dhoron(path));",
+      "dekho(\"Modified:\", file_shomoy_poribortito(path));"
+    ],
+    "description": "Get comprehensive file metadata"
+  },
+  "File Rename": {
+    "prefix": "file_rename",
+    "body": [
+      "file_rename(\"${1:oldpath}\", \"${2:newpath}\");"
+    ],
+    "description": "Rename or move file (ফাইল রিনেম)"
+  },
+  "Directory List": {
+    "prefix": "directory_taliika",
+    "body": [
+      "dhoro ${1:files} = directory_taliika(\"${2:path/to/dir}\");",
+      "ghuriye (dhoro i = 0; i < dorghyo(${1:files}); i = i + 1) {",
+      "\tdekho(${1:files}[i]);",
+      "}"
+    ],
+    "description": "List directory contents (ডিরেক্টরি তালিকা)"
+  },
+  "Directory Traverse": {
+    "prefix": "directory_ghumao",
+    "body": [
+      "dhoro ${1:allFiles} = directory_ghumao(\"${2:path/to/dir}\");",
+      "dekho(\"Total files:\", dorghyo(${1:allFiles}));"
+    ],
+    "description": "Recursive directory traversal (ডিরেক্টরি ঘুরাও)"
+  },
+  "Directory Size": {
+    "prefix": "directory_akar",
+    "body": [
+      "dhoro ${1:totalSize} = directory_akar(\"${2:path/to/dir}\");",
+      "dekho(\"Directory size:\", ${1:totalSize}, \"bytes\");"
+    ],
+    "description": "Get total directory size (ডিরেক্টরি আকার)"
+  },
+  "Check File Exists": {
+    "prefix": "ache_ki",
+    "body": [
+      "jodi (ache_ki(\"${1:path}\")) {",
+      "\tdekho(\"${2:File exists}\");",
+      "} nahole {",
+      "\tdekho(\"${3:File not found}\");",
+      "}"
+    ],
+    "description": "Check if file exists (আছে কি)"
+  },
+  "Create Directory": {
+    "prefix": "folder_banao",
+    "body": [
+      "folder_banao(\"${1:path/to/dir}\");"
+    ],
+    "description": "Create directory (ফোল্ডার বানাও)"
+  },
+  "Create Nested Directory": {
+    "prefix": "folder_banao_shokal",
+    "body": [
+      "folder_banao_shokal(\"${1:path/to/nested/dir}\");"
+    ],
+    "description": "Create directory with parents (ফোল্ডার বানাও সকল)"
+  },
+  "Remove File": {
+    "prefix": "muke_felo",
+    "body": [
+      "muke_felo(\"${1:path}\");"
+    ],
+    "description": "Remove file or directory (মুছে ফেলো)"
+  },
+  "Process Sleep": {
+    "prefix": "process_ghum",
+    "body": [
+      "process_ghum(${1:1000}); // Sleep ${1:1000}ms"
+    ],
+    "description": "Sleep for milliseconds (প্রসেস ঘুম)"
+  },
+  "Execute Command": {
+    "prefix": "chalan",
+    "body": [
+      "dhoro ${1:result} = chalan(\"${2:command}\", [${3:args}]);",
+      "dekho(\"Output:\", ${1:result}[\"output\"]);",
+      "dekho(\"Exit code:\", ${1:result}[\"code\"]);"
+    ],
+    "description": "Execute system command (চালান)"
+  },
+  "Execute Simple Command": {
+    "prefix": "chalan-simple",
+    "body": [
+      "dhoro ${1:result} = chalan(\"${2:ls}\");",
+      "dekho(${1:result}[\"output\"]);"
+    ],
+    "description": "Execute simple command (চালান)"
+  },
+  "Start Background Process": {
+    "prefix": "process_chalu",
+    "body": [
+      "dhoro ${1:proc} = process_chalu(\"${2:command}\", [${3:args}]);",
+      "dekho(\"Started process:\", ${1:proc}[\"pid\"]);"
+    ],
+    "description": "Start process in background (প্রসেস চালু)"
+  },
+  "Kill Process": {
+    "prefix": "process_maro",
+    "body": [
+      "process_maro(${1:pid});"
+    ],
+    "description": "Kill process by PID (প্রসেস মারো)"
+  },
+  "Get Process ID": {
+    "prefix": "process_id",
+    "body": [
+      "dhoro ${1:pid} = process_id();",
+      "dekho(\"Current PID:\", ${1:pid});"
+    ],
+    "description": "Get current process ID (প্রসেস আইডি)"
+  },
+  "Environment Variable": {
+    "prefix": "poribesh",
+    "body": [
+      "dhoro ${1:value} = poribesh(\"${2:VAR_NAME}\");",
+      "dekho(\"${2:VAR_NAME}:\", ${1:value});"
+    ],
+    "description": "Get environment variable (পরিবেশ)"
+  },
+  "Set Environment Variable": {
+    "prefix": "poribesh_set",
+    "body": [
+      "poribesh_set(\"${1:VAR_NAME}\", \"${2:value}\");"
+    ],
+    "description": "Set environment variable (পরিবেশ সেট)"
+  },
+  "All Environment Variables": {
+    "prefix": "poribesh_shokal",
+    "body": [
+      "dhoro ${1:env} = poribesh_shokal();",
+      "dekho(\"Environment variables:\", dorghyo(${1:env}));"
+    ],
+    "description": "Get all environment variables (পরিবেশ সকল)"
+  },
+  "Join Paths": {
+    "prefix": "path_joro",
+    "body": [
+      "dhoro ${1:fullPath} = path_joro(\"${2:dir}\", \"${3:subdir}\", \"${4:file}\");"
+    ],
+    "description": "Join path components (পাথ জোড়ো)"
+  },
+  "Absolute Path": {
+    "prefix": "sompurno_path",
+    "body": [
+      "dhoro ${1:absPath} = sompurno_path(\"${2:relative/path}\");"
+    ],
+    "description": "Get absolute path (সম্পূর্ণ পাথ)"
+  },
+  "Path Match": {
+    "prefix": "path_match",
+    "body": [
+      "jodi (path_match(\"${1:*.txt}\", \"${2:filename}\")) {",
+      "\tdekho(\"${3:Match found}\");",
+      "}"
+    ],
+    "description": "Match path against glob pattern (পাথ ম্যাচ)"
+  },
+  "System Info": {
+    "prefix": "sys-info",
+    "body": [
+      "dekho(\"OS:\", os_naam());",
+      "dekho(\"Architecture:\", bibhag());",
+      "dekho(\"Hostname:\", hostname());",
+      "dekho(\"CPUs:\", cpu_sonkha());",
+      "dekho(\"User:\", bebosthok_naam());",
+      "dekho(\"Home:\", bari_directory());"
+    ],
+    "description": "Get all system information"
+  },
+  "Current Time": {
+    "prefix": "shomoy_ekhon",
+    "body": [
+      "dhoro ${1:now} = shomoy_ekhon();",
+      "dekho(\"Unix timestamp:\", ${1:now});"
+    ],
+    "description": "Get current Unix timestamp (সময় এখন)"
+  },
+  "Format Time": {
+    "prefix": "shomoy_format",
+    "body": [
+      "dhoro ${1:formatted} = shomoy_format(${2:timestamp}, \"${3:2006-01-02 15:04:05}\");",
+      "dekho(${1:formatted});"
+    ],
+    "description": "Format Unix timestamp to string (সময় ফরম্যাট)"
+  },
+  "Parse Time": {
+    "prefix": "shomoy_parse",
+    "body": [
+      "dhoro ${1:timestamp} = shomoy_parse(\"${2:2024-01-01 12:00:00}\", \"${3:2006-01-02 15:04:05}\");"
+    ],
+    "description": "Parse time string to Unix timestamp (সময় পার্স)"
+  },
+  "Temporary File": {
+    "prefix": "temp_file",
+    "body": [
+      "dhoro ${1:tmpFile} = temp_file(\"${2:prefix-}\");",
+      "dekho(\"Temp file:\", ${1:tmpFile});"
+    ],
+    "description": "Create temporary file (টেম্প ফাইল)"
+  },
+  "Temporary Directory": {
+    "prefix": "temp_folder",
+    "body": [
+      "dhoro ${1:tmpDir} = temp_folder(\"${2:prefix-}\");",
+      "dekho(\"Temp directory:\", ${1:tmpDir});"
+    ],
+    "description": "Create temporary directory (টেম্প ফোল্ডার)"
+  },
+  "Temp Directory Path": {
+    "prefix": "temp_directory",
+    "body": [
+      "dhoro ${1:tmpDir} = temp_directory();",
+      "dekho(\"System temp:\", ${1:tmpDir});"
+    ],
+    "description": "Get system temp directory (টেম্প ডিরেক্টরি)"
+  },
+  "Create Symlink": {
+    "prefix": "symlink_banao",
+    "body": [
+      "symlink_banao(\"${1:target}\", \"${2:linkname}\");"
+    ],
+    "description": "Create symbolic link (সিমলিংক বানাও)"
+  },
+  "Read Symlink": {
+    "prefix": "symlink_poro",
+    "body": [
+      "dhoro ${1:target} = symlink_poro(\"${2:linkname}\");",
+      "dekho(\"Points to:\", ${1:target});"
+    ],
+    "description": "Read symlink target (সিমলিংক পড়ো)"
+  },
+  "Check Symlink": {
+    "prefix": "symlink_ki",
+    "body": [
+      "jodi (symlink_ki(\"${1:path}\")) {",
+      "\tdekho(\"${2:Is a symlink}\");",
+      "}"
+    ],
+    "description": "Check if path is symlink (সিমলিংক কি)"
+  },
+  "Memory Info": {
+    "prefix": "mem-info",
+    "body": [
+      "dhoro ${1:total} = memory_total();",
+      "dhoro ${2:used} = memory_bebohrito();",
+      "dekho(\"Memory: \", ${2:used}, \"/\", ${1:total}, \"bytes\");"
+    ],
+    "description": "Get memory information"
+  },
+  "Disk Space": {
+    "prefix": "disk-space",
+    "body": [
+      "dhoro ${1:total} = disk_akar(\"${2:/}\");",
+      "dhoro ${3:free} = disk_mukt(\"${2:/}\");",
+      "dekho(\"Disk: \", ${3:free}, \"free of\", ${1:total}, \"bytes\");"
+    ],
+    "description": "Get disk space information"
+  },
+  "Network Interfaces": {
+    "prefix": "network_interface",
+    "body": [
+      "dhoro ${1:interfaces} = network_interface();",
+      "ghuriye (dhoro i = 0; i < dorghyo(${1:interfaces}); i = i + 1) {",
+      "\tdhoro iface = ${1:interfaces}[i];",
+      "\tdekho(\"Interface:\", iface[\"naam\"]);",
+      "}"
+    ],
+    "description": "Get network interfaces (নেটওয়ার্ক ইন্টারফেস)"
+  },
+  "IP Addresses": {
+    "prefix": "ip_shokal",
+    "body": [
+      "dhoro ${1:ips} = ip_shokal();",
+      "dekho(\"All IP addresses:\", ${1:ips});"
+    ],
+    "description": "Get all IP addresses (আইপি সকল)"
+  },
+  "File Search Pattern": {
+    "prefix": "file-search",
+    "body": [
+      "// Find all .txt files in directory",
+      "dhoro ${1:allFiles} = directory_ghumao(\"${2:.}\");",
+      "ghuriye (dhoro i = 0; i < dorghyo(${1:allFiles}); i = i + 1) {",
+      "\tdhoro file = ${1:allFiles}[i];",
+      "\tjodi (file_ext(file) == \".${3:txt}\") {",
+      "\t\tdekho(\"Found:\", file);",
+      "\t}",
+      "}"
+    ],
+    "description": "Search for files by pattern"
+  },
+  "System Monitor": {
+    "prefix": "sys-monitor",
+    "body": [
+      "kaj monitor() {",
+      "\tdhoro mem_total = memory_total();",
+      "\tdhoro mem_used = memory_bebohrito();",
+      "\tdhoro disk_free = disk_mukt(\"/\");",
+      "\t",
+      "\tdekho(\"Memory:\", mem_used, \"/\", mem_total);",
+      "\tdekho(\"Disk free:\", disk_free);",
+      "\t",
+      "\tprocess_ghum(${1:5000});",
+      "\tmonitor(); // Recursive call",
+      "}",
+      "",
+      "monitor();"
+    ],
+    "description": "System resource monitor"
+  },
+  "Backup Script": {
+    "prefix": "backup-script",
+    "body": [
+      "// Simple backup script",
+      "dhoro ${1:source} = \"${2:/path/to/source}\";",
+      "dhoro ${3:backup} = \"${4:/path/to/backup}\";",
+      "",
+      "jodi (!ache_ki(${3:backup})) {",
+      "\tfolder_banao_shokal(${3:backup});",
+      "}",
+      "",
+      "dhoro files = directory_ghumao(${1:source});",
+      "dekho(\"Backing up\", dorghyo(files), \"files...\");",
+      "",
+      "// Copy files (using chalan for cp command)",
+      "dhoro result = chalan(\"cp\", [\"-r\", ${1:source}, ${3:backup}]);",
+      "jodi (result[\"code\"] == 0) {",
+      "\tdekho(\"Backup completed successfully!\");",
+      "} nahole {",
+      "\tdekho(\"Backup failed:\", result[\"error\"]);",
+      "}"
+    ],
+    "description": "File backup script template"
   }
 }

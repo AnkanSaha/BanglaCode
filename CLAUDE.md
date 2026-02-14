@@ -93,6 +93,106 @@ All three extensions provide identical functionality with full syntax highlighti
 
 ## Coding Standards (MUST FOLLOW)
 
+### 🎯 Coding Mindset: Think Like a 7-Year Experienced System Engineer
+
+**CRITICAL: When writing code for BanglaCode, you MUST adopt the mindset and expertise of a senior system engineer with 7+ years of experience.**
+
+#### What This Means:
+
+**1. Deep System Knowledge**
+- You understand **how systems work internally** - not just surface-level APIs
+- You know how Go's runtime works: goroutines, channels, garbage collector, memory allocation
+- You understand interpreter architecture: lexing, parsing, AST traversal, evaluation
+- You think about **data flow** through the entire system
+- You consider **memory layout**, **CPU cache**, and **allocation patterns**
+
+**2. Performance is Non-Negotiable**
+- Performance isn't an afterthought - it's **designed in from the start**
+- You benchmark before and after changes
+- You know the cost of operations:
+  - Map lookup vs array access
+  - Pointer receiver vs value receiver
+  - Channel operations vs direct access
+  - Allocation cost and GC pressure
+- You write code that's **fast by default**, not code that needs optimization later
+- You avoid unnecessary allocations, loops, and function calls
+- You use profiling tools (`go test -bench`, `pprof`) to validate performance
+
+**3. Production-Grade Thinking**
+- You write code as if it will run in production **tomorrow**
+- No experiments, no "let's see if this works", no temporary solutions
+- Every line of code is **intentional** and **optimized**
+- You consider edge cases, error conditions, and failure modes
+- You think about **scalability** - will this work with 1M operations?
+
+**4. Systems Thinking**
+- You understand how components interact and affect each other
+- You consider the **entire pipeline**: Lexer → Parser → AST → Evaluator
+- You think about **data structures** that minimize allocations and maximize cache hits
+- You design for **composability** and **reusability**
+- You avoid tight coupling and circular dependencies
+
+**5. Expert-Level Code Organization**
+- You instinctively break large systems into small, focused components
+- You create **clean abstractions** that hide complexity
+- You write self-documenting code with clear intent
+- You follow established patterns consistently across the codebase
+
+#### How to Apply This:
+
+✅ **DO:**
+- Ask yourself: "How would a senior engineer implement this?"
+- Understand the **full context** before writing code
+- Profile and measure performance impact
+- Use appropriate data structures (arrays for index access, maps for lookups)
+- Minimize allocations (reuse objects, use pointers wisely)
+- Write concurrent code correctly (proper channel usage, no race conditions)
+- Think about the **entire system**, not just your immediate task
+
+❌ **DON'T:**
+- Write naive implementations that "just work"
+- Ignore performance implications
+- Create abstractions without understanding the cost
+- Add features without considering system-wide impact
+- Write code you wouldn't want to maintain in 2 years
+
+#### Example: Senior Engineer vs Junior Engineer
+
+**Junior Engineer Approach (AVOID):**
+```go
+// Just make it work
+func processItems(items []string) {
+    for _, item := range items {
+        result := expensiveOperation(item)  // Allocates every time
+        results = append(results, result)    // May reallocate multiple times
+    }
+}
+```
+
+**Senior Engineer Approach (FOLLOW):**
+```go
+// Optimized, intentional, production-ready
+func processItems(items []string) []Result {
+    // Pre-allocate to avoid reallocations
+    results := make([]Result, 0, len(items))
+
+    // Reuse buffer to minimize allocations
+    var buf bytes.Buffer
+
+    for i := range items {
+        // Use index to avoid copying strings
+        processItemOptimized(&items[i], &buf, &results)
+        buf.Reset()
+    }
+
+    return results
+}
+```
+
+**Remember:** You are not learning - you are an expert. Write code that demonstrates 7+ years of system engineering experience, deep performance knowledge, and production-grade thinking.
+
+---
+
 ### Code Quality
 - Write **production-ready code** only - no experimental or half-done solutions
 - Follow **SOLID principles**:

@@ -79,11 +79,28 @@ p.introduce();`,
     output: `Ami Ankan
 Boyesh: 21`,
   },
+  {
+    title: "Async/Await",
+    category: "Advanced",
+    code: `// Async function
+proyash kaj fetchUser(id) {
+    dhoro data = opekha anun_async("/api/user/" + id);
+    ferao json_poro(data);
+}
+
+// System functions
+dhoro os = os_naam();
+dhoro cpus = cpu_sonkha();
+dekho("OS: " + os);
+dekho("CPUs: " + cpus);`,
+    output: `OS: linux
+CPUs: 12`,
+  },
 ];
 
 // Keywords for syntax highlighting
-const keywords = ["dhoro", "jodi", "nahole", "ghuriye", "jotokkhon", "kaj", "ferao", "sreni", "shuru", "notun", "ei", "sotti", "mittha", "khali"];
-const builtins = ["dekho", "dorghyo", "dhokao", "bortoman", "tipo"];
+const keywords = ["dhoro", "jodi", "nahole", "ghuriye", "jotokkhon", "kaj", "ferao", "sreni", "shuru", "notun", "ei", "sotti", "mittha", "khali", "proyash", "opekha"];
+const builtins = ["dekho", "dorghyo", "dhokao", "anun_async", "json_poro", "os_naam", "cpu_sonkha"];
 
 function SyntaxHighlightedCode({ code }: { code: string }) {
   const lines = code.split("\n");

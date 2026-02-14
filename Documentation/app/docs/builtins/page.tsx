@@ -13,8 +13,8 @@ export default function Builtins() {
       <h1>Built-in Functions Reference</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        BanglaCode provides 50+ built-in functions for I/O, type conversion, string manipulation,
-        array operations, math, file handling, and HTTP.
+        BanglaCode provides 80+ built-in functions for I/O, type conversion, string manipulation,
+        array operations, math, file handling, HTTP, JSON, and complete OS-level system access.
       </p>
 
       <h2>Input/Output</h2>
@@ -656,6 +656,368 @@ parallel();`}
             <tr><td><code>somoy</code></td><td>সময়</td><td>time</td></tr>
             <tr><td><code>poro</code></td><td>পড়ো</td><td>read</td></tr>
             <tr><td><code>lekho</code></td><td>লেখো</td><td>write</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>System Operations</h2>
+
+      <p className="text-muted-foreground">
+        BanglaCode provides 53 system-level functions for file operations, process management,
+        network information, system statistics, environment variables, and temporary file handling.
+      </p>
+
+      <h3>File Metadata</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>file_akar</code></td>
+              <td><code>path</code></td>
+              <td><code>number</code></td>
+              <td>Get file size in bytes</td>
+            </tr>
+            <tr>
+              <td><code>file_permission</code></td>
+              <td><code>path</code></td>
+              <td><code>string</code></td>
+              <td>Get file permissions (e.g., "0644")</td>
+            </tr>
+            <tr>
+              <td><code>file_permission_set</code></td>
+              <td><code>path, perms</code></td>
+              <td><code>khali</code></td>
+              <td>Change file permissions</td>
+            </tr>
+            <tr>
+              <td><code>file_malikan</code></td>
+              <td><code>path</code></td>
+              <td><code>map</code></td>
+              <td>Get file owner (uid, gid, naam)</td>
+            </tr>
+            <tr>
+              <td><code>file_shomoy_poribortito</code></td>
+              <td><code>path</code></td>
+              <td><code>number</code></td>
+              <td>Get file modified time (Unix)</td>
+            </tr>
+            <tr>
+              <td><code>file_dhoron</code></td>
+              <td><code>path</code></td>
+              <td><code>string</code></td>
+              <td>Get file type (file/directory/symlink)</td>
+            </tr>
+            <tr>
+              <td><code>file_rename</code></td>
+              <td><code>old, new</code></td>
+              <td><code>khali</code></td>
+              <td>Rename or move file</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Directory Operations</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>directory_taliika</code></td>
+              <td><code>path</code></td>
+              <td><code>array</code></td>
+              <td>List directory contents</td>
+            </tr>
+            <tr>
+              <td><code>directory_ghumao</code></td>
+              <td><code>path</code></td>
+              <td><code>array</code></td>
+              <td>Recursive directory traversal</td>
+            </tr>
+            <tr>
+              <td><code>directory_khali_ki</code></td>
+              <td><code>path</code></td>
+              <td><code>boolean</code></td>
+              <td>Check if directory is empty</td>
+            </tr>
+            <tr>
+              <td><code>directory_akar</code></td>
+              <td><code>path</code></td>
+              <td><code>number</code></td>
+              <td>Get total directory size in bytes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CodeBlock
+        code={`// File metadata example
+dhoro size = file_akar("/path/to/file.txt");
+dekho("Size:", size, "bytes");
+
+dhoro perms = file_permission("/path/to/file.txt");
+dekho("Permissions:", perms);
+
+// Directory operations
+dhoro files = directory_taliika("/home/user");
+ghuriye (dhoro i = 0; i < dorghyo(files); i = i + 1) {
+  dekho(files[i]);
+}`}
+      />
+
+      <h3>Process Management</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>chalan</code></td>
+              <td><code>cmd, [args]</code></td>
+              <td><code>map</code></td>
+              <td>Execute system command</td>
+            </tr>
+            <tr>
+              <td><code>process_ghum</code></td>
+              <td><code>ms</code></td>
+              <td><code>khali</code></td>
+              <td>Sleep for milliseconds</td>
+            </tr>
+            <tr>
+              <td><code>process_maro</code></td>
+              <td><code>pid</code></td>
+              <td><code>khali</code></td>
+              <td>Kill process by PID</td>
+            </tr>
+            <tr>
+              <td><code>process_chalu</code></td>
+              <td><code>cmd, [args]</code></td>
+              <td><code>map</code></td>
+              <td>Start process in background</td>
+            </tr>
+            <tr>
+              <td><code>process_opekha</code></td>
+              <td><code>pid</code></td>
+              <td><code>map</code></td>
+              <td>Wait for process completion</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Network Information</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>network_interface</code></td>
+              <td>-</td>
+              <td><code>array</code></td>
+              <td>Get all network interfaces</td>
+            </tr>
+            <tr>
+              <td><code>ip_address</code></td>
+              <td><code>iface</code></td>
+              <td><code>array</code></td>
+              <td>Get IP addresses for interface</td>
+            </tr>
+            <tr>
+              <td><code>ip_shokal</code></td>
+              <td>-</td>
+              <td><code>array</code></td>
+              <td>Get all IP addresses</td>
+            </tr>
+            <tr>
+              <td><code>mac_address</code></td>
+              <td><code>iface</code></td>
+              <td><code>string</code></td>
+              <td>Get MAC address for interface</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>System Statistics</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>memory_total</code></td>
+              <td>-</td>
+              <td><code>number</code></td>
+              <td>Total system memory in bytes</td>
+            </tr>
+            <tr>
+              <td><code>memory_bebohrito</code></td>
+              <td>-</td>
+              <td><code>number</code></td>
+              <td>Used memory in bytes</td>
+            </tr>
+            <tr>
+              <td><code>disk_akar</code></td>
+              <td><code>[path]</code></td>
+              <td><code>number</code></td>
+              <td>Total disk size in bytes</td>
+            </tr>
+            <tr>
+              <td><code>disk_mukt</code></td>
+              <td><code>[path]</code></td>
+              <td><code>number</code></td>
+              <td>Free disk space in bytes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Time Operations</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>shomoy_ekhon</code></td>
+              <td>-</td>
+              <td><code>number</code></td>
+              <td>Current Unix timestamp</td>
+            </tr>
+            <tr>
+              <td><code>shomoy_format</code></td>
+              <td><code>timestamp, [format]</code></td>
+              <td><code>string</code></td>
+              <td>Format timestamp to string</td>
+            </tr>
+            <tr>
+              <td><code>shomoy_parse</code></td>
+              <td><code>str, [format]</code></td>
+              <td><code>number</code></td>
+              <td>Parse time string to timestamp</td>
+            </tr>
+            <tr>
+              <td><code>timezone</code></td>
+              <td>-</td>
+              <td><code>string</code></td>
+              <td>Get current timezone</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Temporary Files</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>temp_directory</code></td>
+              <td>-</td>
+              <td><code>string</code></td>
+              <td>Get system temp directory</td>
+            </tr>
+            <tr>
+              <td><code>temp_file</code></td>
+              <td><code>[prefix]</code></td>
+              <td><code>string</code></td>
+              <td>Create temporary file</td>
+            </tr>
+            <tr>
+              <td><code>temp_folder</code></td>
+              <td><code>[prefix]</code></td>
+              <td><code>string</code></td>
+              <td>Create temporary directory</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Symbolic Links</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>symlink_banao</code></td>
+              <td><code>target, link</code></td>
+              <td><code>khali</code></td>
+              <td>Create symbolic link</td>
+            </tr>
+            <tr>
+              <td><code>symlink_poro</code></td>
+              <td><code>link</code></td>
+              <td><code>string</code></td>
+              <td>Read symlink target</td>
+            </tr>
+            <tr>
+              <td><code>symlink_ki</code></td>
+              <td><code>path</code></td>
+              <td><code>boolean</code></td>
+              <td>Check if path is symlink</td>
+            </tr>
           </tbody>
         </table>
       </div>

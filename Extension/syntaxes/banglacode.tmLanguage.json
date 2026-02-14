@@ -217,6 +217,70 @@
         {
           "name": "support.function.builtin.async.js",
           "match": "\\b(ghumaao|anun_async|poro_async|lekho_async|sob_proyash)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(chalan|poribesh|poribesh_set|poribesh_shokal|poribesh_muke)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(kaj_directory|kaj_directory_bodol|process_id|process_args|process_ghum|process_maro|process_signal)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(process_ache_ki|process_parent_id|process_chalu|process_opekha)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(os_naam|bibhag|hostname|cpu_sonkha)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(bebosthok_naam|bari_directory)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(ache_ki|folder_banao|folder_banao_shokal|muke_felo)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(path_joro|sompurno_path|path_naam|directory_naam|file_ext|path_bichchhed|path_match)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(file_akar|file_permission|file_permission_set|file_malikan|file_malikan_set)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(file_shomoy_tori|file_shomoy_poribortito|file_shomoy_access|file_dhoron|file_rename)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(directory_taliika|directory_ghumao|directory_khali_ki|directory_akar)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(temp_directory|temp_file|temp_folder|temp_path|temp_muche_felo)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(symlink_banao|symlink_poro|symlink_ki|hardlink_banao|link_sonkha)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(shomoy_ekhon|shomoy_format|shomoy_parse|uptime|boot_shomoy|timezone)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(network_interface|ip_address|ip_shokal|mac_address|network_gateway|dns_server)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(memory_total|memory_bebohrito|memory_mukt|cpu_bebohrito)\\b"
+        },
+        {
+          "name": "support.function.builtin.system.js",
+          "match": "\\b(disk_akar|disk_bebohrito|disk_mukt)\\b"
         }
       ]
     },

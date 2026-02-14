@@ -695,3 +695,16 @@ func testBuiltinBooleanObject(t *testing.T, obj object.Object, expected bool) bo
 	}
 	return true
 }
+
+func testBuiltinStringObject(t *testing.T, obj object.Object, expected string) bool {
+	result, ok := obj.(*object.String)
+	if !ok {
+		t.Errorf("object is not String. got=%T (%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%q, want=%q", result.Value, expected)
+		return false
+	}
+	return true
+}

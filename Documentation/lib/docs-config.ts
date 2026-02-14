@@ -81,7 +81,7 @@ export const DOCS_CONFIG: DocSection[] = [
     section: "Reference",
     icon: FileText,
     items: [
-      { name: "Built-in Functions", href: "/docs/builtins", description: "All 50+ built-in functions" },
+      { name: "Built-in Functions", href: "/docs/builtins", description: "All 80+ built-in functions" },
       { name: "Operator Precedence", href: "/docs/precedence", description: "Order of operations" },
       { name: "Examples", href: "/docs/examples", description: "Complete code examples" },
     ],
