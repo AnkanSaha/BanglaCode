@@ -68,39 +68,65 @@ func evalImportStatement(is *ast.ImportStatement, env *object.Environment) objec
 	oldDir := currentDir
 	currentDir = filepath.Dir(fullPath)
 
-	// Evaluate module
-	result := Eval(program, moduleEnv)
-
-	// Restore directory
-	currentDir = oldDir
-
-	if isError(result) {
-		return result
-	}
-
-	// Create module object
+	// Create module object first
 	mod := &object.Module{
 		Name:    modulePath,
 		Exports: make(map[string]object.Object),
 	}
 
-	// Get exports from module environment
+	// Only evaluate export statements and function/class definitions
+	// Skip other top-level code to prevent execution on import
+	for _, stmt := range program.Statements {
+		var result object.Object
+
+		switch s := stmt.(type) {
+		case *ast.ExportStatement:
+			// Evaluate export statements (pathao kaj ...)
+			result = evalExportStatement(s, moduleEnv)
+			if isError(result) {
+				currentDir = oldDir
+				return result
+			}
+
+		case *ast.ExpressionStatement:
+			// Only evaluate function literals (kaj declarations)
+			if fnLit, ok := s.Expression.(*ast.FunctionLiteral); ok && fnLit.Name != nil {
+				result = Eval(s, moduleEnv)
+				if isError(result) {
+					currentDir = oldDir
+					return result
+				}
+			}
+			// Skip other expression statements (function calls, etc.)
+
+		case *ast.ClassDeclaration:
+			// Evaluate class declarations
+			result = Eval(s, moduleEnv)
+			if isError(result) {
+				currentDir = oldDir
+				return result
+			}
+
+		case *ast.VariableDeclaration:
+			// Skip non-exported variable/constant/global declarations
+			// These should only be evaluated if explicitly exported with pathao
+			continue
+
+		default:
+			// Skip all other statements (variable declarations, loops, etc.)
+			// This prevents top-level code execution on import
+			continue
+		}
+	}
+
+	// Restore directory
+	currentDir = oldDir
+
+	// Get exports from module environment (__exports__ map)
 	if exports, ok := moduleEnv.Get("__exports__"); ok {
 		if exportsMap, ok := exports.(*object.Map); ok {
 			for k, v := range exportsMap.Pairs {
 				mod.Exports[k] = v
-			}
-		}
-	}
-
-	// If no explicit exports, export all top-level functions and classes
-	if len(mod.Exports) == 0 {
-		for name, val := range moduleEnv.All() {
-			if name != "__exports__" {
-				switch val.(type) {
-				case *object.Function, *object.Class:
-					mod.Exports[name] = val
-				}
 			}
 		}
 	}

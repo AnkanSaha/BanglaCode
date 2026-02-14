@@ -10,88 +10,90 @@ const fs = require('fs');
 
 // All BanglaCode keywords
 const keywords = [
-    { label: 'dhoro', kind: vscode.CompletionItemKind.Keyword, detail: 'Variable declaration (ধরো)', insertText: 'dhoro ${1:name} = ${2:value};' },
-    { label: 'jodi', kind: vscode.CompletionItemKind.Keyword, detail: 'If condition (যদি)', insertText: 'jodi (${1:condition}) {\n\t${2}\n}' },
-    { label: 'nahole', kind: vscode.CompletionItemKind.Keyword, detail: 'Else (নাহলে)', insertText: 'nahole {\n\t${1}\n}' },
-    { label: 'jotokkhon', kind: vscode.CompletionItemKind.Keyword, detail: 'While loop (যতক্ষণ)', insertText: 'jotokkhon (${1:condition}) {\n\t${2}\n}' },
-    { label: 'ghuriye', kind: vscode.CompletionItemKind.Keyword, detail: 'For loop (ঘুরিয়ে)', insertText: 'ghuriye (dhoro ${1:i} = 0; ${1:i} < ${2:10}; ${1:i} = ${1:i} + 1) {\n\t${3}\n}' },
-    { label: 'kaj', kind: vscode.CompletionItemKind.Keyword, detail: 'Function (কাজ)', insertText: 'kaj ${1:name}(${2:params}) {\n\t${3}\n}' },
-    { label: 'ferao', kind: vscode.CompletionItemKind.Keyword, detail: 'Return (ফেরাও)', insertText: 'ferao ${1:value};' },
-    { label: 'sreni', kind: vscode.CompletionItemKind.Keyword, detail: 'Class definition (শ্রেণী)', insertText: 'sreni ${1:Name} {\n\tshuru(${2:params}) {\n\t\t${3}\n\t}\n}' },
-    { label: 'shuru', kind: vscode.CompletionItemKind.Keyword, detail: 'Constructor method (শুরু)', insertText: 'shuru(${1:params}) {\n\tei.${2:property} = ${2:property};\n}' },
-    { label: 'notun', kind: vscode.CompletionItemKind.Keyword, detail: 'New instance (নতুন)', insertText: 'notun ${1:ClassName}(${2:args})' },
-    { label: 'sotti', kind: vscode.CompletionItemKind.Constant, detail: 'True (সত্যি)', insertText: 'sotti' },
-    { label: 'mittha', kind: vscode.CompletionItemKind.Constant, detail: 'False (মিথ্যা)', insertText: 'mittha' },
-    { label: 'khali', kind: vscode.CompletionItemKind.Constant, detail: 'Null (খালি)', insertText: 'khali' },
-    { label: 'ebong', kind: vscode.CompletionItemKind.Operator, detail: 'Logical AND (এবং)', insertText: 'ebong' },
-    { label: 'ba', kind: vscode.CompletionItemKind.Operator, detail: 'Logical OR (বা)', insertText: 'ba' },
-    { label: 'na', kind: vscode.CompletionItemKind.Operator, detail: 'Logical NOT (না)', insertText: 'na' },
-    { label: 'thamo', kind: vscode.CompletionItemKind.Keyword, detail: 'Break (থামো)', insertText: 'thamo;' },
-    { label: 'chharo', kind: vscode.CompletionItemKind.Keyword, detail: 'Continue (ছাড়ো)', insertText: 'chharo;' },
-    { label: 'ei', kind: vscode.CompletionItemKind.Keyword, detail: 'This reference (এই)', insertText: 'ei.' },
-    { label: 'ano', kind: vscode.CompletionItemKind.Keyword, detail: 'Import module (আনো)', insertText: 'ano "${1:module.bang}";' },
-    { label: 'hisabe', kind: vscode.CompletionItemKind.Keyword, detail: 'Import alias (হিসাবে)', insertText: 'hisabe ${1:alias}' },
-    { label: 'pathao', kind: vscode.CompletionItemKind.Keyword, detail: 'Export (পাঠাও)', insertText: 'pathao ' },
-    { label: 'chesta', kind: vscode.CompletionItemKind.Keyword, detail: 'Try block (চেষ্টা)', insertText: 'chesta {\n\t${1}\n} dhoro_bhul (${2:err}) {\n\t${3}\n}' },
-    { label: 'dhoro_bhul', kind: vscode.CompletionItemKind.Keyword, detail: 'Catch block (ধরো ভুল)', insertText: 'dhoro_bhul (${1:err}) {\n\t${2}\n}' },
-    { label: 'shesh', kind: vscode.CompletionItemKind.Keyword, detail: 'Finally block (শেষ)', insertText: 'shesh {\n\t${1}\n}' },
-    { label: 'felo', kind: vscode.CompletionItemKind.Keyword, detail: 'Throw error (ফেলো)', insertText: 'felo "${1:error message}";' },
+    { label: 'dhoro', kind: vscode.CompletionItemKind.Keyword, detail: 'চলক ঘোষণা (ধরো) - Variable', insertText: 'dhoro ${1:name} = ${2:value};' },
+    { label: 'sthir', kind: vscode.CompletionItemKind.Keyword, detail: 'স্থির মান (স্থির) - Constant', insertText: 'sthir ${1:NAME} = ${2:value};' },
+    { label: 'bishwo', kind: vscode.CompletionItemKind.Keyword, detail: 'বৈশ্বিক চলক (বিশ্ব) - Global', insertText: 'bishwo ${1:name} = ${2:value};' },
+    { label: 'jodi', kind: vscode.CompletionItemKind.Keyword, detail: 'শর্ত যদি (যদি) - If', insertText: 'jodi (${1:condition}) {\n\t${2}\n}' },
+    { label: 'nahole', kind: vscode.CompletionItemKind.Keyword, detail: 'নাহলে (নাহলে) - Else', insertText: 'nahole {\n\t${1}\n}' },
+    { label: 'jotokkhon', kind: vscode.CompletionItemKind.Keyword, detail: 'যতক্ষণ লুপ (যতক্ষণ) - While', insertText: 'jotokkhon (${1:condition}) {\n\t${2}\n}' },
+    { label: 'ghuriye', kind: vscode.CompletionItemKind.Keyword, detail: 'ঘুরিয়ে লুপ (ঘুরিয়ে) - For', insertText: 'ghuriye (dhoro ${1:i} = 0; ${1:i} < ${2:10}; ${1:i} = ${1:i} + 1) {\n\t${3}\n}' },
+    { label: 'kaj', kind: vscode.CompletionItemKind.Keyword, detail: 'ফাংশন (কাজ) - Function', insertText: 'kaj ${1:name}(${2:params}) {\n\t${3}\n}' },
+    { label: 'ferao', kind: vscode.CompletionItemKind.Keyword, detail: 'ফেরাও (ফেরাও) - Return', insertText: 'ferao ${1:value};' },
+    { label: 'sreni', kind: vscode.CompletionItemKind.Keyword, detail: 'শ্রেণী (শ্রেণী) - Class', insertText: 'sreni ${1:Name} {\n\tshuru(${2:params}) {\n\t\t${3}\n\t}\n}' },
+    { label: 'shuru', kind: vscode.CompletionItemKind.Keyword, detail: 'কন্সট্রাক্টর (শুরু) - Constructor', insertText: 'shuru(${1:params}) {\n\tei.${2:property} = ${2:property};\n}' },
+    { label: 'notun', kind: vscode.CompletionItemKind.Keyword, detail: 'নতুন অবজেক্ট (নতুন) - New', insertText: 'notun ${1:ClassName}(${2:args})' },
+    { label: 'sotti', kind: vscode.CompletionItemKind.Constant, detail: 'সত্যি (সত্যি) - True', insertText: 'sotti' },
+    { label: 'mittha', kind: vscode.CompletionItemKind.Constant, detail: 'মিথ্যা (মিথ্যা) - False', insertText: 'mittha' },
+    { label: 'khali', kind: vscode.CompletionItemKind.Constant, detail: 'খালি (খালি) - Null', insertText: 'khali' },
+    { label: 'ebong', kind: vscode.CompletionItemKind.Operator, detail: 'এবং (এবং) - AND', insertText: 'ebong' },
+    { label: 'ba', kind: vscode.CompletionItemKind.Operator, detail: 'বা (বা) - OR', insertText: 'ba' },
+    { label: 'na', kind: vscode.CompletionItemKind.Operator, detail: 'না (না) - NOT', insertText: 'na' },
+    { label: 'thamo', kind: vscode.CompletionItemKind.Keyword, detail: 'থামো (থামো) - Break', insertText: 'thamo;' },
+    { label: 'chharo', kind: vscode.CompletionItemKind.Keyword, detail: 'ছাড়ো (ছাড়ো) - Continue', insertText: 'chharo;' },
+    { label: 'ei', kind: vscode.CompletionItemKind.Keyword, detail: 'এই (এই) - This', insertText: 'ei.' },
+    { label: 'ano', kind: vscode.CompletionItemKind.Keyword, detail: 'আনো মডিউল (আনো) - Import', insertText: 'ano "${1:module.bang}";' },
+    { label: 'hisabe', kind: vscode.CompletionItemKind.Keyword, detail: 'হিসাবে (হিসাবে) - As', insertText: 'hisabe ${1:alias}' },
+    { label: 'pathao', kind: vscode.CompletionItemKind.Keyword, detail: 'পাঠাও (পাঠাও) - Export', insertText: 'pathao ' },
+    { label: 'chesta', kind: vscode.CompletionItemKind.Keyword, detail: 'চেষ্টা করো (চেষ্টা) - Try', insertText: 'chesta {\n\t${1}\n} dhoro_bhul (${2:err}) {\n\t${3}\n}' },
+    { label: 'dhoro_bhul', kind: vscode.CompletionItemKind.Keyword, detail: 'ভুল ধরো (ধরো ভুল) - Catch', insertText: 'dhoro_bhul (${1:err}) {\n\t${2}\n}' },
+    { label: 'shesh', kind: vscode.CompletionItemKind.Keyword, detail: 'শেষে (শেষ) - Finally', insertText: 'shesh {\n\t${1}\n}' },
+    { label: 'felo', kind: vscode.CompletionItemKind.Keyword, detail: 'ত্রুটি ফেলো (ফেলো) - Throw', insertText: 'felo "${1:error message}";' },
 ];
 
 // Built-in functions
 const builtinFunctions = [
-    // Output
-    { label: 'dekho', kind: vscode.CompletionItemKind.Function, detail: 'দেখো - Print values', insertText: 'dekho(${1:value});', documentation: 'Prints values to the console' },
-    
-    // Type functions
-    { label: 'dhoron', kind: vscode.CompletionItemKind.Function, detail: 'ধরন - Get type', insertText: 'dhoron(${1:value})', documentation: 'Returns the type of a value' },
-    { label: 'lipi', kind: vscode.CompletionItemKind.Function, detail: 'লিপি - To string', insertText: 'lipi(${1:value})', documentation: 'Converts value to string' },
-    { label: 'sonkha', kind: vscode.CompletionItemKind.Function, detail: 'সংখ্যা - To number', insertText: 'sonkha(${1:value})', documentation: 'Converts value to number' },
-    { label: 'dorghyo', kind: vscode.CompletionItemKind.Function, detail: 'দৈর্ঘ্য - Get length', insertText: 'dorghyo(${1:value})', documentation: 'Returns the length of string or array' },
-    
-    // String functions
-    { label: 'boroHater', kind: vscode.CompletionItemKind.Function, detail: 'বড় হাতের - Uppercase', insertText: 'boroHater(${1:str})', documentation: 'Converts string to uppercase' },
-    { label: 'chotoHater', kind: vscode.CompletionItemKind.Function, detail: 'ছোট হাতের - Lowercase', insertText: 'chotoHater(${1:str})', documentation: 'Converts string to lowercase' },
-    { label: 'chhanto', kind: vscode.CompletionItemKind.Function, detail: 'ছাঁটো - Trim', insertText: 'chhanto(${1:str})', documentation: 'Removes leading and trailing whitespace' },
-    { label: 'bhag', kind: vscode.CompletionItemKind.Function, detail: 'ভাগ - Split string', insertText: 'bhag(${1:str}, ${2:separator})', documentation: 'Splits string into array' },
-    { label: 'joro', kind: vscode.CompletionItemKind.Function, detail: 'জোড়ো - Join array', insertText: 'joro(${1:arr}, ${2:separator})', documentation: 'Joins array into string' },
-    { label: 'khojo', kind: vscode.CompletionItemKind.Function, detail: 'খোঁজো - Index of', insertText: 'khojo(${1:str}, ${2:substr})', documentation: 'Finds index of substring (-1 if not found)' },
-    { label: 'angsho', kind: vscode.CompletionItemKind.Function, detail: 'অংশ - Substring', insertText: 'angsho(${1:str}, ${2:start}, ${3:end})', documentation: 'Extracts substring from start to end' },
-    { label: 'bodlo', kind: vscode.CompletionItemKind.Function, detail: 'বদলো - Replace', insertText: 'bodlo(${1:str}, ${2:old}, ${3:new})', documentation: 'Replaces all occurrences' },
-    
-    // Array functions
-    { label: 'dhokao', kind: vscode.CompletionItemKind.Function, detail: 'ঢোকাও - Push to array', insertText: 'dhokao(${1:arr}, ${2:value})', documentation: 'Adds element to array' },
-    { label: 'berKoro', kind: vscode.CompletionItemKind.Function, detail: 'বের করো - Pop from array', insertText: 'berKoro(${1:arr})', documentation: 'Removes and returns last element' },
-    { label: 'kato', kind: vscode.CompletionItemKind.Function, detail: 'কাটো - Slice', insertText: 'kato(${1:arr}, ${2:start}, ${3:end})', documentation: 'Extracts portion of array' },
-    { label: 'ulto', kind: vscode.CompletionItemKind.Function, detail: 'উল্টো - Reverse', insertText: 'ulto(${1:arr})', documentation: 'Reverses array (returns new array)' },
-    { label: 'saja', kind: vscode.CompletionItemKind.Function, detail: 'সাজা - Sort', insertText: 'saja(${1:arr})', documentation: 'Sorts array (returns new array)' },
-    { label: 'ache', kind: vscode.CompletionItemKind.Function, detail: 'আছে - Includes', insertText: 'ache(${1:arr}, ${2:value})', documentation: 'Checks if value exists in array' },
-    { label: 'chabi', kind: vscode.CompletionItemKind.Function, detail: 'চাবি - Get keys', insertText: 'chabi(${1:map})', documentation: 'Returns array of map keys' },
-    
-    // Math functions
-    { label: 'borgomul', kind: vscode.CompletionItemKind.Function, detail: 'বর্গমূল - Square root', insertText: 'borgomul(${1:x})', documentation: 'Returns square root' },
-    { label: 'ghat', kind: vscode.CompletionItemKind.Function, detail: 'ঘাত - Power', insertText: 'ghat(${1:base}, ${2:exp})', documentation: 'Returns base raised to exponent' },
-    { label: 'niche', kind: vscode.CompletionItemKind.Function, detail: 'নিচে - Floor', insertText: 'niche(${1:x})', documentation: 'Rounds down to integer' },
-    { label: 'upore', kind: vscode.CompletionItemKind.Function, detail: 'উপরে - Ceiling', insertText: 'upore(${1:x})', documentation: 'Rounds up to integer' },
-    { label: 'kache', kind: vscode.CompletionItemKind.Function, detail: 'কাছে - Round', insertText: 'kache(${1:x})', documentation: 'Rounds to nearest integer' },
-    { label: 'niratek', kind: vscode.CompletionItemKind.Function, detail: 'নিরপেক্ষ - Absolute', insertText: 'niratek(${1:x})', documentation: 'Returns absolute value' },
-    { label: 'choto', kind: vscode.CompletionItemKind.Function, detail: 'ছোট - Minimum', insertText: 'choto(${1:a}, ${2:b})', documentation: 'Returns minimum value' },
-    { label: 'boro', kind: vscode.CompletionItemKind.Function, detail: 'বড় - Maximum', insertText: 'boro(${1:a}, ${2:b})', documentation: 'Returns maximum value' },
-    { label: 'lotto', kind: vscode.CompletionItemKind.Function, detail: 'লটো - Random', insertText: 'lotto()', documentation: 'Returns random number between 0 and 1' },
-    
-    // Utility functions
-    { label: 'somoy', kind: vscode.CompletionItemKind.Function, detail: 'সময় - Current time', insertText: 'somoy()', documentation: 'Returns current timestamp in milliseconds' },
-    { label: 'ghum', kind: vscode.CompletionItemKind.Function, detail: 'ঘুম - Sleep', insertText: 'ghum(${1:milliseconds})', documentation: 'Pauses execution for milliseconds' },
-    { label: 'nao', kind: vscode.CompletionItemKind.Function, detail: 'নাও - Input', insertText: 'nao(${1:"Enter value: "})', documentation: 'Reads user input from console' },
-    { label: 'bondho', kind: vscode.CompletionItemKind.Function, detail: 'বন্ধ - Exit', insertText: 'bondho(${1:0})', documentation: 'Exits program with code' },
-    
-    // File functions
-    { label: 'poro', kind: vscode.CompletionItemKind.Function, detail: 'পড়ো - Read file', insertText: 'poro(${1:"filename"})', documentation: 'Reads file contents as string' },
-    { label: 'lekho', kind: vscode.CompletionItemKind.Function, detail: 'লেখো - Write file', insertText: 'lekho(${1:"filename"}, ${2:content})', documentation: 'Writes content to file' },
-    
-    // HTTP functions
-    { label: 'server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'সার্ভার চালু - Start HTTP server', insertText: 'server_chalu(${1:3000}, ${2:handler})', documentation: 'Starts HTTP server on port' },
-    { label: 'anun', kind: vscode.CompletionItemKind.Function, detail: 'আনুন - HTTP GET', insertText: 'anun(${1:"url"})', documentation: 'Makes HTTP GET request' },
+    // আউটপুট
+    { label: 'dekho', kind: vscode.CompletionItemKind.Function, detail: 'দেখো - মান প্রিন্ট করো', insertText: 'dekho(${1:value});', documentation: 'কনসোলে মান প্রিন্ট করে' },
+
+    // টাইপ ফাংশন
+    { label: 'dhoron', kind: vscode.CompletionItemKind.Function, detail: 'ধরন - ডেটা টাইপ জানো', insertText: 'dhoron(${1:value})', documentation: 'মানের ধরন রিটার্ন করে' },
+    { label: 'lipi', kind: vscode.CompletionItemKind.Function, detail: 'লিপি - স্ট্রিং এ রূপান্তর', insertText: 'lipi(${1:value})', documentation: 'মানকে স্ট্রিং এ রূপান্তর করে' },
+    { label: 'sonkha', kind: vscode.CompletionItemKind.Function, detail: 'সংখ্যা - নাম্বার এ রূপান্তর', insertText: 'sonkha(${1:value})', documentation: 'মানকে সংখ্যায় রূপান্তর করে' },
+    { label: 'dorghyo', kind: vscode.CompletionItemKind.Function, detail: 'দৈর্ঘ্য - লেন্থ নাও', insertText: 'dorghyo(${1:value})', documentation: 'স্ট্রিং বা অ্যারের দৈর্ঘ্য রিটার্ন করে' },
+
+    // স্ট্রিং ফাংশন
+    { label: 'boroHater', kind: vscode.CompletionItemKind.Function, detail: 'বড় হাতের - আপারকেস', insertText: 'boroHater(${1:str})', documentation: 'স্ট্রিংকে বড় হাতের অক্ষরে রূপান্তর করে' },
+    { label: 'chotoHater', kind: vscode.CompletionItemKind.Function, detail: 'ছোট হাতের - লোয়ারকেস', insertText: 'chotoHater(${1:str})', documentation: 'স্ট্রিংকে ছোট হাতের অক্ষরে রূপান্তর করে' },
+    { label: 'chhanto', kind: vscode.CompletionItemKind.Function, detail: 'ছাঁটো - ট্রিম করো', insertText: 'chhanto(${1:str})', documentation: 'স্ট্রিং থেকে ফাঁকা জায়গা সরায়' },
+    { label: 'bhag', kind: vscode.CompletionItemKind.Function, detail: 'ভাগ - স্প্লিট করো', insertText: 'bhag(${1:str}, ${2:separator})', documentation: 'স্ট্রিংকে অ্যারেতে ভাগ করে' },
+    { label: 'joro', kind: vscode.CompletionItemKind.Function, detail: 'জোড়ো - জয়েন করো', insertText: 'joro(${1:arr}, ${2:separator})', documentation: 'অ্যারেকে স্ট্রিং এ জোড়ে' },
+    { label: 'khojo', kind: vscode.CompletionItemKind.Function, detail: 'খোঁজো - ইনডেক্স খুঁজো', insertText: 'khojo(${1:str}, ${2:substr})', documentation: 'সাবস্ট্রিংয়ের ইনডেক্স খুঁজে দেয় (-১ যদি না পাওয়া যায়)' },
+    { label: 'angsho', kind: vscode.CompletionItemKind.Function, detail: 'অংশ - সাবস্ট্রিং নাও', insertText: 'angsho(${1:str}, ${2:start}, ${3:end})', documentation: 'শুরু থেকে শেষ পর্যন্ত সাবস্ট্রিং বের করে' },
+    { label: 'bodlo', kind: vscode.CompletionItemKind.Function, detail: 'বদলো - রিপ্লেস করো', insertText: 'bodlo(${1:str}, ${2:old}, ${3:new})', documentation: 'সব জায়গায় পুরনো মানকে নতুন দিয়ে বদলায়' },
+
+    // অ্যারে ফাংশন
+    { label: 'dhokao', kind: vscode.CompletionItemKind.Function, detail: 'ঢোকাও - পুশ করো', insertText: 'dhokao(${1:arr}, ${2:value})', documentation: 'অ্যারেতে এলিমেন্ট যোগ করে' },
+    { label: 'berKoro', kind: vscode.CompletionItemKind.Function, detail: 'বের করো - পপ করো', insertText: 'berKoro(${1:arr})', documentation: 'শেষ এলিমেন্ট সরিয়ে রিটার্ন করে' },
+    { label: 'kato', kind: vscode.CompletionItemKind.Function, detail: 'কাটো - স্লাইস করো', insertText: 'kato(${1:arr}, ${2:start}, ${3:end})', documentation: 'অ্যারের একটি অংশ বের করে' },
+    { label: 'ulto', kind: vscode.CompletionItemKind.Function, detail: 'উল্টো - রিভার্স করো', insertText: 'ulto(${1:arr})', documentation: 'অ্যারে উল্টে দেয় (নতুন অ্যারে রিটার্ন করে)' },
+    { label: 'saja', kind: vscode.CompletionItemKind.Function, detail: 'সাজা - সর্ট করো', insertText: 'saja(${1:arr})', documentation: 'অ্যারে সাজায় (নতুন অ্যারে রিটার্ন করে)' },
+    { label: 'ache', kind: vscode.CompletionItemKind.Function, detail: 'আছে - খুঁজে দেখো', insertText: 'ache(${1:arr}, ${2:value})', documentation: 'অ্যারেতে মান আছে কিনা চেক করে' },
+    { label: 'chabi', kind: vscode.CompletionItemKind.Function, detail: 'চাবি - কী গুলো নাও', insertText: 'chabi(${1:map})', documentation: 'ম্যাপের সব কী এর অ্যারে রিটার্ন করে' },
+
+    // গাণিতিক ফাংশন
+    { label: 'borgomul', kind: vscode.CompletionItemKind.Function, detail: 'বর্গমূল - স্কয়ার রুট', insertText: 'borgomul(${1:x})', documentation: 'বর্গমূল রিটার্ন করে' },
+    { label: 'ghat', kind: vscode.CompletionItemKind.Function, detail: 'ঘাত - পাওয়ার', insertText: 'ghat(${1:base}, ${2:exp})', documentation: 'বেস কে এক্সপোনেন্ট এ উন্নীত করে' },
+    { label: 'niche', kind: vscode.CompletionItemKind.Function, detail: 'নিচে - ফ্লোর', insertText: 'niche(${1:x})', documentation: 'নিচের দিকে রাউন্ড করে' },
+    { label: 'upore', kind: vscode.CompletionItemKind.Function, detail: 'উপরে - সিলিং', insertText: 'upore(${1:x})', documentation: 'উপরের দিকে রাউন্ড করে' },
+    { label: 'kache', kind: vscode.CompletionItemKind.Function, detail: 'কাছে - রাউন্ড', insertText: 'kache(${1:x})', documentation: 'কাছের পূর্ণসংখ্যায় রাউন্ড করে' },
+    { label: 'niratek', kind: vscode.CompletionItemKind.Function, detail: 'নিরপেক্ষ - এবসোলিউট', insertText: 'niratek(${1:x})', documentation: 'নিরপেক্ষ মান রিটার্ন করে' },
+    { label: 'choto', kind: vscode.CompletionItemKind.Function, detail: 'ছোট - মিনিমাম', insertText: 'choto(${1:a}, ${2:b})', documentation: 'ছোট মান রিটার্ন করে' },
+    { label: 'boro', kind: vscode.CompletionItemKind.Function, detail: 'বড় - ম্যাক্সিমাম', insertText: 'boro(${1:a}, ${2:b})', documentation: 'বড় মান রিটার্ন করে' },
+    { label: 'lotto', kind: vscode.CompletionItemKind.Function, detail: 'লটো - র্যান্ডম', insertText: 'lotto()', documentation: '০ থেকে ১ এর মধ্যে র্যান্ডম নাম্বার রিটার্ন করে' },
+
+    // ইউটিলিটি ফাংশন
+    { label: 'somoy', kind: vscode.CompletionItemKind.Function, detail: 'সময় - বর্তমান সময়', insertText: 'somoy()', documentation: 'বর্তমান টাইমস্ট্যাম্প মিলিসেকেন্ডে রিটার্ন করে' },
+    { label: 'ghum', kind: vscode.CompletionItemKind.Function, detail: 'ঘুম - স্লিপ করো', insertText: 'ghum(${1:milliseconds})', documentation: 'নির্দিষ্ট মিলিসেকেন্ড এর জন্য থামিয়ে রাখে' },
+    { label: 'nao', kind: vscode.CompletionItemKind.Function, detail: 'নাও - ইনপুট নাও', insertText: 'nao(${1:"মান লেখো: "})', documentation: 'কনসোল থেকে ইউজার ইনপুট পড়ে' },
+    { label: 'bondho', kind: vscode.CompletionItemKind.Function, detail: 'বন্ধ - এক্সিট করো', insertText: 'bondho(${1:0})', documentation: 'প্রোগ্রাম বন্ধ করে' },
+
+    // ফাইল ফাংশন
+    { label: 'poro', kind: vscode.CompletionItemKind.Function, detail: 'পড়ো - ফাইল পড়ো', insertText: 'poro(${1:"filename"})', documentation: 'ফাইল এর কন্টেন্ট স্ট্রিং হিসেবে পড়ে' },
+    { label: 'lekho', kind: vscode.CompletionItemKind.Function, detail: 'লেখো - ফাইল লেখো', insertText: 'lekho(${1:"filename"}, ${2:content})', documentation: 'ফাইলে কন্টেন্ট লেখে' },
+
+    // HTTP ফাংশন
+    { label: 'server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'সার্ভার চালু - HTTP সার্ভার', insertText: 'server_chalu(${1:3000}, ${2:handler})', documentation: 'নির্দিষ্ট পোর্টে HTTP সার্ভার চালু করে' },
+    { label: 'anun', kind: vscode.CompletionItemKind.Function, detail: 'আনুন - HTTP GET রিকোয়েস্ট', insertText: 'anun(${1:"url"})', documentation: 'HTTP GET রিকোয়েস্ট করে' },
 ];
 
 /**
@@ -112,24 +114,64 @@ function extractDocComment(text, name, type = 'kaj') {
     } else {
         defRegex = new RegExp(`((?:\\/\\/[^\\n]*\\n)*)\\s*(?:pathao\\s+)?kaj\\s+${name}\\s*\\(`, 'm');
     }
-    
+
     const match = defRegex.exec(text);
     if (!match || !match[1]) return null;
-    
+
     // Extract @comment lines from the comment block
     const commentBlock = match[1];
     const lines = commentBlock.split('\n').filter(l => l.trim());
     const docLines = [];
-    
+
     for (const line of lines) {
         const commentMatch = line.match(/\/\/\s*@comment\s+(.*)/);
         if (commentMatch) {
             docLines.push(commentMatch[1].trim());
         }
     }
-    
+
     // Format each line as a separate item for proper markdown display
     return docLines.length > 0 ? docLines.map(l => `• ${l}`).join('\n\n') : null;
+}
+
+/**
+ * Extract return statement from a function body
+ * @param {string} text - Full document text
+ * @param {string} funcName - Function name
+ * @returns {string|null} - Return expression or null
+ */
+function extractReturnValue(text, funcName) {
+    // Find the function definition and extract its body
+    const funcDefRegex = new RegExp(`(?:pathao\\s+)?kaj\\s+${funcName}\\s*\\([^)]*\\)\\s*\\{`, 'g');
+    const funcMatch = funcDefRegex.exec(text);
+
+    if (!funcMatch) return null;
+
+    const startIndex = funcMatch.index + funcMatch[0].length - 1; // Position of opening brace
+    let braceCount = 0;
+    let endIndex = startIndex;
+
+    // Find matching closing brace
+    for (let i = startIndex; i < text.length; i++) {
+        if (text[i] === '{') braceCount++;
+        else if (text[i] === '}') {
+            braceCount--;
+            if (braceCount === 0) {
+                endIndex = i;
+                break;
+            }
+        }
+    }
+
+    const funcBody = text.substring(startIndex + 1, endIndex);
+
+    // Look for ferao (return) statement
+    const returnMatch = funcBody.match(/ferao\s+([^;]+);?/);
+    if (returnMatch) {
+        return returnMatch[1].trim();
+    }
+
+    return null;
 }
 
 /**
@@ -155,10 +197,10 @@ function extractDocFromModule(modulePath, name, currentDocPath) {
  */
 function extractMapKeys(text, varName) {
     const keys = [];
-    
-    // Find the map declaration: dhoro varName = { ... }
+
+    // Find the map declaration: dhoro/sthir/bishwo varName = { ... }
     // Use a simple brace-matching approach
-    const startRegex = new RegExp(`dhoro\\s+${varName}\\s*=\\s*\\{`);
+    const startRegex = new RegExp(`(dhoro|sthir|bishwo)\\s+${varName}\\s*=\\s*\\{`);
     const startMatch = startRegex.exec(text);
     if (!startMatch) return keys;
     
@@ -267,6 +309,80 @@ function extractJSONKeys(jsonData, prefix = '') {
     return keys;
 }
 
+/**
+ * Extract variable declaration info including value and inferred type
+ * @param {string} text - Full document text
+ * @param {string} varName - Variable name to find
+ * @returns {object|null} - { declType, value, inferredType, displayValue }
+ */
+function extractVariableInfo(text, varName) {
+    // Match: (dhoro|sthir|bishwo) varName = value;
+    const declRegex = new RegExp(`(dhoro|sthir|bishwo)\\s+${varName}\\s*=\\s*([^;]+);?`, 'm');
+    const match = declRegex.exec(text);
+    if (!match) return null;
+
+    const declType = match[1];
+    let rawValue = match[2].trim();
+    let inferredType = 'unknown';
+    let displayValue = rawValue;
+
+    // Infer type from value
+    if (rawValue.startsWith('"') || rawValue.startsWith("'")) {
+        inferredType = 'string';
+        // Extract string content for display (remove quotes)
+        const strMatch = rawValue.match(/^["'](.*)["']$/);
+        if (strMatch) {
+            displayValue = `"${strMatch[1]}"`;
+        }
+    } else if (rawValue === 'sotti') {
+        inferredType = 'boolean';
+        displayValue = 'sotti (true)';
+    } else if (rawValue === 'mittha') {
+        inferredType = 'boolean';
+        displayValue = 'mittha (false)';
+    } else if (rawValue === 'khali') {
+        inferredType = 'null';
+        displayValue = 'khali (null)';
+    } else if (rawValue.startsWith('[')) {
+        inferredType = 'array';
+        // Try to show array length or truncated preview
+        const arrayContent = rawValue.match(/^\[([\s\S]*)\]$/);
+        if (arrayContent) {
+            const items = arrayContent[1].split(',').filter(s => s.trim());
+            displayValue = `[...] (${items.length} items)`;
+        }
+    } else if (rawValue.startsWith('{')) {
+        inferredType = 'map';
+        displayValue = '{...}';
+    } else if (/^-?\d+(\.\d+)?$/.test(rawValue)) {
+        inferredType = rawValue.includes('.') ? 'number (float)' : 'number (int)';
+        displayValue = rawValue;
+    } else if (rawValue.startsWith('kaj')) {
+        inferredType = 'function';
+        displayValue = 'kaj () {...}';
+    } else if (rawValue.startsWith('notun ')) {
+        // Class instance: notun ClassName(...)
+        const classMatch = rawValue.match(/^notun\s+([a-zA-Z_][a-zA-Z0-9_]*)/);
+        if (classMatch) {
+            inferredType = classMatch[1];
+            displayValue = rawValue;
+        }
+    } else if (/^[a-zA-Z_][a-zA-Z0-9_]*\s*\(/.test(rawValue)) {
+        // Function call result
+        const funcMatch = rawValue.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/);
+        if (funcMatch) {
+            inferredType = `result of ${funcMatch[1]}()`;
+        }
+    }
+
+    return {
+        declType,
+        value: rawValue,
+        inferredType,
+        displayValue
+    };
+}
+
 function activate(context) {
     console.log('BanglaCode extension activated!');
 
@@ -298,29 +414,37 @@ function activate(context) {
                 
                 // Extract variables from current document
                 const text = document.getText();
-                const varRegex = /dhoro\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/g;
+                const varRegex = /(dhoro|sthir|bishwo)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/g;
                 let match;
                 const seenVars = new Set();
                 while ((match = varRegex.exec(text)) !== null) {
-                    const varName = match[1];
+                    const declType = match[1];
+                    const varName = match[2];
                     if (!seenVars.has(varName)) {
                         seenVars.add(varName);
-                        const item = new vscode.CompletionItem(varName, vscode.CompletionItemKind.Variable);
-                        item.detail = 'Variable';
+                        const kind = declType === 'sthir' ? vscode.CompletionItemKind.Constant : vscode.CompletionItemKind.Variable;
+                        const item = new vscode.CompletionItem(varName, kind);
+                        item.detail = declType === 'sthir' ? 'স্থির মান - Constant' : (declType === 'bishwo' ? 'বৈশ্বিক চলক - Global' : 'চলক - Variable');
                         completions.push(item);
                     }
                 }
                 
                 // Extract functions from current document
-                const funcRegex = /kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g;
+                const funcRegex = /kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
                 const seenFuncs = new Set();
                 while ((match = funcRegex.exec(text)) !== null) {
                     const funcName = match[1];
+                    const params = match[2].trim();
                     if (!seenFuncs.has(funcName) && funcName !== 'shuru') {
                         seenFuncs.add(funcName);
+                        const returnValue = extractReturnValue(text, funcName);
                         const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Function);
-                        item.detail = 'User function';
+                        const returnInfo = returnValue ? ` → ${returnValue}` : '';
+                        item.detail = `kaj ${funcName}(${params})${returnInfo}`;
                         item.insertText = new vscode.SnippetString(funcName + '(${1})');
+                        if (returnValue) {
+                            item.documentation = new vscode.MarkdownString(`**রিটার্ন করে:** \`${returnValue}\``);
+                        }
                         completions.push(item);
                     }
                 }
@@ -333,11 +457,90 @@ function activate(context) {
                     if (!seenClasses.has(className)) {
                         seenClasses.add(className);
                         const item = new vscode.CompletionItem(className, vscode.CompletionItemKind.Class);
-                        item.detail = 'User class';
+                        item.detail = 'ইউজার শ্রেণী - User Class';
                         completions.push(item);
                     }
                 }
-                
+
+                // Extract functions from directly imported modules (ano "..." without alias)
+                const directImportRegex = /ano\s+["']([^"']+)["']\s*;/g;
+                let directImportMatch;
+                const seenImportedFuncs = new Set();
+
+                while ((directImportMatch = directImportRegex.exec(text)) !== null) {
+                    const modulePath = directImportMatch[1];
+
+                    // Skip if this import has an alias (those are handled by typing alias.)
+                    const hasAlias = new RegExp(`ano\\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s+hisabe`, 'm').test(text);
+                    if (hasAlias) {
+                        continue;
+                    }
+
+                    // Only process .bang modules
+                    if (!modulePath.endsWith('.bang')) {
+                        continue;
+                    }
+
+                    try {
+                        const currentDir = path.dirname(document.uri.fsPath);
+                        const fullPath = path.resolve(currentDir, modulePath);
+
+                        if (!fs.existsSync(fullPath)) {
+                            continue;
+                        }
+
+                        const moduleText = fs.readFileSync(fullPath, 'utf8');
+
+                        // Find all exported functions (with 'pathao' keyword)
+                        const exportedFuncRegex = /pathao\s+kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
+                        let exportMatch;
+
+                        while ((exportMatch = exportedFuncRegex.exec(moduleText)) !== null) {
+                            const funcName = exportMatch[1];
+                            const params = exportMatch[2].trim();
+
+                            if (funcName === 'shuru' || seenImportedFuncs.has(funcName)) {
+                                continue;
+                            }
+                            seenImportedFuncs.add(funcName);
+
+                            const docComment = extractDocComment(moduleText, funcName, 'kaj');
+                            const returnValue = extractReturnValue(moduleText, funcName);
+                            const paramList = params ? params.split(',').map(p => p.trim()) : [];
+
+                            const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Function);
+                            const returnInfo = returnValue ? ` → ${returnValue}` : '';
+                            item.detail = `kaj ${funcName}(${params})${returnInfo} - ইম্পোর্ট করা`;
+                            item.insertText = new vscode.SnippetString(funcName + '(${1})');
+                            item.sortText = `1_${funcName}`; // Lower priority than local functions
+
+                            // Build documentation
+                            const docMd = new vscode.MarkdownString();
+                            docMd.appendMarkdown(`**kaj ${funcName}(${params})**\n\n`);
+                            docMd.appendMarkdown(`📦 ইম্পোর্ট করা: \`${modulePath}\`\n\n`);
+
+                            if (docComment) {
+                                docMd.appendMarkdown('---\n\n');
+                                docMd.appendMarkdown(docComment + '\n\n');
+                                docMd.appendMarkdown('---\n\n');
+                            }
+
+                            docMd.appendMarkdown(`**প্যারামিটার:** ${paramList.length === 0 ? 'নেই' : paramList.join(', ')}\n\n`);
+
+                            if (returnValue) {
+                                docMd.appendMarkdown(`**রিটার্ন করে:** \`${returnValue}\`\n\n`);
+                            }
+
+                            docMd.appendMarkdown(`**কল করো:** \`${funcName}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
+
+                            item.documentation = docMd;
+                            completions.push(item);
+                        }
+                    } catch (err) {
+                        console.error('[BanglaCode] Error reading module for completion:', err);
+                    }
+                }
+
                 return completions;
             }
         },
@@ -395,7 +598,7 @@ function activate(context) {
                                 entry.name + '/',
                                 vscode.CompletionItemKind.Folder
                             );
-                            item.detail = 'Directory';
+                            item.detail = 'ডিরেক্টরি';
                             item.insertText = entry.name + '/';
                             item.command = {
                                 command: 'editor.action.triggerSuggest',
@@ -407,7 +610,7 @@ function activate(context) {
                                 entry.name,
                                 vscode.CompletionItemKind.File
                             );
-                            item.detail = 'BanglaCode module';
+                            item.detail = 'BanglaCode মডিউল';
                             item.insertText = entry.name;
                             completions.push(item);
                         } else if (entry.name.endsWith('.json')) {
@@ -415,7 +618,7 @@ function activate(context) {
                                 entry.name,
                                 vscode.CompletionItemKind.File
                             );
-                            item.detail = 'JSON file';
+                            item.detail = 'JSON ফাইল';
                             item.insertText = entry.name;
                             completions.push(item);
                         }
@@ -430,94 +633,129 @@ function activate(context) {
         '/', '.', '"', "'" // Trigger on these characters
     );
 
-    // Register map/JSON property completion provider
+    // Register map/JSON property completion provider (also handles module imports)
     const mapPropertyProvider = vscode.languages.registerCompletionItemProvider(
         'banglacode',
         {
             provideCompletionItems(document, position, token, context) {
                 const line = document.lineAt(position.line).text;
                 const linePrefix = line.substring(0, position.character);
-                
-                // Check if we're after a dot (e.g., "json.")
+
+                // Check if we're after a dot (e.g., "json." or "as.")
                 const dotMatch = linePrefix.match(/([a-zA-Z_][a-zA-Z0-9_]*)\.$/);
                 if (!dotMatch) {
                     return undefined;
                 }
-                
+
                 const varName = dotMatch[1];
                 const text = document.getText();
                 const completions = [];
-                
-                // First check if this is an import alias
-                const aliasImportRegex = new RegExp(`ano\\s+"([^"]+)"\\s+hisabe\\s+${varName}\\s*;?`);
+
+                // PRIORITY 1: Check if this is an import alias (ano "..." hisabe varName)
+                const aliasImportRegex = new RegExp(`ano\\s+["']([^"']+)["']\\s+hisabe\\s+${varName}\\s*;?`, 'm');
                 const aliasImport = aliasImportRegex.exec(text);
-                
+
                 if (aliasImport) {
                     const modulePath = aliasImport[1];
                     try {
                         const currentDir = path.dirname(document.uri.fsPath);
                         const fullPath = path.resolve(currentDir, modulePath);
-                        if (fs.existsSync(fullPath)) {
-                            // Check if it's a JSON file
-                            if (modulePath.endsWith('.json')) {
-                                const jsonText = fs.readFileSync(fullPath, 'utf8');
-                                try {
-                                    const jsonData = JSON.parse(jsonText);
-                                    const keys = extractJSONKeys(jsonData);
-                                    for (const key of keys) {
-                                        const item = new vscode.CompletionItem(key.name, vscode.CompletionItemKind.Property);
-                                        item.detail = `${key.type} property`;
-                                        if (key.nested) {
-                                            item.documentation = new vscode.MarkdownString('Nested object with: ' + key.nested.join(', '));
-                                        }
-                                        completions.push(item);
-                                    }
-                                } catch (err) {
-                                    console.error('Error parsing JSON:', err);
-                                }
-                            } else {
-                                // It's a .bang module - get functions
-                                const moduleText = fs.readFileSync(fullPath, 'utf8');
-                                
-                                // Find exported functions
-                                const funcRegex = /pathao\s+kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
-                                let funcMatch;
-                                while ((funcMatch = funcRegex.exec(moduleText)) !== null) {
-                                    const funcName = funcMatch[1];
-                                    const params = funcMatch[2].trim();
-                                    const docComment = extractDocComment(moduleText, funcName, 'kaj');
-                                    
-                                    const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Method);
-                                    item.detail = `${varName}.${funcName}(${params})`;
-                                    item.insertText = new vscode.SnippetString(funcName + '(${1})');
-                                    if (docComment) {
-                                        item.documentation = new vscode.MarkdownString(docComment);
+
+                        if (!fs.existsSync(fullPath)) {
+                            console.log('[BanglaCode] Module file not found:', fullPath);
+                            return completions;
+                        }
+
+                        // Check if it's a JSON file
+                        if (modulePath.endsWith('.json')) {
+                            const jsonText = fs.readFileSync(fullPath, 'utf8');
+                            try {
+                                const jsonData = JSON.parse(jsonText);
+                                const keys = extractJSONKeys(jsonData);
+                                for (const key of keys) {
+                                    const item = new vscode.CompletionItem(key.name, vscode.CompletionItemKind.Property);
+                                    item.detail = `${key.type} প্রপার্টি (JSON)`;
+                                    item.sortText = `0_${key.name}`; // Prioritize in completion list
+                                    if (key.nested) {
+                                        item.documentation = new vscode.MarkdownString('**নেস্টেড অবজেক্ট:** ' + key.nested.join(', '));
                                     }
                                     completions.push(item);
                                 }
+                            } catch (err) {
+                                console.error('[BanglaCode] Error parsing JSON:', err);
                             }
+                        } else if (modulePath.endsWith('.bang')) {
+                            // It's a .bang module - get ONLY exported functions (with 'pathao' keyword)
+                            const moduleText = fs.readFileSync(fullPath, 'utf8');
+
+                            // Find only exported functions (with 'pathao' keyword)
+                            const funcRegex = /pathao\s+kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
+                            let funcMatch;
+                            const seenFuncs = new Set();
+
+                            while ((funcMatch = funcRegex.exec(moduleText)) !== null) {
+                                const funcName = funcMatch[1];
+                                if (funcName === 'shuru' || seenFuncs.has(funcName)) continue; // Skip constructor and duplicates
+                                seenFuncs.add(funcName);
+
+                                const params = funcMatch[2].trim();
+                                const paramList = params ? params.split(',').map(p => p.trim()) : [];
+                                const docComment = extractDocComment(moduleText, funcName, 'kaj');
+                                const returnValue = extractReturnValue(moduleText, funcName);
+
+                                const item = new vscode.CompletionItem(funcName, vscode.CompletionItemKind.Method);
+                                const returnInfo = returnValue ? ` → ${returnValue}` : '';
+                                item.detail = `kaj ${funcName}(${params})${returnInfo}`;
+                                item.insertText = new vscode.SnippetString(funcName + '(${1})');
+                                item.sortText = `0_${funcName}`; // Prioritize in completion list
+
+                                // Build documentation
+                                const docMd = new vscode.MarkdownString();
+                                docMd.appendMarkdown(`**${varName}.${funcName}(${params})**\n\n`);
+                                docMd.appendMarkdown(`📦 ইম্পোর্ট করা: \`${modulePath}\`\n\n`);
+
+                                if (docComment) {
+                                    docMd.appendMarkdown('---\n\n');
+                                    docMd.appendMarkdown(docComment + '\n\n');
+                                    docMd.appendMarkdown('---\n\n');
+                                }
+
+                                docMd.appendMarkdown(`**প্যারামিটার:** ${paramList.length === 0 ? 'নেই' : paramList.join(', ')}\n\n`);
+
+                                if (returnValue) {
+                                    docMd.appendMarkdown(`**রিটার্ন করে:** \`${returnValue}\`\n\n`);
+                                }
+
+                                docMd.appendMarkdown(`**কল করো:** \`${varName}.${funcName}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
+
+                                item.documentation = docMd;
+                                completions.push(item);
+                            }
+
+                            console.log(`[BanglaCode] Found ${completions.length} functions in ${modulePath} for alias '${varName}'`);
                         }
                     } catch (err) {
-                        console.error('Error reading module:', err);
+                        console.error('[BanglaCode] Error reading module:', err);
                     }
-                    
+
                     return completions;
                 }
-                
-                // Check if it's a map/JSON variable - extract its keys
+
+                // PRIORITY 2: Check if it's a map/JSON variable - extract its keys
                 const mapKeys = extractMapKeys(text, varName);
                 if (mapKeys.length > 0) {
                     for (const key of mapKeys) {
                         const item = new vscode.CompletionItem(key.name, vscode.CompletionItemKind.Property);
-                        item.detail = key.type ? `Property (${key.type})` : 'Property';
+                        item.detail = key.type ? `প্রপার্টি (${key.type})` : 'প্রপার্টি';
+                        item.sortText = `1_${key.name}`;
                         if (key.nested) {
-                            item.documentation = new vscode.MarkdownString('Nested object with properties: ' + key.nested.join(', '));
+                            item.documentation = new vscode.MarkdownString('**নেস্টেড অবজেক্ট প্রপার্টি:** ' + key.nested.join(', '));
                         }
                         completions.push(item);
                     }
                     return completions;
                 }
-                
+
                 return undefined;
             }
         },
@@ -539,17 +777,17 @@ function activate(context) {
             if (kw) {
                 return new vscode.Hover([
                     `**${kw.label}** - ${kw.detail}`,
-                    'BanglaCode keyword'
+                    'BanglaCode কীওয়ার্ড'
                 ]);
             }
-            
+
             // Check built-in functions
             const fn = builtinFunctions.find(f => f.label === word);
             if (fn) {
                 return new vscode.Hover([
                     `**${fn.label}** - ${fn.detail}`,
                     fn.documentation || '',
-                    'BanglaCode built-in function'
+                    'BanglaCode বিল্ট-ইন ফাংশন'
                 ]);
             }
             
@@ -560,22 +798,32 @@ function activate(context) {
                 const params = funcMatch[1].trim();
                 const paramList = params ? params.split(',').map(p => p.trim()) : [];
                 const paramCount = paramList.length;
-                
+
                 // Extract @comment documentation
                 const docComment = extractDocComment(text, word, 'kaj');
-                
+
+                // Extract return value
+                const returnValue = extractReturnValue(text, word);
+
                 const md = new vscode.MarkdownString();
                 md.appendMarkdown(`**kaj ${word}(${params})**\n\n`);
-                
+
                 if (docComment) {
                     md.appendMarkdown('---\n\n');
                     md.appendMarkdown(docComment + '\n\n');
                     md.appendMarkdown('---\n\n');
                 }
-                
-                md.appendMarkdown(`**Parameters:** ${paramCount === 0 ? 'none' : paramList.join(', ')}\n\n`);
-                md.appendMarkdown(`**Call with:** \`${word}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
-                
+
+                md.appendMarkdown(`**প্যারামিটার:** ${paramCount === 0 ? 'নেই' : paramList.join(', ')}\n\n`);
+
+                if (returnValue) {
+                    md.appendMarkdown(`**রিটার্ন করে:** \`${returnValue}\`\n\n`);
+                } else {
+                    md.appendMarkdown(`**রিটার্ন করে:** কিছু না (void)\n\n`);
+                }
+
+                md.appendMarkdown(`**কল করো:** \`${word}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
+
                 return new vscode.Hover(md);
             }
             
@@ -596,20 +844,20 @@ function activate(context) {
                             const keys = Object.keys(jsonData);
                             
                             const md = new vscode.MarkdownString();
-                            md.appendMarkdown(`**${word}** - Imported JSON\n\n`);
-                            md.appendMarkdown(`📦 File: \`${modulePath}\`\n\n`);
+                            md.appendMarkdown(`**${word}** - ইম্পোর্ট করা JSON\n\n`);
+                            md.appendMarkdown(`📦 ফাইল: \`${modulePath}\`\n\n`);
                             md.appendMarkdown('---\n\n');
-                            md.appendMarkdown('**Properties:**\n\n');
+                            md.appendMarkdown('**প্রপার্টি:**\n\n');
                             for (const key of keys.slice(0, 10)) {
                                 const value = jsonData[key];
                                 const type = Array.isArray(value) ? 'array' : typeof value;
                                 md.appendMarkdown(`• \`${key}\`: ${type}\n\n`);
                             }
                             if (keys.length > 10) {
-                                md.appendMarkdown(`... and ${keys.length - 10} more\n\n`);
+                                md.appendMarkdown(`... এবং আরও ${keys.length - 10} টি\n\n`);
                             }
                             md.appendMarkdown('---\n\n');
-                            md.appendMarkdown(`**Access:** \`${word}.propertyName\``);
+                            md.appendMarkdown(`**ব্যবহার করো:** \`${word}.propertyName\``);
                             
                             return new vscode.Hover(md);
                         }
@@ -620,9 +868,9 @@ function activate(context) {
                 
                 // Regular .bang module
                 return new vscode.Hover([
-                    `**${word}** - Imported module alias`,
-                    `Module: \`${modulePath}\``,
-                    `Access with: ${word}.functionName(args)`
+                    `**${word}** - ইম্পোর্ট করা মডিউলের নাম`,
+                    `মডিউল: \`${modulePath}\``,
+                    `ব্যবহার করো: ${word}.functionName(args)`
                 ]);
             }
             
@@ -652,22 +900,27 @@ function activate(context) {
                     md.appendMarkdown('---\n\n');
                 }
                 
-                md.appendMarkdown(constructorParams ? `**Constructor:** shuru(${constructorParams})\n\n` : 'No constructor\n\n');
-                md.appendMarkdown(`**Create:** \`notun ${word}(${constructorParams})\``);
+                md.appendMarkdown(constructorParams ? `**কন্সট্রাক্টর:** shuru(${constructorParams})\n\n` : 'কোনো কন্সট্রাক্টর নেই\n\n');
+                md.appendMarkdown(`**তৈরি করো:** \`notun ${word}(${constructorParams})\``);
                 
                 return new vscode.Hover(md);
             }
             
-            // Check variables
-            const varRegex = new RegExp(`dhoro\\s+${word}\\s*=`);
-            if (varRegex.test(text)) {
+            // Check variables (dhoro, sthir, bishwo)
+            const varInfo = extractVariableInfo(text, word);
+            if (varInfo) {
+                const { declType, inferredType, displayValue } = varInfo;
+                const banglaLabel = declType === 'sthir' ? 'স্থির' : (declType === 'bishwo' ? 'বিশ্ব' : 'ধরো');
+
                 // Check if it's a map/JSON variable
                 const mapKeys = extractMapKeys(text, word);
                 if (mapKeys.length > 0) {
                     const md = new vscode.MarkdownString();
-                    md.appendMarkdown(`**${word}** - Map/JSON Object\n\n`);
+                    md.isTrusted = true;
+                    md.appendMarkdown(`**${word}** - ম্যাপ/JSON অবজেক্ট\n\n`);
+                    md.appendMarkdown(`**ঘোষণা করা হয়েছে:** ${declType} (${banglaLabel})\n\n`);
                     md.appendMarkdown('---\n\n');
-                    md.appendMarkdown('**Properties:**\n\n');
+                    md.appendMarkdown('**প্রপার্টি:**\n\n');
                     for (const key of mapKeys) {
                         if (key.nested) {
                             md.appendMarkdown(`• \`${key.name}\`: object { ${key.nested.join(', ')} }\n\n`);
@@ -676,94 +929,119 @@ function activate(context) {
                         }
                     }
                     md.appendMarkdown('---\n\n');
-                    md.appendMarkdown(`**Access:** \`${word}.propertyName\``);
+                    md.appendMarkdown(`**ব্যবহার করো:** \`${word}.propertyName\``);
                     return new vscode.Hover(md);
                 }
-                
-                return new vscode.Hover([
-                    `**${word}** - Variable`,
-                    'Declared with dhoro'
-                ]);
+
+                // Standard variable hover with type and value
+                const md = new vscode.MarkdownString();
+                md.isTrusted = true;
+                md.appendMarkdown(`**${word}** - ${inferredType}\n\n`);
+                md.appendMarkdown(`**ঘোষণা করা হয়েছে:** ${declType} (${banglaLabel})`);
+                if (declType === 'sthir') {
+                    md.appendMarkdown(` - স্থির মান (অপরিবর্তনীয়)`);
+                } else if (declType === 'bishwo') {
+                    md.appendMarkdown(` - বৈশ্বিক পরিসর (সবখানে পাবে)`);
+                }
+                md.appendMarkdown(`\n\n`);
+                md.appendMarkdown(`**মান:** \`${displayValue}\``);
+                return new vscode.Hover(md);
             }
             
-            // Check if hovering over a map property (e.g., json.name)
+            // Check if hovering over a map/module property (e.g., json.name or as.greet)
             const lineText = document.lineAt(position.line).text;
             const wordStart = position.character - word.length;
             const beforeWord = lineText.substring(0, wordStart);
             const mapPropertyMatch = beforeWord.match(/([a-zA-Z_][a-zA-Z0-9_]*)\.$/);
-            
+
             if (mapPropertyMatch) {
                 const mapName = mapPropertyMatch[1];
-                
-                // First check if it's an import alias
-                const aliasImportRegex = new RegExp(`ano\\s+"([^"]+)"\\s+hisabe\\s+${mapName}\\s*;?`);
+
+                // PRIORITY 1: Check if it's an import alias (ano "..." hisabe mapName)
+                const aliasImportRegex = new RegExp(`ano\\s+["']([^"']+)["']\\s+hisabe\\s+${mapName}\\s*;?`, 'm');
                 const aliasImport = aliasImportRegex.exec(text);
-                
+
                 if (aliasImport) {
                     const modulePath = aliasImport[1];
                     try {
                         const currentDir = path.dirname(document.uri.fsPath);
                         const fullPath = path.resolve(currentDir, modulePath);
-                        if (fs.existsSync(fullPath)) {
-                            // Check if it's a JSON file
-                            if (modulePath.endsWith('.json')) {
-                                const jsonText = fs.readFileSync(fullPath, 'utf8');
-                                try {
-                                    const jsonData = JSON.parse(jsonText);
-                                    if (jsonData.hasOwnProperty(word)) {
-                                        const value = jsonData[word];
-                                        const md = new vscode.MarkdownString();
-                                        md.appendMarkdown(`**${mapName}.${word}**\n\n`);
-                                        md.appendMarkdown(`📦 From JSON: \`${modulePath}\`\n\n`);
-                                        
-                                        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                                            md.appendMarkdown(`**Type:** object\n\n`);
-                                            md.appendMarkdown(`**Properties:** ${Object.keys(value).join(', ')}\n\n`);
-                                            md.appendMarkdown(`**Access:** \`${mapName}.${word}.propertyName\``);
-                                        } else if (Array.isArray(value)) {
-                                            md.appendMarkdown(`**Type:** array\n\n`);
-                                            md.appendMarkdown(`**Length:** ${value.length}`);
-                                        } else {
-                                            md.appendMarkdown(`**Type:** ${typeof value}\n\n`);
-                                            md.appendMarkdown(`**Value:** \`${JSON.stringify(value)}\``);
-                                        }
-                                        
-                                        return new vscode.Hover(md);
-                                    }
-                                } catch (err) {
-                                    // Ignore JSON parse errors
-                                }
-                            } else {
-                                // It's a .bang module
-                                const moduleText = fs.readFileSync(fullPath, 'utf8');
-                                
-                                // Get function signature
-                                const funcInModuleRegex = new RegExp(`pathao\\s+kaj\\s+${word}\\s*\\(([^)]*)\\)`);
-                                const funcInModule = funcInModuleRegex.exec(moduleText);
-                                
-                                if (funcInModule) {
-                                    const params = funcInModule[1].trim();
-                                    const docComment = extractDocComment(moduleText, word, 'kaj');
-                                    
+
+                        if (!fs.existsSync(fullPath)) {
+                            console.log(`[BanglaCode] Module file not found for hover: ${fullPath}`);
+                            return null;
+                        }
+
+                        // Check if it's a JSON file
+                        if (modulePath.endsWith('.json')) {
+                            const jsonText = fs.readFileSync(fullPath, 'utf8');
+                            try {
+                                const jsonData = JSON.parse(jsonText);
+                                if (jsonData.hasOwnProperty(word)) {
+                                    const value = jsonData[word];
                                     const md = new vscode.MarkdownString();
-                                    md.appendMarkdown(`**${mapName}.${word}(${params})**\n\n`);
-                                    md.appendMarkdown(`📦 Imported from: \`${modulePath}\`\n\n`);
-                                    
-                                    if (docComment) {
-                                        md.appendMarkdown('---\n\n');
-                                        md.appendMarkdown(docComment + '\n\n');
-                                        md.appendMarkdown('---\n\n');
+                                    md.appendMarkdown(`**${mapName}.${word}**\n\n`);
+                                    md.appendMarkdown(`📦 JSON থেকে: \`${modulePath}\`\n\n`);
+
+                                    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                                        md.appendMarkdown(`**টাইপ:** object\n\n`);
+                                        md.appendMarkdown(`**প্রপার্টি:** ${Object.keys(value).join(', ')}\n\n`);
+                                        md.appendMarkdown(`**ব্যবহার করো:** \`${mapName}.${word}.propertyName\``);
+                                    } else if (Array.isArray(value)) {
+                                        md.appendMarkdown(`**টাইপ:** array\n\n`);
+                                        md.appendMarkdown(`**দৈর্ঘ্য:** ${value.length}`);
+                                    } else {
+                                        md.appendMarkdown(`**টাইপ:** ${typeof value}\n\n`);
+                                        md.appendMarkdown(`**মান:** \`${JSON.stringify(value)}\``);
                                     }
-                                    
-                                    md.appendMarkdown(`**Parameters:** ${params || 'none'}\n\n`);
-                                    md.appendMarkdown(`**Call:** \`${mapName}.${word}(${params.split(',').map((_, i) => `arg${i+1}`).join(', ')})\``);
-                                    
+
                                     return new vscode.Hover(md);
                                 }
+                            } catch (err) {
+                                console.error('[BanglaCode] Error parsing JSON for hover:', err);
+                            }
+                        } else if (modulePath.endsWith('.bang')) {
+                            // It's a .bang module - check for ONLY exported functions (with 'pathao' keyword)
+                            const moduleText = fs.readFileSync(fullPath, 'utf8');
+
+                            // Get function signature (only exported functions with 'pathao')
+                            const funcInModuleRegex = new RegExp(`pathao\\s+kaj\\s+${word}\\s*\\(([^)]*)\\)`, 'm');
+                            const funcInModule = funcInModuleRegex.exec(moduleText);
+
+                            if (funcInModule) {
+                                const params = funcInModule[1].trim();
+                                const paramList = params ? params.split(',').map(p => p.trim()) : [];
+                                const docComment = extractDocComment(moduleText, word, 'kaj');
+                                const returnValue = extractReturnValue(moduleText, word);
+
+                                const md = new vscode.MarkdownString();
+                                md.appendMarkdown(`**kaj ${word}(${params})**\n\n`);
+                                md.appendMarkdown(`📦 ইম্পোর্ট করা মডিউল: \`${modulePath}\`\n\n`);
+                                md.appendMarkdown(`🔗 অ্যালিয়াস: \`${mapName}\`\n\n`);
+
+                                if (docComment) {
+                                    md.appendMarkdown('---\n\n');
+                                    md.appendMarkdown(docComment + '\n\n');
+                                    md.appendMarkdown('---\n\n');
+                                }
+
+                                md.appendMarkdown(`**প্যারামিটার:** ${paramList.length === 0 ? 'নেই' : paramList.join(', ')}\n\n`);
+
+                                if (returnValue) {
+                                    md.appendMarkdown(`**রিটার্ন করে:** \`${returnValue}\`\n\n`);
+                                } else {
+                                    md.appendMarkdown(`**রিটার্ন করে:** কিছু না (void)\n\n`);
+                                }
+
+                                md.appendMarkdown(`**কল করো:** \`${mapName}.${word}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
+
+                                return new vscode.Hover(md);
+                            } else {
+                                console.log(`[BanglaCode] Function '${word}' not found in module ${modulePath}`);
                             }
                         }
                     } catch (err) {
-                        // Ignore errors
+                        console.error('[BanglaCode] Error reading module for hover:', err);
                     }
                 } else {
                     // Check if it's a map/JSON variable property
@@ -773,48 +1051,81 @@ function activate(context) {
                         const md = new vscode.MarkdownString();
                         md.appendMarkdown(`**${mapName}.${word}**\n\n`);
                         if (keyInfo.nested) {
-                            md.appendMarkdown(`**Type:** object\n\n`);
-                            md.appendMarkdown(`**Nested properties:** ${keyInfo.nested.join(', ')}\n\n`);
-                            md.appendMarkdown(`**Access nested:** \`${mapName}.${word}.propertyName\``);
+                            md.appendMarkdown(`**টাইপ:** object\n\n`);
+                            md.appendMarkdown(`**নেস্টেড প্রপার্টি:** ${keyInfo.nested.join(', ')}\n\n`);
+                            md.appendMarkdown(`**নেস্টেড ব্যবহার করো:** \`${mapName}.${word}.propertyName\``);
                         } else {
-                            md.appendMarkdown(`**Type:** ${keyInfo.type}\n\n`);
-                            md.appendMarkdown(`Property of \`${mapName}\` object`);
+                            md.appendMarkdown(`**টাইপ:** ${keyInfo.type}\n\n`);
+                            md.appendMarkdown(`\`${mapName}\` অবজেক্টের প্রপার্টি`);
                         }
                         return new vscode.Hover(md);
                     }
                 }
             }
             
-            // Check if function is from an imported module (direct import, no alias)
-            const importRegex = /ano\s+"([^"]+)"\s*;/g;
+            // Check if function is from a directly imported module (ano "..." without hisabe alias)
+            const importRegex = /ano\s+["']([^"']+)["']\s*;/g;
             let importMatch;
             while ((importMatch = importRegex.exec(text)) !== null) {
                 const modulePath = importMatch[1];
-                const docComment = extractDocFromModule(modulePath, word, document.uri.fsPath);
-                if (docComment) {
-                    // Try to get function signature from module
-                    try {
-                        const currentDir = path.dirname(document.uri.fsPath);
-                        const fullPath = path.resolve(currentDir, modulePath);
-                        if (fs.existsSync(fullPath)) {
-                            const moduleText = fs.readFileSync(fullPath, 'utf8');
-                            const funcInModuleRegex = new RegExp(`pathao\\s+kaj\\s+${word}\\s*\\(([^)]*)\\)`);
-                            const funcInModule = funcInModuleRegex.exec(moduleText);
-                            if (funcInModule) {
-                                const params = funcInModule[1].trim();
-                                const md = new vscode.MarkdownString();
-                                md.appendMarkdown(`**kaj ${word}(${params})**\n\n`);
-                                md.appendMarkdown(`📦 Imported from: \`${modulePath}\`\n\n`);
-                                md.appendMarkdown('---\n\n');
-                                md.appendMarkdown(docComment + '\n\n');
-                                md.appendMarkdown('---\n\n');
-                                md.appendMarkdown(`**Parameters:** ${params || 'none'}`);
-                                return new vscode.Hover(md);
-                            }
-                        }
-                    } catch (err) {
-                        // Ignore errors
+
+                // Skip if this import has an alias (we already handled those above)
+                const hasAlias = new RegExp(`ano\\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s+hisabe`, 'm').test(text);
+                if (hasAlias) {
+                    continue;
+                }
+
+                // Try to get function signature from module
+                try {
+                    const currentDir = path.dirname(document.uri.fsPath);
+                    const fullPath = path.resolve(currentDir, modulePath);
+
+                    if (!fs.existsSync(fullPath)) {
+                        console.log(`[BanglaCode] Module file not found for direct import hover: ${fullPath}`);
+                        continue;
                     }
+
+                    if (!modulePath.endsWith('.bang')) {
+                        // Only .bang modules can export functions directly
+                        continue;
+                    }
+
+                    const moduleText = fs.readFileSync(fullPath, 'utf8');
+
+                    // Look for ONLY exported functions (with 'pathao' keyword)
+                    const funcInModuleRegex = new RegExp(`pathao\\s+kaj\\s+${word}\\s*\\(([^)]*)\\)`, 'm');
+                    const funcInModule = funcInModuleRegex.exec(moduleText);
+
+                    if (funcInModule) {
+                        const params = funcInModule[1].trim();
+                        const paramList = params ? params.split(',').map(p => p.trim()) : [];
+                        const docComment = extractDocComment(moduleText, word, 'kaj');
+                        const returnValue = extractReturnValue(moduleText, word);
+
+                        const md = new vscode.MarkdownString();
+                        md.appendMarkdown(`**kaj ${word}(${params})**\n\n`);
+                        md.appendMarkdown(`📦 ইম্পোর্ট করা মডিউল: \`${modulePath}\`\n\n`);
+
+                        if (docComment) {
+                            md.appendMarkdown('---\n\n');
+                            md.appendMarkdown(docComment + '\n\n');
+                            md.appendMarkdown('---\n\n');
+                        }
+
+                        md.appendMarkdown(`**প্যারামিটার:** ${paramList.length === 0 ? 'নেই' : paramList.join(', ')}\n\n`);
+
+                        if (returnValue) {
+                            md.appendMarkdown(`**রিটার্ন করে:** \`${returnValue}\`\n\n`);
+                        } else {
+                            md.appendMarkdown(`**রিটার্ন করে:** কিছু না (void)\n\n`);
+                        }
+
+                        md.appendMarkdown(`**কল করো:** \`${word}(${paramList.map((_, i) => `arg${i+1}`).join(', ')})\``);
+
+                        return new vscode.Hover(md);
+                    }
+                } catch (err) {
+                    console.error('[BanglaCode] Error reading module for direct import hover:', err);
                 }
             }
             
@@ -831,12 +1142,12 @@ function activate(context) {
         const diagnostics = [];
         const text = document.getText();
         
-        // Find all declared variables
+        // Find all declared variables (dhoro, sthir, bishwo)
         const declaredVars = new Set();
-        const varDeclRegex = /dhoro\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/g;
+        const varDeclRegex = /(dhoro|sthir|bishwo)\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=/g;
         let match;
         while ((match = varDeclRegex.exec(text)) !== null) {
-            declaredVars.add(match[1]);
+            declaredVars.add(match[2]);
         }
         
         // Find all function definitions with their parameter counts
@@ -854,77 +1165,187 @@ function activate(context) {
         while ((match = funcCallRegex.exec(text)) !== null) {
             const funcName = match[1];
             const argsStr = match[2].trim();
-            
-            // Skip if it's a function definition, built-in, or keyword
-            if (funcName === 'kaj' || funcName === 'jodi' || funcName === 'jotokkhon' || 
-                funcName === 'ghuriye' || funcName === 'shuru' ||
-                builtinFunctions.some(f => f.label === funcName)) {
+
+            // Skip if it's a function definition or keyword
+            if (funcName === 'kaj' || funcName === 'jodi' || funcName === 'jotokkhon' ||
+                funcName === 'ghuriye' || funcName === 'shuru') {
                 continue;
             }
-            
+
+            // Count arguments (simple approach - count commas + 1, unless empty)
+            const argCount = argsStr ? argsStr.split(',').length : 0;
+
+            // Check local functions first
             if (funcDefs.has(funcName)) {
                 const def = funcDefs.get(funcName);
-                // Count arguments (simple approach - count commas + 1, unless empty)
-                const argCount = argsStr ? argsStr.split(',').length : 0;
-                
+
                 if (argCount !== def.paramCount) {
                     const pos = document.positionAt(match.index);
                     const range = new vscode.Range(pos, pos.translate(0, funcName.length));
+                    const paramNames = def.params ? def.params.split(',').map(p => p.trim()).join(', ') : '';
                     diagnostics.push(new vscode.Diagnostic(
                         range,
-                        `Function '${funcName}' expects ${def.paramCount} argument(s) but got ${argCount}`,
+                        `Function '${funcName}(${paramNames})' expects ${def.paramCount} argument(s) but got ${argCount}`,
                         vscode.DiagnosticSeverity.Error
                     ));
                 }
+                continue; // Skip to next iteration
+            }
+
+            // Check built-in functions with known parameter requirements
+            const builtinFunc = builtinFunctions.find(f => f.label === funcName);
+            if (builtinFunc) {
+                // Extract expected param count from insertText
+                const paramMatch = builtinFunc.insertText.match(/\$\{(\d+)(?::([^}]+))?\}/g);
+                if (paramMatch) {
+                    const expectedCount = paramMatch.length;
+
+                    if (argCount !== expectedCount) {
+                        const pos = document.positionAt(match.index);
+                        const range = new vscode.Range(pos, pos.translate(0, funcName.length));
+                        diagnostics.push(new vscode.Diagnostic(
+                            range,
+                            `Built-in function '${funcName}' expects ${expectedCount} argument(s) but got ${argCount}`,
+                            vscode.DiagnosticSeverity.Error
+                        ));
+                    }
+                }
+                continue; // Skip to next iteration
             }
         }
         
-        // Check for aliased module function calls (e.g., math.add(5))
+        // Check for aliased module function calls (e.g., helper.greet(name))
         // First, find all import aliases and their modules
         const importAliases = new Map();
-        const aliasImportRegex = /ano\s+"([^"]+)"\s+hisabe\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;?/g;
+        const aliasImportRegex = /ano\s+["']([^"']+)["']\s+hisabe\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*;?/g;
         while ((match = aliasImportRegex.exec(text)) !== null) {
             importAliases.set(match[2], match[1]);
         }
-        
+
         // Find alias.function() calls
         const aliasCallRegex = /([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
         while ((match = aliasCallRegex.exec(text)) !== null) {
             const aliasName = match[1];
             const funcName = match[2];
             const argsStr = match[3].trim();
-            
+
             if (importAliases.has(aliasName)) {
                 const modulePath = importAliases.get(aliasName);
                 try {
                     const currentDir = path.dirname(document.uri.fsPath);
                     const fullPath = path.resolve(currentDir, modulePath);
-                    if (fs.existsSync(fullPath)) {
+                    if (fs.existsSync(fullPath) && modulePath.endsWith('.bang')) {
                         const moduleText = fs.readFileSync(fullPath, 'utf8');
-                        
-                        // Find function definition in module
+
+                        // Find function definition in module (ONLY exported with 'pathao')
                         const funcInModuleRegex = new RegExp(`pathao\\s+kaj\\s+${funcName}\\s*\\(([^)]*)\\)`);
                         const funcInModule = funcInModuleRegex.exec(moduleText);
-                        
+
                         if (funcInModule) {
                             const params = funcInModule[1].trim();
+                            const paramNames = params.split(',').map(p => p.trim()).join(', ');
                             const expectedCount = params ? params.split(',').length : 0;
                             const actualCount = argsStr ? argsStr.split(',').length : 0;
-                            
+
                             if (actualCount !== expectedCount) {
                                 const pos = document.positionAt(match.index);
                                 const range = new vscode.Range(pos, pos.translate(0, aliasName.length + 1 + funcName.length));
                                 diagnostics.push(new vscode.Diagnostic(
                                     range,
-                                    `Function '${aliasName}.${funcName}' expects ${expectedCount} argument(s) but got ${actualCount}`,
+                                    `Function '${funcName}(${paramNames})' expects ${expectedCount} argument(s) but got ${actualCount}`,
                                     vscode.DiagnosticSeverity.Error
                                 ));
                             }
+                        } else {
+                            // Function not found or not exported
+                            const pos = document.positionAt(match.index);
+                            const range = new vscode.Range(pos, pos.translate(0, aliasName.length + 1 + funcName.length));
+                            diagnostics.push(new vscode.Diagnostic(
+                                range,
+                                `Function '${funcName}' is not exported from module '${modulePath}'`,
+                                vscode.DiagnosticSeverity.Error
+                            ));
                         }
                     }
                 } catch (err) {
-                    // Ignore errors
+                    console.error('[BanglaCode] Diagnostic error for aliased import:', err);
                 }
+            }
+        }
+
+        // Check for directly imported functions (ano "..." without hisabe alias)
+        const directImports = [];
+        const directImportRegex = /ano\s+["']([^"']+)["']\s*;/g;
+        while ((match = directImportRegex.exec(text)) !== null) {
+            const modulePath = match[1];
+            // Skip if this import has an alias
+            const hasAlias = new RegExp(`ano\\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']\\s+hisabe`, 'm').test(text);
+            if (!hasAlias && modulePath.endsWith('.bang')) {
+                directImports.push(modulePath);
+            }
+        }
+
+        // For each directly imported module, check function calls
+        for (const modulePath of directImports) {
+            try {
+                const currentDir = path.dirname(document.uri.fsPath);
+                const fullPath = path.resolve(currentDir, modulePath);
+
+                if (!fs.existsSync(fullPath)) continue;
+
+                const moduleText = fs.readFileSync(fullPath, 'utf8');
+
+                // Find all exported functions in this module
+                const exportedFuncs = new Map();
+                const exportedFuncRegex = /pathao\s+kaj\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
+                let exportMatch;
+
+                while ((exportMatch = exportedFuncRegex.exec(moduleText)) !== null) {
+                    const funcName = exportMatch[1];
+                    const params = exportMatch[2].trim();
+                    const paramCount = params ? params.split(',').length : 0;
+                    exportedFuncs.set(funcName, { params, paramCount });
+                }
+
+                // Now check if any function calls match these exported functions
+                const funcCallRegex2 = /([a-zA-Z_][a-zA-Z0-9_]*)\s*\(([^)]*)\)/g;
+                let callMatch;
+
+                while ((callMatch = funcCallRegex2.exec(text)) !== null) {
+                    const funcName = callMatch[1];
+                    const argsStr = callMatch[2].trim();
+
+                    // Skip keywords and built-ins
+                    if (funcName === 'kaj' || funcName === 'jodi' || funcName === 'jotokkhon' ||
+                        funcName === 'ghuriye' || funcName === 'shuru') {
+                        continue;
+                    }
+
+                    // Skip if it's a local function
+                    if (funcDefs.has(funcName)) continue;
+
+                    // Skip if it's a built-in
+                    if (builtinFunctions.some(f => f.label === funcName)) continue;
+
+                    // Check if it's an exported function from this module
+                    if (exportedFuncs.has(funcName)) {
+                        const def = exportedFuncs.get(funcName);
+                        const argCount = argsStr ? argsStr.split(',').length : 0;
+
+                        if (argCount !== def.paramCount) {
+                            const pos = document.positionAt(callMatch.index);
+                            const range = new vscode.Range(pos, pos.translate(0, funcName.length));
+                            const paramNames = def.params.split(',').map(p => p.trim()).join(', ');
+                            diagnostics.push(new vscode.Diagnostic(
+                                range,
+                                `Function '${funcName}(${paramNames})' expects ${def.paramCount} argument(s) but got ${argCount}`,
+                                vscode.DiagnosticSeverity.Error
+                            ));
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('[BanglaCode] Diagnostic error for direct import:', err);
             }
         }
         
