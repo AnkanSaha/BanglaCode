@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   FaGithub,
@@ -9,34 +10,45 @@ import {
   FaDiscord,
   FaGlobe,
 } from "react-icons/fa";
-import { MapPin, Briefcase, Code2, Heart, Users, FolderGit2 } from "lucide-react";
+import { MapPin, Briefcase, Code2, Heart, Users, FolderGit2, Star } from "lucide-react";
+import { getCreatorData, getNexoralProjects, type CreatorData, type NexoralProject } from "@/lib/github";
 
-interface CreatorSectionProps {
-  creator: {
-    name: string;
-    username: string;
-    bio: string;
-    location: string;
-    avatar: string;
-    website: string;
-    twitter: string;
-    linkedin: string;
-    instagram: string;
-    discord: string;
-    followers?: number;
-    publicRepos?: number;
-    skills: string[];
-    projects: { name: string; description: string; url: string; stars?: number }[];
-  };
-}
+const STATIC_DATA = {
+  website: "https://ankan.in",
+  twitter: "theankansaha",
+  linkedin: "theankansaha",
+  instagram: "theankansaha",
+  discord: "",
+  skills: ["Go", "TypeScript", "React", "Node.js", "Python", "System Design", "Open Source"],
+};
 
-export default function CreatorSection({ creator }: CreatorSectionProps) {
+const FALLBACK_CREATOR: CreatorData = {
+  name: "Ankan Saha",
+  username: "AnkanSaha",
+  bio: "Software Engineer | Building BanglaCode to make programming accessible to Bengali speakers",
+  location: "India",
+  avatar: "https://avatars.githubusercontent.com/u/90076852",
+  website: "https://ankan.in",
+  followers: 100,
+  following: 0,
+  publicRepos: 50,
+};
+
+export default function CreatorSection() {
+  const [creator, setCreator] = useState<CreatorData>(FALLBACK_CREATOR);
+  const [projects, setProjects] = useState<NexoralProject[]>([]);
+
+  useEffect(() => {
+    getCreatorData().then(setCreator);
+    getNexoralProjects().then(setProjects);
+  }, []);
+
   const socialLinks = [
-    { icon: FaGlobe, href: creator.website, label: "Website", color: "hover:text-blue-400" },
+    { icon: FaGlobe, href: STATIC_DATA.website, label: "Website", color: "hover:text-blue-400" },
     { icon: FaGithub, href: `https://github.com/${creator.username}`, label: "GitHub", color: "hover:text-gray-400" },
-    { icon: FaTwitter, href: `https://twitter.com/${creator.twitter}`, label: "Twitter", color: "hover:text-sky-400" },
-    { icon: FaLinkedin, href: `https://linkedin.com/in/${creator.linkedin}`, label: "LinkedIn", color: "hover:text-blue-500" },
-    { icon: FaInstagram, href: `https://instagram.com/${creator.instagram}`, label: "Instagram", color: "hover:text-pink-500" },
+    { icon: FaTwitter, href: `https://twitter.com/${STATIC_DATA.twitter}`, label: "Twitter", color: "hover:text-sky-400" },
+    { icon: FaLinkedin, href: `https://linkedin.com/in/${STATIC_DATA.linkedin}`, label: "LinkedIn", color: "hover:text-blue-500" },
+    { icon: FaInstagram, href: `https://instagram.com/${STATIC_DATA.instagram}`, label: "Instagram", color: "hover:text-pink-500" },
     { icon: FaDiscord, href: "#", label: "Discord", color: "hover:text-indigo-400" },
   ];
 
@@ -101,20 +113,16 @@ export default function CreatorSection({ creator }: CreatorSectionProps) {
 
                     {/* GitHub Stats */}
                     <div className="flex items-center justify-center gap-4 mt-4">
-                      {creator.followers !== undefined && (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <Users className="w-4 h-4" />
-                          <span className="font-semibold text-foreground">{creator.followers}</span>
-                          <span>followers</span>
-                        </div>
-                      )}
-                      {creator.publicRepos !== undefined && (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                          <FolderGit2 className="w-4 h-4" />
-                          <span className="font-semibold text-foreground">{creator.publicRepos}</span>
-                          <span>repos</span>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Users className="w-4 h-4" />
+                        <span className="font-semibold text-foreground">{creator.followers}</span>
+                        <span>followers</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <FolderGit2 className="w-4 h-4" />
+                        <span className="font-semibold text-foreground">{creator.publicRepos}</span>
+                        <span>repos</span>
+                      </div>
                     </div>
                   </div>
 
@@ -147,7 +155,7 @@ export default function CreatorSection({ creator }: CreatorSectionProps) {
 
                     <h4 className="text-lg font-semibold mb-3">Skills & Interests</h4>
                     <div className="flex flex-wrap gap-2 mb-8">
-                      {creator.skills.map((skill, index) => (
+                      {STATIC_DATA.skills.map((skill, index) => (
                         <span
                           key={index}
                           className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20"
@@ -159,28 +167,40 @@ export default function CreatorSection({ creator }: CreatorSectionProps) {
 
                     <h4 className="text-lg font-semibold mb-4">Other Projects</h4>
                     <div className="grid gap-3">
-                      {creator.projects.map((project, index) => (
-                        <Link
-                          key={index}
-                          href={project.url}
-                          target="_blank"
-                          className="block p-4 bg-background/50 rounded-xl border border-border/50 hover:border-primary/50 transition-all duration-200 group hover:-translate-y-1"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h5 className="font-semibold group-hover:text-primary transition-colors duration-200">
-                                {project.name}
-                              </h5>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {project.description}
-                              </p>
+                      {projects.length > 0 ? (
+                        projects.map((project, index) => (
+                          <Link
+                            key={index}
+                            href={project.url}
+                            target="_blank"
+                            className="block p-4 bg-background/50 rounded-xl border border-border/50 hover:border-primary/50 transition-all duration-200 group hover:-translate-y-1"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h5 className="font-semibold group-hover:text-primary transition-colors duration-200">
+                                  {project.name}
+                                </h5>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                  {project.description}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-1 text-muted-foreground">
+                                <Star className="w-4 h-4" />
+                                <span className="text-sm">{project.stars}</span>
+                              </div>
                             </div>
-                            <span className="text-muted-foreground group-hover:text-primary transition-colors duration-200">
-                              →
-                            </span>
-                          </div>
-                        </Link>
-                      ))}
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="grid gap-3">
+                          {[1, 2, 3].map((i) => (
+                            <div key={i} className="p-4 bg-background/50 rounded-xl border border-border/50 animate-pulse">
+                              <div className="h-4 bg-muted rounded w-24 mb-2"></div>
+                              <div className="h-3 bg-muted rounded w-48"></div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -191,8 +211,8 @@ export default function CreatorSection({ creator }: CreatorSectionProps) {
           {/* Message */}
           <div className="mt-12 text-center animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             <blockquote className="text-xl md:text-2xl font-light italic text-muted-foreground max-w-3xl mx-auto">
-              "I believe technology should be accessible to everyone, regardless of their language.
-              BanglaCode is my contribution to making this dream a reality for the Bengali-speaking world."
+              &quot;I believe technology should be accessible to everyone, regardless of their language.
+              BanglaCode is my contribution to making this dream a reality for the Bengali-speaking world.&rdquo;
             </blockquote>
             <p className="mt-4 text-primary font-semibold">— {creator.name}</p>
           </div>

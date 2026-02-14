@@ -1,17 +1,27 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Download, Sparkles } from "lucide-react";
 import Typewriter from "typewriter-effect";
 import AnimatedBackground from "./AnimatedBackground";
+import { getRepoStats } from "@/lib/github";
 
 interface HeroSectionProps {
   version: string;
-  stars: number;
-  forks: number;
 }
 
-export default function HeroSection({ version, stars, forks }: HeroSectionProps) {
+export default function HeroSection({ version }: HeroSectionProps) {
+  const [stars, setStars] = useState<number | null>(null);
+  const [forks, setForks] = useState<number | null>(null);
+
+  useEffect(() => {
+    getRepoStats().then((data) => {
+      setStars(data.stars);
+      setForks(data.forks);
+    });
+  }, []);
+
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen text-center px-4 overflow-hidden">
       <AnimatedBackground />
@@ -77,17 +87,21 @@ export default function HeroSection({ version, stars, forks }: HeroSectionProps)
         {/* Stats */}
         <div className="flex flex-wrap items-center justify-center gap-8 text-muted-foreground animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
           <div className="flex items-center gap-2">
-            <span className="text-3xl font-bold text-yellow-500">{stars}</span>
+            <span className="text-3xl font-bold text-yellow-500">
+              {stars !== null ? stars : <span className="animate-pulse">--</span>}
+            </span>
             <span>GitHub Stars</span>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-3xl font-bold text-green-500">{forks}</span>
+            <span className="text-3xl font-bold text-green-500">
+              {forks !== null ? forks : <span className="animate-pulse">--</span>}
+            </span>
             <span>Forks</span>
           </div>
           <div className="w-px h-8 bg-border hidden sm:block" />
           <div className="flex items-center gap-2">
-            <span className="text-3xl font-bold text-purple-500">27</span>
+            <span className="text-3xl font-bold text-purple-500">29</span>
             <span>Bengali Keywords</span>
           </div>
         </div>

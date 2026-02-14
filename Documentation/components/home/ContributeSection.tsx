@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   GitBranch,
@@ -12,13 +13,12 @@ import {
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { VscRepoForked } from "react-icons/vsc";
+import { getRepoStats, getContributorsCount } from "@/lib/github";
 
-interface ContributeSectionProps {
-  stats: {
-    stars: number;
-    contributors: number;
-    forks: number;
-  };
+interface Stats {
+  stars: number;
+  contributors: number;
+  forks: number;
 }
 
 const contributionWays = [
@@ -60,11 +60,19 @@ const contributionWays = [
   },
 ];
 
-export default function ContributeSection({ stats }: ContributeSectionProps) {
+export default function ContributeSection() {
+  const [stats, setStats] = useState<Stats>({ stars: 0, contributors: 0, forks: 0 });
+
+  useEffect(() => {
+    Promise.all([getRepoStats(), getContributorsCount()]).then(([repo, contributors]) => {
+      setStats({ stars: repo.stars, forks: repo.forks, contributors });
+    });
+  }, []);
+
   const statsDisplay = [
-    { icon: Star, value: stats.stars.toString(), label: "GitHub Stars" },
-    { icon: GitBranch, value: stats.contributors.toString(), label: "Contributors" },
-    { icon: VscRepoForked, value: stats.forks.toString(), label: "Forks" },
+    { icon: Star, value: stats.stars > 0 ? stats.stars.toString() : "--", label: "GitHub Stars" },
+    { icon: GitBranch, value: stats.contributors > 0 ? stats.contributors.toString() : "--", label: "Contributors" },
+    { icon: VscRepoForked, value: stats.forks > 0 ? stats.forks.toString() : "--", label: "Forks" },
     { icon: Heart, value: "100%", label: "Open Source" },
   ];
   return (

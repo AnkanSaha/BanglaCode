@@ -1,22 +1,43 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Users, GitCommit, ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { getTopContributors, type Contributor } from "@/lib/github";
 
-interface Contributor {
-  login: string;
-  avatar_url: string;
-  html_url: string;
-  contributions: number;
-  name?: string;
-}
+export default function ContributorsSection() {
+  const [contributors, setContributors] = useState<Contributor[]>([]);
+  const [loading, setLoading] = useState(true);
 
-interface ContributorsSectionProps {
-  contributors: Contributor[];
-}
+  useEffect(() => {
+    getTopContributors()
+      .then(setContributors)
+      .finally(() => setLoading(false));
+  }, []);
 
-export default function ContributorsSection({ contributors }: ContributorsSectionProps) {
+  if (loading) {
+    return (
+      <section className="py-24 relative overflow-hidden">
+        <div className="container mx-auto px-4 text-center">
+          <div className="animate-pulse">
+            <div className="h-8 bg-muted rounded w-48 mx-auto mb-4"></div>
+            <div className="h-12 bg-muted rounded w-64 mx-auto mb-8"></div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-card border border-border rounded-2xl p-6">
+                  <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4"></div>
+                  <div className="h-4 bg-muted rounded w-20 mx-auto mb-2"></div>
+                  <div className="h-3 bg-muted rounded w-16 mx-auto"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (contributors.length === 0) return null;
 
   const totalContributions = contributors.reduce((sum, c) => sum + c.contributions, 0);
