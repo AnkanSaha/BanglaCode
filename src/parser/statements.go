@@ -9,7 +9,11 @@ import (
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case lexer.DHORO:
-		return p.parseVariableDeclaration()
+		return p.parseVariableDeclaration(false, false)
+	case lexer.STHIR:
+		return p.parseVariableDeclaration(true, false)
+	case lexer.BISHWO:
+		return p.parseVariableDeclaration(false, true)
 	case lexer.JODI:
 		return p.parseIfStatement()
 	case lexer.JOTOKKHON:
@@ -37,9 +41,13 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 }
 
-// parseVariableDeclaration parses "dhoro x = value"
-func (p *Parser) parseVariableDeclaration() *ast.VariableDeclaration {
-	stmt := &ast.VariableDeclaration{Token: p.curToken}
+// parseVariableDeclaration parses "dhoro x = value", "sthir x = value", or "bishwo x = value"
+func (p *Parser) parseVariableDeclaration(isConstant bool, isGlobal bool) *ast.VariableDeclaration {
+	stmt := &ast.VariableDeclaration{
+		Token:      p.curToken,
+		IsConstant: isConstant,
+		IsGlobal:   isGlobal,
+	}
 
 	if !p.expectPeek(lexer.IDENT) {
 		return nil

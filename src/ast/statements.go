@@ -7,18 +7,26 @@ import (
 
 // ==================== Statement Nodes ====================
 
-// VariableDeclaration represents: dhoro x = 5;
+// VariableDeclaration represents: dhoro x = 5; or sthir x = 5; or bishwo x = 5;
 type VariableDeclaration struct {
-	Token lexer.Token // the DHORO token
-	Name  *Identifier
-	Value Expression
+	Token      lexer.Token // the DHORO/STHIR/BISHWO token
+	Name       *Identifier
+	Value      Expression
+	IsConstant bool // true for sthir declarations
+	IsGlobal   bool // true for bishwo declarations
 }
 
 func (vd *VariableDeclaration) statementNode()       {}
 func (vd *VariableDeclaration) TokenLiteral() string { return vd.Token.Literal }
 func (vd *VariableDeclaration) String() string {
 	var out bytes.Buffer
-	out.WriteString("dhoro ")
+	if vd.IsConstant {
+		out.WriteString("sthir ")
+	} else if vd.IsGlobal {
+		out.WriteString("bishwo ")
+	} else {
+		out.WriteString("dhoro ")
+	}
 	out.WriteString(vd.Name.String())
 	out.WriteString(" = ")
 	if vd.Value != nil {

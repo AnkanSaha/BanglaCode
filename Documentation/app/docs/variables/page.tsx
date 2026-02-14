@@ -13,14 +13,50 @@ export default function Variables() {
       <h1>Variables</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        Variables in BanglaCode are declared using the <code>dhoro</code> keyword, meaning
-        &quot;hold&quot; in Bengali. BanglaCode is dynamically typed, so you don&apos;t need to specify types.
+        BanglaCode provides three ways to declare variables: <code>dhoro</code> (regular),{" "}
+        <code>sthir</code> (constant), and <code>bishwo</code> (global). BanglaCode is dynamically
+        typed, so you don&apos;t need to specify types.
       </p>
 
-      <h2>Declaring Variables</h2>
+      <h2>Variable Declaration Keywords</h2>
+
+      <div className="overflow-x-auto my-6">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="border-b border-border">
+              <th className="text-left py-3 px-4 font-semibold">Keyword</th>
+              <th className="text-left py-3 px-4 font-semibold">Bengali</th>
+              <th className="text-left py-3 px-4 font-semibold">English</th>
+              <th className="text-left py-3 px-4 font-semibold">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b border-border/50">
+              <td className="py-3 px-4"><code>dhoro</code></td>
+              <td className="py-3 px-4">ধরো</td>
+              <td className="py-3 px-4">let</td>
+              <td className="py-3 px-4">Regular mutable variable</td>
+            </tr>
+            <tr className="border-b border-border/50">
+              <td className="py-3 px-4"><code>sthir</code></td>
+              <td className="py-3 px-4">স্থির</td>
+              <td className="py-3 px-4">const</td>
+              <td className="py-3 px-4">Immutable constant (cannot be changed)</td>
+            </tr>
+            <tr className="border-b border-border/50">
+              <td className="py-3 px-4"><code>bishwo</code></td>
+              <td className="py-3 px-4">বিশ্ব</td>
+              <td className="py-3 px-4">global</td>
+              <td className="py-3 px-4">Global variable (accessible everywhere)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Regular Variables (dhoro)</h2>
 
       <p>
-        Use the <code>dhoro</code> keyword followed by the variable name and an initial value:
+        Use the <code>dhoro</code> keyword for regular mutable variables:
       </p>
 
       <CodeBlock
@@ -29,10 +65,92 @@ dhoro naam = "Rahim";
 dhoro boyosh = 25;
 dhoro active = sotti;
 
-// Variables can hold any type
+// Variables can be reassigned
 dhoro message = "Hello";
 message = 42;        // Now holds a number
 message = [1, 2, 3]; // Now holds an array`}
+      />
+
+      <h2>Constants (sthir)</h2>
+
+      <p>
+        Use the <code>sthir</code> (স্থির = fixed/constant) keyword for values that should never change.
+        Attempting to reassign a constant will result in an error:
+      </p>
+
+      <CodeBlock
+        code={`// Declare constants
+sthir PI = 3.14159;
+sthir MAX_SIZE = 100;
+sthir APP_NAME = "BanglaCode";
+
+// Use constants
+dhoro area = PI * 5 * 5;
+dekho(area);  // 78.53975
+
+// This will cause an error!
+// PI = 3.14;  // Error: 'PI' ekti sthir (constant), eitake bodlano jabe na`}
+      />
+
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 my-4">
+        <p className="text-amber-200 font-medium mb-2">⚠️ Constant Naming Convention</p>
+        <p className="text-muted-foreground text-sm">
+          By convention, use UPPERCASE names for constants to make them easily identifiable.
+        </p>
+      </div>
+
+      <h2>Global Variables (bishwo)</h2>
+
+      <p>
+        Use the <code>bishwo</code> (বিশ্ব = world/global) keyword for variables that need to be
+        accessible from any scope, including inside functions:
+      </p>
+
+      <CodeBlock
+        code={`// Declare a global variable
+bishwo ganok = 0;
+
+kaj barao() {
+    // Can access and modify global variable
+    ganok = ganok + 1;
+}
+
+barao();
+barao();
+barao();
+
+dekho(ganok);  // 3`}
+      />
+
+      <h3>Global vs Regular Variables</h3>
+
+      <p>
+        The key difference is that regular variables inside functions create new local bindings,
+        while global variables are shared across all scopes:
+      </p>
+
+      <CodeBlock
+        code={`// Regular variable - function creates new local binding
+dhoro x = 10;
+
+kaj test1() {
+    dhoro x = 20;  // New local variable
+    dekho(x);      // 20
+}
+
+test1();
+dekho(x);  // 10 (outer x unchanged)
+
+// Global variable - shared across all scopes
+bishwo counter = 0;
+
+kaj test2() {
+    counter = counter + 1;  // Modifies global
+}
+
+test2();
+test2();
+dekho(counter);  // 2`}
       />
 
       <h2>Naming Rules</h2>
@@ -51,7 +169,8 @@ message = [1, 2, 3]; // Now holds an array`}
 dhoro firstName = "Rahim";
 dhoro _private = "secret";
 dhoro count2 = 100;
-dhoro userAge = 25;
+sthir MAX_VALUE = 1000;
+bishwo app_state = "running";
 
 // Invalid variable names (will cause errors)
 // dhoro 2count = 5;      // Cannot start with digit
@@ -62,7 +181,7 @@ dhoro userAge = 25;
       <h2>Assignment Operators</h2>
 
       <p>
-        BanglaCode supports compound assignment operators for convenience:
+        BanglaCode supports compound assignment operators for regular variables:
       </p>
 
       <CodeBlock
@@ -77,27 +196,32 @@ x -= 3;   // x = x - 3  (x is now 22)
 x *= 2;   // x = x * 2  (x is now 44)
 x /= 4;   // x = x / 4  (x is now 11)
 
-dekho(x);  // Output: 11`}
+dekho(x);  // Output: 11
+
+// Note: Compound operators don't work on constants
+// sthir Y = 10;
+// Y += 5;  // Error!`}
       />
 
       <h2>Variable Scope</h2>
 
       <p>
-        Variables have block scope. A variable declared inside a block (between <code>{`{}`}</code>)
-        is only accessible within that block:
+        Variables have function scope. A variable declared inside a function is only accessible
+        within that function:
       </p>
 
       <CodeBlock
-        code={`dhoro global = "I am global";
+        code={`dhoro outer = "I am outer";
 
-jodi (sotti) {
-    dhoro local = "I am local";
-    dekho(global);  // Works - can access outer variable
-    dekho(local);   // Works - can access local variable
+kaj myFunction() {
+    dhoro inner = "I am inner";
+    dekho(outer);  // Works - can access outer variable
+    dekho(inner);  // Works - can access local variable
 }
 
-dekho(global);  // Works
-// dekho(local);  // Error! local is not defined here`}
+myFunction();
+dekho(outer);  // Works
+// dekho(inner);  // Error! inner is not defined here`}
       />
 
       <h3>Closures</h3>
@@ -122,6 +246,35 @@ dekho(counter());  // 2
 dekho(counter());  // 3`}
       />
 
+      <h2>Combining All Three</h2>
+
+      <p>
+        Here&apos;s an example using all three variable types together:
+      </p>
+
+      <CodeBlock
+        code={`// Constants for configuration
+sthir PI = 3.14159;
+sthir RATE = 0.05;
+
+// Global for shared state
+bishwo total = 0;
+
+kaj calculateArea(radius) {
+    // Local variable for computation
+    dhoro area = PI * radius * radius;
+    
+    // Update global total
+    total = total + area;
+    
+    ferao area;
+}
+
+dekho(calculateArea(5));   // 78.53975
+dekho(calculateArea(10));  // 314.159
+dekho("Total:", total);    // Total: 392.69875`}
+      />
+
       <h2>Type Checking</h2>
 
       <p>
@@ -130,18 +283,12 @@ dekho(counter());  // 3`}
 
       <CodeBlock
         code={`dhoro num = 42;
-dhoro str = "hello";
-dhoro bool = sotti;
-dhoro arr = [1, 2, 3];
-dhoro obj = {x: 1, y: 2};
-dhoro nothing = khali;
+sthir STR = "hello";
+bishwo flag = sotti;
 
-dekho(dhoron(num));      // "int" or "float"
-dekho(dhoron(str));      // "string"
-dekho(dhoron(bool));     // "boolean"
-dekho(dhoron(arr));      // "array"
-dekho(dhoron(obj));      // "map"
-dekho(dhoron(nothing));  // "null"`}
+dekho(dhoron(num));   // "int" or "float"
+dekho(dhoron(STR));   // "string"
+dekho(dhoron(flag));  // "boolean"`}
       />
 
       <h2>Type Conversion</h2>
@@ -164,71 +311,15 @@ dekho(dhoron(str));     // "string"
 dekho(dhoron(number));  // "int"`}
       />
 
-      <h2>Constants</h2>
+      <h2>Best Practices</h2>
 
-      <p>
-        BanglaCode doesn&apos;t have a separate constant keyword. By convention, use UPPERCASE
-        names for values that shouldn&apos;t change:
-      </p>
-
-      <CodeBlock
-        code={`// Convention: UPPERCASE for constants
-dhoro PI = 3.14159;
-dhoro MAX_SIZE = 100;
-dhoro APP_NAME = "MyApp";
-
-// These CAN be changed (no enforcement)
-// but by convention, they shouldn't be`}
-      />
-
-      <h2>Multiple Variables</h2>
-
-      <p>
-        Each variable must be declared separately:
-      </p>
-
-      <CodeBlock
-        code={`// Declare multiple variables
-dhoro a = 1;
-dhoro b = 2;
-dhoro c = 3;
-
-// Variables can reference each other
-dhoro x = 10;
-dhoro y = x * 2;
-dhoro z = x + y;
-
-dekho(z);  // 30`}
-      />
-
-      <h2>Truthiness</h2>
-
-      <p>
-        When used in boolean contexts (like <code>jodi</code>), values are evaluated for truthiness:
-      </p>
-
-      <CodeBlock
-        code={`// Falsy values
-dhoro f1 = mittha;  // false
-dhoro f2 = khali;   // null
-dhoro f3 = 0;       // zero
-
-// Truthy values (everything else)
-dhoro t1 = sotti;   // true
-dhoro t2 = 1;       // non-zero numbers
-dhoro t3 = "hello"; // non-empty strings
-dhoro t4 = [];      // arrays (even empty)
-dhoro t5 = {};      // maps (even empty)
-
-// Example usage
-jodi (f1) {
-    dekho("This won't print");
-}
-
-jodi (t2) {
-    dekho("This will print");
-}`}
-      />
+      <ul>
+        <li>Use <code>sthir</code> for values that should never change (configuration, mathematical constants)</li>
+        <li>Use <code>bishwo</code> sparingly - only when truly needed for shared state</li>
+        <li>Prefer <code>dhoro</code> for most variables</li>
+        <li>Use descriptive names that explain the variable&apos;s purpose</li>
+        <li>Use UPPERCASE for constants, camelCase or snake_case for others</li>
+      </ul>
 
       <DocNavigation currentPath="/docs/variables" />
     </div>

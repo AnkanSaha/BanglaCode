@@ -62,6 +62,8 @@ const (
 
 	// Keywords (Banglish)
 	DHORO      = "DHORO"      // variable declaration (let/var)
+	STHIR      = "STHIR"      // constant declaration (const) - স্থির = fixed/constant
+	BISHWO     = "BISHWO"     // global variable declaration - বিশ্ব = world/global
 	JODI       = "JODI"       // if
 	NAHOLE     = "NAHOLE"     // else
 	JOTOKKHON  = "JOTOKKHON"  // while
@@ -91,6 +93,8 @@ const (
 // keywords maps Banglish keywords to their token types
 var keywords = map[string]TokenType{
 	"dhoro":      DHORO,
+	"sthir":      STHIR,
+	"bishwo":     BISHWO,
 	"jodi":       JODI,
 	"nahole":     NAHOLE,
 	"jotokkhon":  JOTOKKHON,

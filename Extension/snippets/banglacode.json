@@ -6,6 +6,20 @@
     ],
     "description": "Declare a variable (ধরো)"
   },
+  "Constant Declaration": {
+    "prefix": "sthir",
+    "body": [
+      "sthir ${1:NAME} = ${2:value};"
+    ],
+    "description": "Declare a constant - cannot be changed (স্থির)"
+  },
+  "Global Variable": {
+    "prefix": "bishwo",
+    "body": [
+      "bishwo ${1:name} = ${2:value};"
+    ],
+    "description": "Declare a global variable (বিশ্ব)"
+  },
   "If Statement": {
     "prefix": "jodi",
     "body": [

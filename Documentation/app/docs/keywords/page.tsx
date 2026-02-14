@@ -4,6 +4,8 @@ import DocNavigation from "@/components/DocNavigation";
 export default function Keywords() {
   const keywords = [
     { keyword: "dhoro", meaning: "hold/let", english: "var/let", description: "Variable declaration", example: 'dhoro x = 5;' },
+    { keyword: "sthir", meaning: "fixed/constant", english: "const", description: "Constant declaration (immutable)", example: 'sthir PI = 3.14;' },
+    { keyword: "bishwo", meaning: "world/global", english: "global", description: "Global variable declaration", example: 'bishwo count = 0;' },
     { keyword: "jodi", meaning: "if", english: "if", description: "Conditional statement", example: 'jodi (x > 0) { }' },
     { keyword: "nahole", meaning: "else/otherwise", english: "else", description: "Else branch", example: 'nahole { }' },
     { keyword: "jotokkhon", meaning: "as long as", english: "while", description: "While loop", example: 'jotokkhon (x < 10) { }' },
@@ -42,7 +44,7 @@ export default function Keywords() {
       <h1>Keywords Reference</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        BanglaCode has 27 Bengali keywords written in Banglish (Bengali words using English/Latin script).
+        BanglaCode has 29 Bengali keywords written in Banglish (Bengali words using English/Latin script).
         This makes it easy to type on any keyboard while remaining familiar to Bengali speakers.
       </p>
 
@@ -76,10 +78,23 @@ export default function Keywords() {
       <h3>Variable Declaration</h3>
 
       <CodeBlock
-        code={`// dhoro - declare a variable (like let/var)
+        code={`// dhoro - declare a mutable variable (like let/var)
 dhoro naam = "Rahim";
 dhoro boyosh = 25;
-dhoro active = sotti;`}
+
+// sthir - declare a constant (cannot be changed)
+sthir PI = 3.14159;
+sthir MAX_SIZE = 100;
+
+// bishwo - declare a global variable (accessible everywhere)
+bishwo counter = 0;
+
+kaj increment() {
+    counter = counter + 1;  // Modifies global
+}
+
+increment();
+dekho(counter);  // 1`}
       />
 
       <h3>Boolean & Null Literals</h3>
@@ -248,7 +263,7 @@ kaj validateAge(age) {
       <h2>Reserved Words</h2>
 
       <p>
-        All 27 keywords are reserved and cannot be used as variable names, function names,
+        All 29 keywords are reserved and cannot be used as variable names, function names,
         or identifiers. Attempting to use a keyword as an identifier will result in a syntax error.
       </p>
 

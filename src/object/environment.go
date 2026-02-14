@@ -2,21 +2,38 @@ package object
 
 // Environment represents a scope for variable bindings
 type Environment struct {
-	store map[string]Object
-	outer *Environment // parent scope
+	store     map[string]Object
+	constants map[string]bool // tracks which variables are constants
+	outer     *Environment    // parent scope
+	global    *Environment    // reference to global (root) environment
 }
 
 // NewEnvironment creates a new environment
 func NewEnvironment() *Environment {
 	s := make(map[string]Object)
-	return &Environment{store: s, outer: nil}
+	c := make(map[string]bool)
+	env := &Environment{store: s, constants: c, outer: nil, global: nil}
+	env.global = env // root environment is its own global
+	return env
 }
 
 // NewEnclosedEnvironment creates a new environment with an outer scope
 func NewEnclosedEnvironment(outer *Environment) *Environment {
-	env := NewEnvironment()
-	env.outer = outer
+	env := &Environment{
+		store:     make(map[string]Object),
+		constants: make(map[string]bool),
+		outer:     outer,
+		global:    outer.GetGlobal(),
+	}
 	return env
+}
+
+// GetGlobal returns the global (root) environment
+func (e *Environment) GetGlobal() *Environment {
+	if e.global != nil {
+		return e.global
+	}
+	return e
 }
 
 // Get retrieves a variable from the environment
@@ -32,6 +49,31 @@ func (e *Environment) Get(name string) (Object, bool) {
 func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
+}
+
+// SetConstant assigns a constant in the environment
+func (e *Environment) SetConstant(name string, val Object) Object {
+	e.store[name] = val
+	e.constants[name] = true
+	return val
+}
+
+// SetGlobal assigns a variable in the global environment
+func (e *Environment) SetGlobal(name string, val Object) Object {
+	global := e.GetGlobal()
+	global.store[name] = val
+	return val
+}
+
+// IsConstant checks if a variable is a constant
+func (e *Environment) IsConstant(name string) bool {
+	if constant, ok := e.constants[name]; ok && constant {
+		return true
+	}
+	if e.outer != nil {
+		return e.outer.IsConstant(name)
+	}
+	return false
 }
 
 // Update updates a variable in the environment (searches outer scopes)

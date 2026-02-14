@@ -53,6 +53,8 @@ The interpreter pipeline flows through these components in order:
 | Keyword | English | Usage |
 |---------|---------|-------|
 | `dhoro` | let/var | `dhoro x = 5;` |
+| `sthir` | const | `sthir PI = 3.14;` (immutable constant) |
+| `bishwo` | global | `bishwo count = 0;` (global variable) |
 | `jodi`/`nahole` | if/else | `jodi (x > 0) { } nahole { }` |
 | `jotokkhon` | while | `jotokkhon (x < 10) { }` |
 | `ghuriye` | for | `ghuriye (dhoro i = 0; i < 5; i = i + 1) { }` |

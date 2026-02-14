@@ -149,6 +149,11 @@ func evalAssignmentExpression(ae *ast.AssignmentExpression, env *object.Environm
 		return newError("invalid assignment target")
 	}
 
+	// Check if trying to reassign a constant
+	if env.IsConstant(ident.Value) {
+		return newErrorAt(ae.Token.Line, ae.Token.Column, "'%s' ekti sthir (constant), eitake bodlano jabe na", ident.Value)
+	}
+
 	value := Eval(ae.Value, env)
 	if isError(value) {
 		return value
@@ -157,7 +162,7 @@ func evalAssignmentExpression(ae *ast.AssignmentExpression, env *object.Environm
 	// Handle compound assignment operators
 	switch ae.Operator {
 	case "=":
-		env.Set(ident.Value, value)
+		env.Update(ident.Value, value)
 		return value
 	case "+=", "-=", "*=", "/=":
 		current, ok := env.Get(ident.Value)
@@ -174,7 +179,7 @@ func evalAssignmentExpression(ae *ast.AssignmentExpression, env *object.Environm
 			return result
 		}
 
-		env.Set(ident.Value, result)
+		env.Update(ident.Value, result)
 		return result
 	default:
 		return newError("unknown assignment operator: %s", ae.Operator)

@@ -159,12 +159,17 @@ Type 'sahajjo' for help, 'baire' to exit
 ### Variables and Data Types
 
 ```banglacode
-// Numbers
+// Regular variables (mutable)
 dhoro integer = 42;
 dhoro decimal = 3.14159;
-
-// Strings
 dhoro text = "Hello, BanglaCode!";
+
+// Constants (immutable) - cannot be reassigned
+sthir PI = 3.14159;
+sthir MAX_SIZE = 100;
+
+// Global variables - accessible from any scope
+bishwo counter = 0;
 
 // Booleans
 dhoro isActive = sotti;    // true

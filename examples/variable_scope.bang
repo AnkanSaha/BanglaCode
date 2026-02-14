@@ -1,0 +1,94 @@
+// BanglaCode Variable Scope Example
+// Demonstrates dhoro, sthir, and bishwo keywords
+
+// ===== Constants (sthir) =====
+// Constants cannot be changed after declaration
+sthir PI = 3.14159;
+sthir APP_NAME = "BanglaCode";
+sthir VERSION = "3.3.0";
+
+dekho("=== Constants (sthir) ===");
+dekho("App:", APP_NAME, "v" + VERSION);
+dekho("PI value:", PI);
+
+// This would cause an error:
+// PI = 3.14;  // Error: 'PI' ekti sthir (constant), eitake bodlano jabe na
+
+// ===== Global Variables (bishwo) =====
+// Global variables are accessible from any scope
+bishwo totalCalls = 0;
+bishwo lastResult = 0;
+
+dekho("\n=== Global Variables (bishwo) ===");
+
+kaj add(a, b) {
+    totalCalls = totalCalls + 1;
+    lastResult = a + b;
+    ferao lastResult;
+}
+
+kaj multiply(a, b) {
+    totalCalls = totalCalls + 1;
+    lastResult = a * b;
+    ferao lastResult;
+}
+
+dekho("5 + 3 =", add(5, 3));
+dekho("4 * 7 =", multiply(4, 7));
+dekho("6 + 2 =", add(6, 2));
+
+dekho("Total function calls:", totalCalls);
+dekho("Last result:", lastResult);
+
+// ===== Regular Variables (dhoro) =====
+// Regular variables have function scope
+dekho("\n=== Regular Variables (dhoro) ===");
+
+dhoro outerX = 100;
+
+kaj testScope() {
+    dhoro innerX = 200;  // Local to this function
+    dekho("Inside function - innerX:", innerX);
+    dekho("Inside function - outerX:", outerX);  // Can access outer
+    ferao innerX;
+}
+
+testScope();
+dekho("Outside function - outerX:", outerX);
+// dekho(innerX);  // Error: innerX is not defined here
+
+// ===== Combined Example: Circle Calculator =====
+dekho("\n=== Circle Calculator ===");
+
+sthir RADIUS_UNIT = "cm";
+bishwo circleCount = 0;
+
+sreni Circle {
+    shuru(radius) {
+        ei.radius = radius;
+        circleCount = circleCount + 1;  // Update global counter
+    }
+    
+    kaj area() {
+        ferao PI * ei.radius * ei.radius;
+    }
+    
+    kaj circumference() {
+        ferao 2 * PI * ei.radius;
+    }
+    
+    kaj describe() {
+        dekho("Circle #" + lipi(circleCount));
+        dekho("  Radius:", ei.radius, RADIUS_UNIT);
+        dekho("  Area:", ei.area(), RADIUS_UNIT + "²");
+        dekho("  Circumference:", ei.circumference(), RADIUS_UNIT);
+    }
+}
+
+dhoro c1 = notun Circle(5);
+c1.describe();
+
+dhoro c2 = notun Circle(10);
+c2.describe();
+
+dekho("\nTotal circles created:", circleCount);

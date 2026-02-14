@@ -80,7 +80,15 @@
       "patterns": [
         {
           "name": "keyword.control.banglacode",
-          "match": "\\b(dhoro|jodi|nahole|jotokkhon|ghuriye|kaj|ferao|thamo|chharo|ano|pathao|hisabe|chesta|dhoro_bhul|shesh|felo)\\b"
+          "match": "\\b(dhoro|sthir|bishwo|jodi|nahole|jotokkhon|ghuriye|kaj|ferao|thamo|chharo|ano|pathao|hisabe|chesta|dhoro_bhul|shesh|felo)\\b"
+        },
+        {
+          "name": "storage.type.constant.banglacode",
+          "match": "\\b(sthir)\\b"
+        },
+        {
+          "name": "storage.type.global.banglacode",
+          "match": "\\b(bishwo)\\b"
         },
         {
           "name": "keyword.other.banglacode",

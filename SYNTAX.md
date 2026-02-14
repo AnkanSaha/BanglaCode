@@ -77,6 +77,8 @@ BanglaCode uses Banglish keywords that are intuitive for Bengali speakers:
 | Keyword | Meaning | English Equivalent |
 |---------|---------|-------------------|
 | `dhoro` | hold/take | let/var |
+| `sthir` | fixed/constant | const |
+| `bishwo` | world/global | global |
 | `jodi` | if | if |
 | `nahole` | else | else |
 | `jotokkhon` | as long as | while |
@@ -152,12 +154,42 @@ dhoro person = {
 
 ## Variables
 
-Declare variables using `dhoro`:
+BanglaCode has three variable declaration keywords:
+
+### Regular Variables (`dhoro`)
+Mutable variables using `dhoro`:
 
 ```banglacode
 dhoro naam = "Ankan";
 dhoro boyosh = 25;
 dhoro isStudent = sotti;
+```
+
+### Constants (`sthir`)
+Immutable constants using `sthir` (স্থির = fixed):
+
+```banglacode
+sthir PI = 3.14159;
+sthir MAX_SIZE = 100;
+sthir APP_NAME = "BanglaCode";
+
+// Trying to reassign will cause an error:
+// PI = 3.14;  // Error: 'PI' ekti sthir (constant), eitake bodlano jabe na
+```
+
+### Global Variables (`bishwo`)
+Global variables using `bishwo` (বিশ্ব = world) that are accessible from any scope:
+
+```banglacode
+bishwo counter = 0;
+
+kaj increment() {
+    counter = counter + 1;  // Modifies the global variable
+}
+
+increment();
+increment();
+dekho(counter);  // Output: 2
 ```
 
 Variables are dynamically typed - no type declarations needed!
