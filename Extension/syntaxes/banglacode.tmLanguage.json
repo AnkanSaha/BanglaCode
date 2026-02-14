@@ -211,6 +211,18 @@
           "match": "\\b(server_chalu|anun|uttor|json_uttor)\\b"
         },
         {
+          "name": "support.function.builtin.network.js",
+          "match": "\\b(tcp_server_chalu|tcp_jukto|tcp_pathao|tcp_lekho|tcp_shuno|tcp_bondho)\\b"
+        },
+        {
+          "name": "support.function.builtin.network.js",
+          "match": "\\b(udp_server_chalu|udp_pathao|udp_uttor|udp_shuno|udp_bondho)\\b"
+        },
+        {
+          "name": "support.function.builtin.network.js",
+          "match": "\\b(websocket_server_chalu|websocket_jukto|websocket_pathao|websocket_bondho)\\b"
+        },
+        {
           "name": "support.function.js",
           "match": "\\b(json_poro|json_banao)\\b"
         },

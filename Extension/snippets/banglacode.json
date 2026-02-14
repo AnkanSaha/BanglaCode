@@ -332,6 +332,79 @@
     ],
     "description": "HTTP GET request (আনুন)"
   },
+  "TCP Server": {
+    "prefix": "tcp-server",
+    "body": [
+      "tcp_server_chalu(${1:8080}, kaj(conn) {",
+      "\tdekho(\"Client connected:\", conn[\"remote_addr\"]);",
+      "\tdekho(\"Data:\", conn[\"data\"]);",
+      "\ttcp_pathao(conn, \"${2:Echo: }\" + conn[\"data\"]);",
+      "});"
+    ],
+    "description": "TCP server (TCP সার্ভার চালু)"
+  },
+  "TCP Client": {
+    "prefix": "tcp-client",
+    "body": [
+      "proyash kaj ${1:tcpClient}() {",
+      "\tdhoro conn = opekha tcp_jukto(\"${2:localhost}\", ${3:8080});",
+      "\ttcp_lekho(conn, \"${4:Hello TCP!}\");",
+      "\tdhoro response = opekha tcp_shuno(conn);",
+      "\tdekho(\"Response:\", response);",
+      "\ttcp_bondho(conn);",
+      "}",
+      "${1:tcpClient}();"
+    ],
+    "description": "TCP client with async/await"
+  },
+  "UDP Server": {
+    "prefix": "udp-server",
+    "body": [
+      "udp_server_chalu(${1:9000}, kaj(packet) {",
+      "\tdekho(\"Received:\", packet[\"data\"]);",
+      "\tdekho(\"From:\", packet[\"remote_addr\"]);",
+      "\tudp_uttor(packet, \"${2:Response message}\");",
+      "});"
+    ],
+    "description": "UDP server (UDP সার্ভার চালু)"
+  },
+  "UDP Client": {
+    "prefix": "udp-client",
+    "body": [
+      "proyash kaj ${1:udpClient}() {",
+      "\topekha udp_pathao(\"${2:localhost}\", ${3:9000}, \"${4:Hello UDP!}\");",
+      "\tdekho(\"Packet sent!\");",
+      "}",
+      "${1:udpClient}();"
+    ],
+    "description": "UDP client with async"
+  },
+  "WebSocket Server": {
+    "prefix": "websocket-server",
+    "body": [
+      "websocket_server_chalu(${1:3000}, kaj(conn) {",
+      "\tdekho(\"Client connected:\", conn[\"remote_addr\"]);",
+      "\tjodi (conn[\"connected\"] == sotti) {",
+      "\t\tdekho(\"Message:\", conn[\"message\"]);",
+      "\t\twebsocket_pathao(conn, \"${2:Echo: }\" + conn[\"message\"]);",
+      "\t}",
+      "});"
+    ],
+    "description": "WebSocket server (WebSocket সার্ভার চালু)"
+  },
+  "WebSocket Client": {
+    "prefix": "websocket-client",
+    "body": [
+      "proyash kaj ${1:wsClient}() {",
+      "\tdhoro ws = opekha websocket_jukto(\"${2:ws://localhost:3000}\");",
+      "\twebsocket_pathao(ws, \"${3:Hello WebSocket!}\");",
+      "\tghumaao(${4:1000});",
+      "\twebsocket_bondho(ws);",
+      "}",
+      "${1:wsClient}();"
+    ],
+    "description": "WebSocket client with async/await"
+  },
   "Read File": {
     "prefix": "poro",
     "body": [

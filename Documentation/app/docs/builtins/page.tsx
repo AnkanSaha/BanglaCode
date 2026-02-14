@@ -13,8 +13,8 @@ export default function Builtins() {
       <h1>Built-in Functions Reference</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        BanglaCode provides 80+ built-in functions for I/O, type conversion, string manipulation,
-        array operations, math, file handling, HTTP, JSON, and complete OS-level system access.
+        BanglaCode provides 95+ built-in functions for I/O, type conversion, string manipulation,
+        array operations, math, file handling, HTTP, JSON, networking (TCP/UDP/WebSocket), and complete OS-level system access.
       </p>
 
       <h2>Input/Output</h2>
@@ -626,6 +626,205 @@ proyash kaj parallel() {
 
 timer();
 parallel();`}
+      />
+
+      <h2>Networking Functions</h2>
+
+      <p className="text-muted-foreground">
+        BanglaCode provides comprehensive networking capabilities for TCP, UDP, and WebSocket protocols,
+        making network programming as easy as JavaScript/Node.js.
+      </p>
+
+      <h3>TCP Functions (6 functions)</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>tcp_server_chalu</code></td>
+              <td><code>port, handler</code></td>
+              <td><code>khali</code></td>
+              <td>Start TCP server with callback</td>
+            </tr>
+            <tr>
+              <td><code>tcp_jukto</code></td>
+              <td><code>host, port</code></td>
+              <td><code>Promise</code></td>
+              <td>Connect to TCP server (async)</td>
+            </tr>
+            <tr>
+              <td><code>tcp_pathao</code></td>
+              <td><code>connection, data</code></td>
+              <td><code>khali</code></td>
+              <td>Send data on TCP connection</td>
+            </tr>
+            <tr>
+              <td><code>tcp_lekho</code></td>
+              <td><code>connection, data</code></td>
+              <td><code>khali</code></td>
+              <td>Write data to TCP connection (alias)</td>
+            </tr>
+            <tr>
+              <td><code>tcp_shuno</code></td>
+              <td><code>connection</code></td>
+              <td><code>Promise</code></td>
+              <td>Read data from TCP connection (async)</td>
+            </tr>
+            <tr>
+              <td><code>tcp_bondho</code></td>
+              <td><code>connection</code></td>
+              <td><code>khali</code></td>
+              <td>Close TCP connection</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CodeBlock
+        code={`// TCP Server
+tcp_server_chalu(8080, kaj(conn) {
+    dekho("Client:", conn["remote_addr"]);
+    dekho("Data:", conn["data"]);
+    tcp_pathao(conn, "Echo: " + conn["data"]);
+});
+
+// TCP Client
+proyash kaj client() {
+    dhoro conn = opekha tcp_jukto("localhost", 8080);
+    tcp_lekho(conn, "Hello!");
+    dhoro response = opekha tcp_shuno(conn);
+    dekho(response);
+    tcp_bondho(conn);
+}
+client();`}
+      />
+
+      <h3>UDP Functions (5 functions)</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>udp_server_chalu</code></td>
+              <td><code>port, handler</code></td>
+              <td><code>khali</code></td>
+              <td>Start UDP server with callback</td>
+            </tr>
+            <tr>
+              <td><code>udp_pathao</code></td>
+              <td><code>host, port, data</code></td>
+              <td><code>Promise</code></td>
+              <td>Send UDP packet (async)</td>
+            </tr>
+            <tr>
+              <td><code>udp_uttor</code></td>
+              <td><code>packet, data</code></td>
+              <td><code>khali</code></td>
+              <td>Send UDP response to client</td>
+            </tr>
+            <tr>
+              <td><code>udp_shuno</code></td>
+              <td><code>port, handler</code></td>
+              <td><code>khali</code></td>
+              <td>Listen for UDP packets (alias)</td>
+            </tr>
+            <tr>
+              <td><code>udp_bondho</code></td>
+              <td><code>connection</code></td>
+              <td><code>khali</code></td>
+              <td>Close UDP connection</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CodeBlock
+        code={`// UDP Server
+udp_server_chalu(9000, kaj(packet) {
+    dekho("From:", packet["remote_addr"]);
+    dekho("Data:", packet["data"]);
+    udp_uttor(packet, "Got it!");
+});
+
+// UDP Client
+proyash kaj send() {
+    opekha udp_pathao("localhost", 9000, "Hello UDP!");
+}
+send();`}
+      />
+
+      <h3>WebSocket Functions (4 functions)</h3>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>websocket_server_chalu</code></td>
+              <td><code>port, handler</code></td>
+              <td><code>khali</code></td>
+              <td>Start WebSocket server</td>
+            </tr>
+            <tr>
+              <td><code>websocket_jukto</code></td>
+              <td><code>url</code></td>
+              <td><code>Promise</code></td>
+              <td>Connect to WebSocket server (async)</td>
+            </tr>
+            <tr>
+              <td><code>websocket_pathao</code></td>
+              <td><code>connection, message</code></td>
+              <td><code>khali</code></td>
+              <td>Send WebSocket message</td>
+            </tr>
+            <tr>
+              <td><code>websocket_bondho</code></td>
+              <td><code>connection</code></td>
+              <td><code>khali</code></td>
+              <td>Close WebSocket connection</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CodeBlock
+        code={`// WebSocket Chat Server
+websocket_server_chalu(3000, kaj(conn) {
+    dekho("Message:", conn["message"]);
+    websocket_pathao(conn, "Reply: " + conn["message"]);
+});
+
+// WebSocket Client
+proyash kaj chat() {
+    dhoro ws = opekha websocket_jukto("ws://localhost:3000");
+    websocket_pathao(ws, "Hello WebSocket!");
+    ghumaao(1000);
+    websocket_bondho(ws);
+}
+chat();`}
       />
 
       <h2>Function Name Meanings</h2>

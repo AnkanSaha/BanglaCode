@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-const Version = "6.2.1"
+const Version = "6.3.0"
 
 const PROMPT = "\033[1;33m>> \033[0m"
 
