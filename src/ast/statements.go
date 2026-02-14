@@ -224,7 +224,7 @@ func (es *ExportStatement) String() string {
 
 // TryCatchStatement represents: chesta { } dhoro_bhul (e) { } shesh { }
 type TryCatchStatement struct {
-	Token        lexer.Token     // the CHESTA token
+	Token        lexer.Token // the CHESTA token
 	TryBlock     *BlockStatement
 	CatchParam   *Identifier // parameter in catch block
 	CatchBlock   *BlockStatement

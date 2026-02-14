@@ -765,9 +765,9 @@ dhoro y = 10;`
 	}
 
 	// Skip to second line
-	l.NextToken() // =
-	l.NextToken() // 5
-	l.NextToken() // ;
+	l.NextToken()       // =
+	l.NextToken()       // 5
+	l.NextToken()       // ;
 	tok = l.NextToken() // dhoro on line 2
 	if tok.Line != 2 {
 		t.Errorf("expected line=2, got line=%d", tok.Line)
