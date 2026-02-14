@@ -128,24 +128,26 @@ func TestTCPClientServer(t *testing.T) {
 
 	// Should return a promise that resolves to connection map
 	if promise, ok := result.(*object.Promise); ok {
-		// Wait for promise to resolve
-		time.Sleep(200 * time.Millisecond)
-
-		if promise.State != "RESOLVED" && promise.State != "fulfilled" {
-			t.Errorf("promise state = %s, want RESOLVED or fulfilled", promise.State)
-		}
-
-		if connMap, ok := promise.Value.(*object.Map); ok {
-			// Check connection object has required fields
-			if _, hasID := connMap.Pairs["id"]; !hasID {
-				t.Error("connection missing 'id' field")
+		// Wait for promise to resolve by reading from channel (thread-safe)
+		select {
+		case connObj := <-promise.ResultChan:
+			// Promise resolved successfully
+			if connMap, ok := connObj.(*object.Map); ok {
+				// Check connection object has required fields
+				if _, hasID := connMap.Pairs["id"]; !hasID {
+					t.Error("connection missing 'id' field")
+				}
+				if _, hasHost := connMap.Pairs["host"]; !hasHost {
+					t.Error("connection missing 'host' field")
+				}
+				if _, hasPort := connMap.Pairs["port"]; !hasPort {
+					t.Error("connection missing 'port' field")
+				}
 			}
-			if _, hasHost := connMap.Pairs["host"]; !hasHost {
-				t.Error("connection missing 'host' field")
-			}
-			if _, hasPort := connMap.Pairs["port"]; !hasPort {
-				t.Error("connection missing 'port' field")
-			}
+		case err := <-promise.ErrorChan:
+			t.Errorf("promise rejected with error: %s", err.Inspect())
+		case <-time.After(5 * time.Second):
+			t.Error("promise timeout after 5 seconds")
 		}
 	}
 }

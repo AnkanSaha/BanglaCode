@@ -152,7 +152,9 @@ func init() {
 
 			// Connect asynchronously
 			go func() {
-				conn, err := net.Dial("tcp", fmt.Sprintf("%s:%d", host, port))
+				// Use net.JoinHostPort for proper IPv6 support
+				addr := net.JoinHostPort(host, fmt.Sprintf("%d", port))
+				conn, err := net.Dial("tcp", addr)
 				if err != nil {
 					object.RejectPromise(promise, newError("TCP connection failed: %s", err.Error()))
 					return
