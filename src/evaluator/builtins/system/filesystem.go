@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/user"
 	"strconv"
-	"syscall"
 )
 
 func init() {
@@ -176,13 +175,13 @@ func init() {
 
 		result := make(map[string]object.Object)
 
-		// Get UID and GID from system-specific stat
-		if stat, ok := info.Sys().(*syscall.Stat_t); ok {
-			result["uid"] = &object.Number{Value: float64(stat.Uid)}
-			result["gid"] = &object.Number{Value: float64(stat.Gid)}
+		// Get UID and GID using platform-specific helper
+		if uid, gid, ok := getFileOwnership(info); ok {
+			result["uid"] = &object.Number{Value: float64(uid)}
+			result["gid"] = &object.Number{Value: float64(gid)}
 
 			// Try to get username from UID
-			if u, err := user.LookupId(fmt.Sprintf("%d", stat.Uid)); err == nil {
+			if u, err := user.LookupId(fmt.Sprintf("%d", uid)); err == nil {
 				result["naam"] = &object.String{Value: u.Username}
 			} else {
 				result["naam"] = &object.String{Value: ""}
@@ -253,9 +252,9 @@ func init() {
 			return newError("failed to get file info: %s", err.Error())
 		}
 
-		// Get access time from system-specific stat
-		if stat, ok := info.Sys().(*syscall.Stat_t); ok {
-			return &object.Number{Value: float64(stat.Atim.Sec)}
+		// Get access time using platform-specific helper
+		if atime, ok := getAccessTime(info); ok {
+			return &object.Number{Value: float64(atime)}
 		}
 
 		// Fallback to mod time if access time not available
@@ -277,9 +276,9 @@ func init() {
 			return newError("failed to get file info: %s", err.Error())
 		}
 
-		// Get creation time from system-specific stat
-		if stat, ok := info.Sys().(*syscall.Stat_t); ok {
-			return &object.Number{Value: float64(stat.Ctim.Sec)}
+		// Get creation time using platform-specific helper
+		if ctime, ok := getCreationTime(info); ok {
+			return &object.Number{Value: float64(ctime)}
 		}
 
 		// Fallback to mod time if creation time not available

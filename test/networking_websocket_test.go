@@ -166,35 +166,32 @@ func TestWebSocketJukto(t *testing.T) {
 
 				// For async operations, check if it's a promise
 				if promise, ok := result.(*object.Promise); ok {
-					// Wait for promise to resolve
-					time.Sleep(300 * time.Millisecond)
-
-					if promise.State != "RESOLVED" && promise.State != "fulfilled" {
-						if promise.State == "rejected" {
-							if errVal, ok := promise.Value.(*object.Error); ok {
-								t.Errorf("promise rejected with error: %s", errVal.Message)
-							} else {
-								t.Errorf("promise rejected with value: %s", promise.Value.Inspect())
+					// Wait for promise to resolve by reading from channel (thread-safe)
+					select {
+					case connObj := <-promise.ResultChan:
+						// Promise resolved successfully
+						if connMap, ok := connObj.(*object.Map); ok {
+							// Check connection object has required fields
+							if _, hasID := connMap.Pairs["id"]; !hasID {
+								t.Error("connection missing 'id' field")
+							}
+							if _, hasURL := connMap.Pairs["url"]; !hasURL {
+								t.Error("connection missing 'url' field")
+							}
+							if _, hasConnected := connMap.Pairs["connected"]; !hasConnected {
+								t.Error("connection missing 'connected' field")
 							}
 						} else {
-							t.Errorf("promise state = %s, want fulfilled", promise.State)
+							t.Errorf("expected connection map, got %T", connObj)
 						}
-						return
-					}
-
-					if connMap, ok := promise.Value.(*object.Map); ok {
-						// Check connection object has required fields
-						if _, hasID := connMap.Pairs["id"]; !hasID {
-							t.Error("connection missing 'id' field")
+					case errObj := <-promise.ErrorChan:
+						if errVal, ok := errObj.(*object.Error); ok {
+							t.Errorf("promise rejected with error: %s", errVal.Message)
+						} else {
+							t.Errorf("promise rejected with value: %s", errObj.Inspect())
 						}
-						if _, hasURL := connMap.Pairs["url"]; !hasURL {
-							t.Error("connection missing 'url' field")
-						}
-						if _, hasConnected := connMap.Pairs["connected"]; !hasConnected {
-							t.Error("connection missing 'connected' field")
-						}
-					} else {
-						t.Errorf("expected connection map, got %T", promise.Value)
+					case <-time.After(5 * time.Second):
+						t.Error("promise timeout after 5 seconds")
 					}
 				}
 			}

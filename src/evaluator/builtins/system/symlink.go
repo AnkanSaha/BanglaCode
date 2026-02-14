@@ -3,7 +3,6 @@ package system
 import (
 	"BanglaCode/src/object"
 	"os"
-	"syscall"
 )
 
 func init() {
@@ -101,9 +100,9 @@ func init() {
 			return newError("failed to get file info: %s", err.Error())
 		}
 
-		// Get link count from system-specific stat
-		if stat, ok := info.Sys().(*syscall.Stat_t); ok {
-			return &object.Number{Value: float64(stat.Nlink)}
+		// Get link count using platform-specific helper
+		if nlink, ok := getFileLinkCount(info); ok {
+			return &object.Number{Value: float64(nlink)}
 		}
 
 		// Fallback

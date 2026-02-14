@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"syscall"
 )
 
 func init() {
@@ -15,7 +14,8 @@ func init() {
 	registerBuiltin("memory_total", func(args ...object.Object) object.Object {
 		var totalMem uint64
 
-		if runtime.GOOS == "linux" {
+		switch runtime.GOOS {
+		case "linux":
 			// Read /proc/meminfo on Linux
 			data, err := os.ReadFile("/proc/meminfo")
 			if err == nil {
@@ -23,10 +23,10 @@ func init() {
 				_, _ = fmt.Sscanf(string(data), "MemTotal: %d kB", &memTotal)
 				totalMem = memTotal * 1024 // Convert KB to bytes
 			}
-		} else if runtime.GOOS == "darwin" {
+		case "darwin":
 			// Use sysctl on macOS - placeholder
 			totalMem = 0
-		} else {
+		default:
 			// Windows or other platforms - use runtime stats as approximation
 			var m runtime.MemStats
 			runtime.ReadMemStats(&m)
@@ -86,15 +86,12 @@ func init() {
 			path = args[0].(*object.String).Value
 		}
 
-		var stat syscall.Statfs_t
-		if err := syscall.Statfs(path, &stat); err != nil {
+		total, _, _, err := getDiskStats(path)
+		if err != nil {
 			return newError("failed to get disk stats: %s", err.Error())
 		}
 
-		// Total size = block size * total blocks
-		totalSize := stat.Blocks * uint64(stat.Bsize)
-
-		return &object.Number{Value: float64(totalSize)}
+		return &object.Number{Value: float64(total)}
 	})
 
 	// disk_bebohrito (ডিস্ক ব্যবহৃত) - Get disk used space in bytes
@@ -108,14 +105,13 @@ func init() {
 			path = args[0].(*object.String).Value
 		}
 
-		var stat syscall.Statfs_t
-		if err := syscall.Statfs(path, &stat); err != nil {
+		total, free, _, err := getDiskStats(path)
+		if err != nil {
 			return newError("failed to get disk stats: %s", err.Error())
 		}
 
-		// Used = (total - free) blocks * block size
-		usedBlocks := stat.Blocks - stat.Bfree
-		usedSize := usedBlocks * uint64(stat.Bsize)
+		// Used = total - free
+		usedSize := total - free
 
 		return &object.Number{Value: float64(usedSize)}
 	})
@@ -131,14 +127,12 @@ func init() {
 			path = args[0].(*object.String).Value
 		}
 
-		var stat syscall.Statfs_t
-		if err := syscall.Statfs(path, &stat); err != nil {
+		_, _, avail, err := getDiskStats(path)
+		if err != nil {
 			return newError("failed to get disk stats: %s", err.Error())
 		}
 
 		// Available to non-root users
-		freeSize := stat.Bavail * uint64(stat.Bsize)
-
-		return &object.Number{Value: float64(freeSize)}
+		return &object.Number{Value: float64(avail)}
 	})
 }

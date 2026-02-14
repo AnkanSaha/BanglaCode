@@ -162,14 +162,20 @@ func TestUDPPathao(t *testing.T) {
 				if !ok {
 					// Might be a promise that rejects
 					if promise, ok := result.(*object.Promise); ok {
-						time.Sleep(100 * time.Millisecond)
-						if promise.State == "rejected" {
-							if errVal, ok := promise.Value.(*object.Error); ok {
-								if tt.errMsg != "" && !stringContains(errVal.Message, tt.errMsg) {
-									t.Errorf("error message = %q, want to contain %q", errVal.Message, tt.errMsg)
+						// Wait for promise rejection by reading from channel (thread-safe)
+						select {
+						case <-promise.ResultChan:
+							t.Fatalf("expected error, but promise resolved successfully")
+						case errVal := <-promise.ErrorChan:
+							if err, ok := errVal.(*object.Error); ok {
+								if tt.errMsg != "" && !stringContains(err.Message, tt.errMsg) {
+									t.Errorf("error message = %q, want to contain %q", err.Message, tt.errMsg)
 								}
 								return
 							}
+							t.Fatalf("expected error object, got %T", errVal)
+						case <-time.After(5 * time.Second):
+							t.Fatalf("promise timeout after 5 seconds")
 						}
 					}
 					t.Fatalf("expected error, got %T (%+v)", result, result)
