@@ -1,0 +1,70 @@
+// UDP Client Example
+// Demonstrates udp_pathao for sending UDP packets
+
+dekho("=== BanglaCode UDP Client ===");
+dekho("");
+
+// Async UDP client function
+proyash kaj runUDPClient() {
+    dekho("Sending UDP packets to localhost:9000...");
+    dekho("");
+
+    chesta {
+        // Send multiple UDP packets
+        ghuriye (dhoro i = 1; i <= 5; i = i + 1) {
+            dhoro message = "UDP Packet #" + jongate(i) + " from BanglaCode";
+
+            dekho("[Sending #", i, "]:", message);
+
+            // Send UDP packet (async)
+            opekha udp_pathao("localhost", 9000, message);
+
+            dekho("  Packet sent!");
+
+            // Wait between packets
+            ghumaao(300);
+        }
+
+        dekho("");
+        dekho("All packets sent successfully!");
+
+        // Note: UDP is connectionless, so responses are handled
+        // by the server using udp_uttor, but client won't receive
+        // them unless we set up a listener on the client side too
+
+    } dhoro_bhul (error) {
+        dekho("Error:", error);
+    }
+}
+
+// Alternative: UDP client with listener for responses
+proyash kaj runUDPClientWithListener() {
+    dekho("");
+    dekho("=== UDP Client with Response Listener ===");
+    dekho("Setting up listener on port 9001...");
+
+    // Start listener for responses
+    udp_shuno(9001, kaj(packet) {
+        dekho("[Response received]:", packet["data"]);
+    });
+
+    ghumaao(500); // Let listener start
+
+    // Now send packets with return address hint
+    dekho("Sending packets...");
+    ghuriye (dhoro i = 1; i <= 3; i = i + 1) {
+        dhoro message = "Request #" + jongate(i);
+        dekho("  Sending:", message);
+        opekha udp_pathao("localhost", 9000, message);
+        ghumaao(500);
+    }
+
+    dekho("Messages sent. Waiting for responses...");
+    ghumaao(3000); // Wait for responses
+}
+
+// Run simple client
+runUDPClient();
+
+// Uncomment to test client with response listener
+// runUDPClientWithListener();

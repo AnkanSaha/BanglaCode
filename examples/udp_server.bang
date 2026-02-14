@@ -1,0 +1,40 @@
+// UDP Server Example
+// Demonstrates udp_server_chalu and udp_uttor for sending responses
+
+dekho("=== BanglaCode UDP Server ===");
+dekho("Starting UDP server on port 9000...");
+dekho("Send packets using: ./banglacode examples/udp_client.bang");
+dekho("");
+
+// Packet counter
+bishwo packet_count = 0;
+
+// UDP packet handler
+kaj handlePacket(packet) {
+    packet_count = packet_count + 1;
+    dhoro packet_num = packet_count;
+
+    dekho("[Packet #", packet_num, "] Received");
+    dekho("  From:", packet["remote_addr"]);
+    dekho("  To:", packet["local_addr"]);
+    dekho("  Data:", packet["data"]);
+
+    // Send response back to client
+    dhoro response = "[UDP Response #" + jongate(packet_num) + "] Got: " + packet["data"];
+    udp_uttor(packet, response);
+
+    dekho("  Response sent:", response);
+    dekho("");
+}
+
+// Start UDP server
+udp_server_chalu(9000, handlePacket);
+
+dekho("UDP Server is listening on port 9000!");
+dekho("Waiting for packets... (Press Ctrl+C to stop)");
+dekho("");
+
+// Keep server running
+jotokkhon (sotti) {
+    ghumaao(1000); // Sleep 1 second
+}

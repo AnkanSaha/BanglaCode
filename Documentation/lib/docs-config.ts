@@ -75,13 +75,14 @@ export const DOCS_CONFIG: DocSection[] = [
       { name: "Error Handling", href: "/docs/error-handling", description: "Try-catch-finally" },
       { name: "File I/O", href: "/docs/file-io", description: "Reading and writing files" },
       { name: "HTTP Server", href: "/docs/http-server", description: "Building web servers" },
+      { name: "Networking", href: "/docs/networking", description: "TCP, UDP, WebSocket" },
     ],
   },
   {
     section: "Reference",
     icon: FileText,
     items: [
-      { name: "Built-in Functions", href: "/docs/builtins", description: "All 80+ built-in functions" },
+      { name: "Built-in Functions", href: "/docs/builtins", description: "All 95+ built-in functions" },
       { name: "Operator Precedence", href: "/docs/precedence", description: "Order of operations" },
       { name: "Examples", href: "/docs/examples", description: "Complete code examples" },
     ],

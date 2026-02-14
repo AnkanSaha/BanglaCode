@@ -1,0 +1,43 @@
+// TCP Echo Server Example
+// Demonstrates tcp_server_chalu, tcp_pathao for sending data
+
+dekho("=== BanglaCode TCP Echo Server ===");
+dekho("Starting TCP server on port 8080...");
+dekho("Connect using: ./banglacode examples/tcp_client.bang");
+dekho("");
+
+// Connection counter
+bishwo connection_count = 0;
+
+// TCP connection handler
+kaj handleConnection(conn) {
+    connection_count = connection_count + 1;
+    dhoro conn_num = connection_count;
+
+    dekho("[Connection #", conn_num, "] New client connected");
+    dekho("  Remote:", conn["remote_addr"]);
+    dekho("  Local:", conn["local_addr"]);
+
+    // Get received data
+    dhoro data = conn["data"];
+    dekho("  Received:", data);
+
+    // Echo back with prefix
+    dhoro response = "[Server Echo #" + jongate(conn_num) + "] " + data;
+    tcp_pathao(conn, response);
+
+    dekho("  Sent:", response);
+    dekho("");
+}
+
+// Start TCP server
+tcp_server_chalu(8080, handleConnection);
+
+dekho("TCP Server is running!");
+dekho("Waiting for connections... (Press Ctrl+C to stop)");
+dekho("");
+
+// Keep server running
+jotokkhon (sotti) {
+    ghumaao(1000); // Sleep 1 second
+}

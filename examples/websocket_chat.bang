@@ -1,0 +1,70 @@
+// WebSocket Chat Server Example
+// Demonstrates websocket_server_chalu and websocket_pathao for broadcasting
+
+dekho("=== BanglaCode WebSocket Chat Server ===");
+dekho("Starting WebSocket server on port 3000...");
+dekho("Connect using: ./banglacode examples/websocket_client.bang");
+dekho("Or use browser: ws://localhost:3000");
+dekho("");
+
+// Store all connected clients
+bishwo clients = [];
+bishwo client_count = 0;
+
+// WebSocket connection handler
+kaj handleWebSocketConnection(conn) {
+    // New client connected
+    client_count = client_count + 1;
+    dhoro client_num = client_count;
+
+    dekho("[Client #", client_num, "] Connected");
+    dekho("  Remote:", conn["remote_addr"]);
+    dekho("  ID:", conn["id"]);
+
+    // Add to clients list
+    dhokao(clients, conn);
+
+    // Broadcast join message to all clients
+    dhoro join_msg = "User #" + jongate(client_num) + " joined the chat!";
+    ghuriye (dhoro i = 0; i < dorghyo(clients); i = i + 1) {
+        websocket_pathao(clients[i], join_msg);
+    }
+
+    // Handle incoming messages
+    jodi (conn["connected"] == sotti) {
+        dhoro message = conn["message"];
+        dhoro msg_type = conn["type"];
+
+        jodi (msg_type == "text") {
+            dekho("[Client #", client_num, "] Message:", message);
+
+            // Broadcast to all clients
+            dhoro broadcast = "User #" + jongate(client_num) + ": " + message;
+            ghuriye (dhoro i = 0; i < dorghyo(clients); i = i + 1) {
+                websocket_pathao(clients[i], broadcast);
+            }
+        }
+    } nahole {
+        // Client disconnected
+        dekho("[Client #", client_num, "] Disconnected");
+
+        // Remove from clients list (simplified - in production use filter)
+        // Note: This is a simple example, production code would properly remove the client
+        dhoro leave_msg = "User #" + jongate(client_num) + " left the chat.";
+        ghuriye (dhoro i = 0; i < dorghyo(clients); i = i + 1) {
+            websocket_pathao(clients[i], leave_msg);
+        }
+    }
+}
+
+// Start WebSocket server
+websocket_server_chalu(3000, handleWebSocketConnection);
+
+dekho("WebSocket Chat Server is running on ws://localhost:3000");
+dekho("Waiting for connections... (Press Ctrl+C to stop)");
+dekho("");
+
+// Keep server running
+jotokkhon (sotti) {
+    ghumaao(1000); // Sleep 1 second
+}

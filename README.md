@@ -50,10 +50,11 @@
 <tr>
 <td width="50%">
 
-**🔧 80+ Built-in Functions**
+**🔧 95+ Built-in Functions**
 - String & Array operations
 - Math & Utility functions
 - HTTP server & JSON support
+- **Networking (TCP, UDP, WebSocket)**
 - **Complete OS-level access**
 
 </td>
@@ -427,7 +428,7 @@ dhoro linkTarget = symlink_poro("/path/to/symlink");
 
 ---
 
-## 📚 80+ Built-in Functions
+## 📚 95+ Built-in Functions
 
 ### 🖨️ Output & Input
 - `dekho(...)` - Print to console
@@ -527,6 +528,28 @@ dhoro linkTarget = symlink_poro("/path/to/symlink");
 - `json_uttor(res, data, status)` - Send JSON
 - `json_poro(str)` - Parse JSON
 - `json_banao(obj)` - Stringify JSON
+
+### 🌐 Networking (TCP, UDP, WebSocket)
+**TCP Functions:**
+- `tcp_server_chalu(port, handler)` - Start TCP server
+- `tcp_jukto(host, port)` - Connect to TCP server (async)
+- `tcp_pathao(conn, data)` - Send data on TCP connection
+- `tcp_lekho(conn, data)` - Write data (alias)
+- `tcp_shuno(conn)` - Read data (async)
+- `tcp_bondho(conn)` - Close TCP connection
+
+**UDP Functions:**
+- `udp_server_chalu(port, handler)` - Start UDP server
+- `udp_pathao(host, port, data)` - Send UDP packet (async)
+- `udp_uttor(packet, data)` - Send UDP response
+- `udp_shuno(port, handler)` - Listen for packets (alias)
+- `udp_bondho(conn)` - Close UDP connection
+
+**WebSocket Functions:**
+- `websocket_server_chalu(port, handler)` - Start WebSocket server
+- `websocket_jukto(url)` - Connect to WebSocket (async)
+- `websocket_pathao(conn, message)` - Send message
+- `websocket_bondho(conn)` - Close WebSocket connection
 
 ### ⏱️ Time Functions
 - `somoy()` - Current timestamp (ms)
@@ -656,8 +679,9 @@ BanglaCode/
 │   ├── ast/            # Abstract Syntax Tree nodes
 │   ├── object/         # Runtime values & environment
 │   └── evaluator/      # Tree-walking interpreter
-│       ├── builtins/   # 80+ built-in functions
-│       │   └── system/ # 50+ OS-level functions (NEW!)
+│       ├── builtins/   # 95+ built-in functions
+│       │   ├── system/ # 50+ OS-level functions
+│       │   └── network/ # TCP, UDP, WebSocket (NEW!)
 │       ├── async.go    # Async/await implementation
 │       ├── classes.go  # OOP support
 │       ├── modules.go  # Import/export system
@@ -821,7 +845,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ### 📊 Project Stats
 - **300M+** potential Bengali-speaking users
-- **80+** built-in functions
+- **95+** built-in functions (including TCP, UDP, WebSocket networking)
 - **29** Bengali keywords
 - **3-4x** faster than Python
 

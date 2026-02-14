@@ -1,0 +1,92 @@
+// WebSocket Client Example
+// Demonstrates websocket_jukto, websocket_pathao, websocket_bondho
+
+dekho("=== BanglaCode WebSocket Client ===");
+dekho("");
+
+// Async WebSocket client function
+proyash kaj runWebSocketClient() {
+    dekho("Connecting to WebSocket server at ws://localhost:3000...");
+
+    chesta {
+        // Connect to WebSocket server (async)
+        dhoro ws = opekha websocket_jukto("ws://localhost:3000");
+
+        dekho("Connected successfully!");
+        dekho("  URL:", ws["url"]);
+        dekho("  Remote:", ws["remote_addr"]);
+        dekho("  Local:", ws["local_addr"]);
+        dekho("  Connected:", ws["connected"]);
+        dekho("");
+
+        // Send multiple messages to chat
+        dhoro messages = [
+            "Namaskar! I'm a BanglaCode client!",
+            "This is message number 2",
+            "WebSockets are awesome!",
+            "Sending from BanglaCode interpreter",
+            "Goodbye everyone!"
+        ];
+
+        ghuriye (dhoro i = 0; i < dorghyo(messages); i = i + 1) {
+            dhoro message = messages[i];
+            dekho("[Sending]:", message);
+
+            websocket_pathao(ws, message);
+
+            // Wait between messages
+            ghumaao(1000);
+        }
+
+        dekho("");
+        dekho("All messages sent!");
+        dekho("Waiting a bit for server responses...");
+        ghumaao(2000);
+
+        dekho("Closing WebSocket connection...");
+        websocket_bondho(ws);
+
+        dekho("Connection closed.");
+
+    } dhoro_bhul (error) {
+        dekho("Error:", error);
+    }
+}
+
+// Alternative: Interactive WebSocket client
+proyash kaj runInteractiveClient() {
+    dekho("");
+    dekho("=== Interactive WebSocket Client ===");
+
+    chesta {
+        dhoro ws = opekha websocket_jukto("ws://localhost:3000");
+        dekho("Connected to chat server!");
+        dekho("");
+
+        // Send some test messages
+        websocket_pathao(ws, "Hello from interactive client!");
+        ghumaao(500);
+
+        websocket_pathao(ws, "Testing 1, 2, 3...");
+        ghumaao(500);
+
+        websocket_pathao(ws, "BanglaCode WebSockets work great!");
+        ghumaao(500);
+
+        // Keep connection alive for a bit
+        dekho("Staying connected for 5 seconds...");
+        ghumaao(5000);
+
+        websocket_bondho(ws);
+        dekho("Disconnected.");
+
+    } dhoro_bhul (error) {
+        dekho("Error:", error);
+    }
+}
+
+// Run the basic client
+runWebSocketClient();
+
+// Uncomment to test interactive client
+// runInteractiveClient();

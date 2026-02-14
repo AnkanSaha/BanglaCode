@@ -1,0 +1,50 @@
+// TCP Client Example
+// Demonstrates tcp_jukto, tcp_lekho, tcp_shuno, tcp_bondho
+
+dekho("=== BanglaCode TCP Client ===");
+dekho("");
+
+// Async TCP client function
+proyash kaj runTCPClient() {
+    dekho("Connecting to TCP server at localhost:8080...");
+
+    chesta {
+        // Connect to server (async)
+        dhoro conn = opekha tcp_jukto("localhost", 8080);
+
+        dekho("Connected successfully!");
+        dekho("  Remote:", conn["remote_addr"]);
+        dekho("  Local:", conn["local_addr"]);
+        dekho("");
+
+        // Send multiple messages
+        ghuriye (dhoro i = 1; i <= 5; i = i + 1) {
+            dhoro message = "Hello from BanglaCode! Message #" + jongate(i);
+
+            dekho("[Sending #", i, "]:", message);
+            tcp_lekho(conn, message);
+
+            // Read response (async)
+            dekho("  Waiting for response...");
+            dhoro response = opekha tcp_shuno(conn);
+            dekho("  [Response #", i, "]:", response);
+            dekho("");
+
+            // Wait a bit between messages
+            ghumaao(500);
+        }
+
+        dekho("All messages sent and received!");
+        dekho("Closing connection...");
+
+        // Close connection
+        tcp_bondho(conn);
+        dekho("Connection closed.");
+
+    } dhoro_bhul (error) {
+        dekho("Error:", error);
+    }
+}
+
+// Run the client
+runTCPClient();
