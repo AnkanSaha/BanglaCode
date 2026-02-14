@@ -109,7 +109,9 @@ go install github.com/nexoral/BanglaCode@latest
 
 ### Your First Program
 
-Create a file named `hello.bang`:
+BanglaCode supports three file extensions: **`.bang`**, **`.bangla`**, and **`.bong`**. You can use any of them!
+
+Create a file named `hello.bang` (or `hello.bangla` or `hello.bong`):
 
 ```banglacode
 // @comment: আমার প্রথম BanglaCode প্রোগ্রাম

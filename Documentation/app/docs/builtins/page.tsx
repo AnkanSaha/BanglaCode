@@ -554,6 +554,80 @@ dhoro response = anun("https://api.example.com/data");
 dekho(response.body);`}
       />
 
+      <h2>Async/Promise Functions</h2>
+
+      <p>
+        Asynchronous functions that return promises. Use with <code>proyash</code>/<code>opekha</code> keywords.
+        See the <a href="/docs/async-await" className="text-primary hover:underline">Async/Await documentation</a> for detailed examples.
+      </p>
+
+      <div className="overflow-x-auto my-4">
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Parameters</th>
+              <th>Returns</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ghumaao</code></td>
+              <td><code>milliseconds</code></td>
+              <td><code>Promise</code></td>
+              <td>Sleep for specified time (async)</td>
+            </tr>
+            <tr>
+              <td><code>sob_proyash</code></td>
+              <td><code>array</code></td>
+              <td><code>Promise</code></td>
+              <td>Wait for all promises concurrently (Promise.all)</td>
+            </tr>
+            <tr>
+              <td><code>poro_async</code></td>
+              <td><code>path</code></td>
+              <td><code>Promise</code></td>
+              <td>Read file asynchronously</td>
+            </tr>
+            <tr>
+              <td><code>lekho_async</code></td>
+              <td><code>path, content</code></td>
+              <td><code>Promise</code></td>
+              <td>Write file asynchronously</td>
+            </tr>
+            <tr>
+              <td><code>anun_async</code></td>
+              <td><code>url</code></td>
+              <td><code>Promise</code></td>
+              <td>HTTP GET request asynchronously</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <CodeBlock
+        code={`// Sleep for 1 second
+proyash kaj timer() {
+    dekho("Start");
+    opekha ghumaao(1000);
+    dekho("1 second later");
+}
+
+// Run multiple operations concurrently
+proyash kaj parallel() {
+    dhoro results = opekha sob_proyash([
+        ghumaao(500),
+        poro_async("file.txt"),
+        anun_async("https://api.example.com")
+    ]);
+    dekho("All operations complete!");
+}
+
+timer();
+parallel();`}
+      />
+
       <h2>Function Name Meanings</h2>
 
       <p>All built-in functions use Bengali words:</p>

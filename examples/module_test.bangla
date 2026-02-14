@@ -1,0 +1,4 @@
+// Module file with .bangla extension
+pathao kaj greet(naam) {
+    ferao "Namaskar, " + naam + "!";
+}

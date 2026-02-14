@@ -82,9 +82,14 @@ The interpreter pipeline flows through these components in order:
 
 **New object type:** Define in `src/object/object.go` implementing the `Object` interface (`Type()` and `Inspect()` methods)
 
-## File Extension
+## File Extensions
 
-BanglaCode source files use `.bang` extension.
+BanglaCode supports three file extensions:
+- **`.bang`** - Primary extension (recommended)
+- **`.bangla`** - Alternative extension (বাংলা)
+- **`.bong`** - Alternative extension (বং)
+
+All three extensions provide identical functionality with full syntax highlighting and IntelliSense support in VS Code.
 
 ## Coding Standards (MUST FOLLOW)
 
@@ -339,6 +344,30 @@ Extension/
 ```
 
 ### Documentation Website (MANDATORY)
+
+**🚨 CRITICAL RULE: ALWAYS UPDATE DOCUMENTATION WEBSITE 🚨**
+
+**WHENEVER YOU CHANGE ANYTHING** in the interpreter, VS Code extension, or add/modify features, you **MUST IMMEDIATELY** update the Documentation website in `Documentation/` folder. This is **NON-NEGOTIABLE** and **MANDATORY**.
+
+**This includes:**
+- ✅ Adding new keywords, built-in functions, or syntax
+- ✅ Modifying existing features or behavior
+- ✅ Fixing bugs that change functionality
+- ✅ Adding new examples or use cases
+- ✅ Performance improvements worth documenting
+- ✅ Breaking changes or deprecations
+- ✅ **ANY change that affects how users write BanglaCode**
+
+**Why this is critical:**
+- The Documentation website is the **primary learning resource** for users
+- Outdated documentation causes confusion and frustration
+- Users will not discover new features if they're not documented
+- Documentation must **always match** the current codebase state
+
+**If you add a feature but DON'T update documentation, the feature is INCOMPLETE.**
+
+---
+
 When adding **any new feature** (keyword, built-in function, syntax, control flow), you **MUST** also update the Documentation website in `Documentation/` folder:
 
 | Feature Type | Files to Update |
@@ -347,7 +376,6 @@ When adding **any new feature** (keyword, built-in function, syntax, control flo
 | New built-in function | `Documentation/app/docs/functions/page.tsx` |
 | New control flow (if/while/for) | `Documentation/app/docs/control-flow/page.tsx` |
 | New OOP feature (class/method) | `Documentation/app/docs/oop/page.tsx` |
-| New example code | `Documentation/app/playground/examples.ts` |
 | New documentation section | `Documentation/lib/docs-config.ts` (navigation config) |
 
 **Documentation folder structure:**
@@ -360,23 +388,21 @@ Documentation/
 │   │   ├── control-flow/page.tsx    # Control flow documentation
 │   │   ├── oop/page.tsx             # OOP documentation
 │   │   └── installation/page.tsx    # Installation guide
-│   └── playground/
-│       ├── page.tsx                 # Interactive playground
-│       └── examples.ts              # Code examples for playground
 ├── lib/
 │   └── docs-config.ts               # Documentation navigation config
 └── components/                      # Shared UI components
 ```
 
-**Checklist for every new feature:**
+**Checklist for every new feature (ALL ITEMS MANDATORY):**
 1. ✅ Implement in interpreter (`src/`) - **break into separate files for each component**
 2. ✅ Write tests in `test/`
 3. ✅ Add syntax highlighting in `Extension/syntaxes/banglacode.tmLanguage.json`
 4. ✅ Add snippet in `Extension/snippets/banglacode.json`
-5. ✅ Update Documentation website (`Documentation/app/docs/`)
-6. ✅ Add playground examples if applicable (`Documentation/app/playground/examples.ts`)
-7. ✅ Update README.md and SYNTAX.md
-8. ✅ **Benchmark performance impact** - ensure no regression
+5. ✅ **Update Documentation website (`Documentation/app/docs/`) - MANDATORY, NOT OPTIONAL**
+6. ✅ Update README.md and SYNTAX.md
+7. ✅ **Benchmark performance impact** - ensure no regression
+
+**⚠️ WARNING:** If you skip step 5 (Documentation website update), the feature is considered **INCOMPLETE** and **UNFINISHED**. Users will not know about the feature, making it effectively useless. ALWAYS update documentation.
 
 ### Core Principles Summary (CRITICAL)
 
@@ -387,7 +413,15 @@ When writing code for BanglaCode, always follow these principles in order of pri
    - Simple syntax + high performance = ideal
    - Never sacrifice speed for abstraction
 
-2. **📁 NO LARGE FILES - MULTIPLE FILES MANDATORY** - STRICT enforcement
+2. **📚 ALWAYS UPDATE DOCUMENTATION** - Documentation is MANDATORY, not optional
+   - **EVERY change must be documented** in `Documentation/` folder
+   - Users cannot use features they don't know exist
+   - Outdated documentation is worse than no documentation
+   - A feature without documentation is an **incomplete feature**
+   - Update docs **immediately** when making changes, not "later"
+   - If you change code but skip documentation, **the task is NOT done**
+
+3. **📁 NO LARGE FILES - MULTIPLE FILES MANDATORY** - STRICT enforcement
    - **NEVER write one large file** - always break into multiple focused files
    - Use Go's import system and same-package grouping extensively
    - **Maximum 500 lines per file** - split immediately if approaching this
@@ -401,18 +435,18 @@ When writing code for BanglaCode, always follow these principles in order of pri
    - Files in the same package can access each other without imports
    - **Easy to understand = small, focused files**
 
-3. **📦 COMPONENT-BASED DESIGN** - One file = one component
+4. **📦 COMPONENT-BASED DESIGN** - One file = one component
    - Each component/feature gets its own dedicated file
    - Clear file naming: `<feature>.go`, `<feature>_helpers.go`, `<feature>_test.go`
    - Related files grouped by prefix (e.g., `async.go`, `async_helpers.go`, `async_builtins.go`)
 
-4. **🏗️ CLEAN ARCHITECTURE** - Separation of concerns
+5. **🏗️ CLEAN ARCHITECTURE** - Separation of concerns
    - Each file has ONE responsibility
    - Minimal coupling between components
    - Follow SOLID principles
    - Use interfaces for abstraction
 
-5. **✨ SIMPLE SYNTAX** - User experience matters
+6. **✨ SIMPLE SYNTAX** - User experience matters
    - Bengali keywords that are intuitive
    - Consistent with existing patterns
    - Easy to read and understand
@@ -547,8 +581,10 @@ func init() {
 3. **✅ DO use imports and Go's same-package grouping**
 4. **✅ DO benchmark performance before and after**
 5. **✅ DO make code easy to understand through small, focused files**
+6. **✅ DO update Documentation website (`Documentation/`) - MANDATORY**
 
 ### Critical Rules:
+- 📚 **ALWAYS update Documentation/** - for EVERY change, not just new features
 - 📏 **File size limit: 500 lines MAX, 300 lines IDEAL**
 - 🚀 **Performance first** - benchmark everything
 - 📦 **Multiple files** - never one large file
@@ -556,7 +592,9 @@ func init() {
 - ✨ **Simple syntax** - intuitive Bengali keywords
 
 **Remember:**
+- **Documentation is NOT optional** - update it for every change or the task is incomplete
 - Performance and simplicity are the core values of BanglaCode
 - Small, focused files = easy to understand and maintain
 - If a feature impacts performance negatively, it should be redesigned
 - If a file grows beyond 500 lines, split it immediately
+- **If you change code but don't update docs, users won't know about it**

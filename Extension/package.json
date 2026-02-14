@@ -1,8 +1,8 @@
 {
   "name": "banglacode",
   "displayName": "BanglaCode",
-  "description": "Language support for BanglaCode - Bengali Programming Language created by Ankan from West Bengal, India",
-  "version": "6.2.0",
+  "description": "Language support for BanglaCode (.bang, .bangla, .bong) - Bengali Programming Language created by Ankan from West Bengal, India",
+  "version": "6.2.1",
   "publisher": "AnkanSaha",
   "author": {
     "name": "AnkanSaha"
@@ -58,7 +58,9 @@
           "bang"
         ],
         "extensions": [
-          ".bang"
+          ".bang",
+          ".bangla",
+          ".bong"
         ],
         "configuration": "./language-configuration.json",
         "icon": {

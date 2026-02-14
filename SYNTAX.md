@@ -1132,12 +1132,18 @@ Example:
 dhoro x = 10 / 0;  // Error: division by zero
 ```
 
-## File Extension
+## File Extensions
 
-Use `.bang` extension for BanglaCode source files:
-- `hello.bang`
-- `calculator.bang`
-- `game.bang`
+BanglaCode supports three file extensions - use any of them:
+
+**Primary Extension:**
+- `.bang` (recommended) - `hello.bang`, `calculator.bang`, `game.bang`
+
+**Alternative Extensions:**
+- `.bangla` (বাংলা) - `hello.bangla`, `calculator.bangla`, `game.bangla`
+- `.bong` (বং) - `hello.bong`, `calculator.bong`, `game.bong`
+
+All three extensions provide identical functionality with full IDE support.
 
 ## Getting Help
 

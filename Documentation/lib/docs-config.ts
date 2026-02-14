@@ -70,6 +70,7 @@ export const DOCS_CONFIG: DocSection[] = [
     section: "Advanced",
     icon: GraduationCap,
     items: [
+      { name: "Async/Await", href: "/docs/async-await", description: "Asynchronous programming with promises" },
       { name: "Modules", href: "/docs/modules", description: "Import and export" },
       { name: "Error Handling", href: "/docs/error-handling", description: "Try-catch-finally" },
       { name: "File I/O", href: "/docs/file-io", description: "Reading and writing files" },

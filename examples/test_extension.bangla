@@ -1,0 +1,4 @@
+// Test file for .bangla extension
+dhoro message = "Testing .bangla extension";
+dekho(message);
+dekho("File extension test: SUCCESS ✓");

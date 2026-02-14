@@ -481,6 +481,90 @@ server_chalu(8080, kaj(req, res) {
 dekho("API running on http://localhost:8080");`}
       />
 
+      <h2>Async Data Fetcher</h2>
+
+      <p>
+        Demonstrates asynchronous programming with <code>proyash</code> (async) and <code>opekha</code> (await).
+        Shows concurrent execution with <code>sob_proyash</code> (Promise.all).
+      </p>
+
+      <CodeBlock
+        code={`// Simulate fetching data from different sources
+proyash kaj fetchUser(id) {
+    dekho("Fetching user", id, "...");
+    opekha ghumaao(1000);  // Simulate network delay
+    ferao {naam: "User " + lipi(id), id: id};
+}
+
+proyash kaj fetchPosts(userId) {
+    dekho("Fetching posts for user", userId, "...");
+    opekha ghumaao(1500);  // Simulate network delay
+    ferao ["Post 1", "Post 2", "Post 3"];
+}
+
+proyash kaj fetchComments(userId) {
+    dekho("Fetching comments for user", userId, "...");
+    opekha ghumaao(800);  // Simulate network delay
+    ferao ["Comment 1", "Comment 2"];
+}
+
+// Load dashboard - sequential approach (slow)
+proyash kaj loadDashboardSlow() {
+    dekho("=== Sequential Loading (slow) ===");
+    dhoro start = somoy();
+
+    dhoro user = opekha fetchUser(1);
+    dhoro posts = opekha fetchPosts(user["id"]);
+    dhoro comments = opekha fetchComments(user["id"]);
+
+    dhoro elapsed = somoy() - start;
+    dekho("User:", user["naam"]);
+    dekho("Posts:", dorghyo(posts));
+    dekho("Comments:", dorghyo(comments));
+    dekho("Sequential time:", elapsed, "ms");  // ~3300ms
+}
+
+// Load dashboard - concurrent approach (fast)
+proyash kaj loadDashboardFast() {
+    dekho("");
+    dekho("=== Concurrent Loading (fast) ===");
+    dhoro start = somoy();
+
+    // First get user
+    dhoro user = opekha fetchUser(1);
+
+    // Then fetch posts and comments concurrently
+    dhoro results = opekha sob_proyash([
+        fetchPosts(user["id"]),
+        fetchComments(user["id"])
+    ]);
+
+    dhoro posts = results[0];
+    dhoro comments = results[1];
+
+    dhoro elapsed = somoy() - start;
+    dekho("User:", user["naam"]);
+    dekho("Posts:", dorghyo(posts));
+    dekho("Comments:", dorghyo(comments));
+    dekho("Concurrent time:", elapsed, "ms");  // ~2500ms (33% faster!)
+}
+
+// Run both approaches
+proyash kaj main() {
+    opekha loadDashboardSlow();
+    opekha loadDashboardFast();
+    dekho("");
+    dekho("✓ Async demo complete!");
+}
+
+main();`}
+      />
+
+      <p className="mt-4 text-sm text-muted-foreground">
+        This example shows how async/await enables concurrent execution, reducing total wait time
+        from 3300ms (sequential) to 2500ms (concurrent) - a 33% performance improvement!
+      </p>
+
       <DocNavigation currentPath="/docs/examples" />
     </div>
   );

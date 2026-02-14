@@ -31,6 +31,8 @@ export default function Keywords() {
     { keyword: "dhoro_bhul", meaning: "catch error", english: "catch", description: "Catch block", example: 'dhoro_bhul (e) { }' },
     { keyword: "shesh", meaning: "end/finish", english: "finally", description: "Finally block", example: 'shesh { }' },
     { keyword: "felo", meaning: "throw", english: "throw", description: "Throw exception", example: 'felo "error message";' },
+    { keyword: "proyash", meaning: "effort/attempt", english: "async", description: "Async function declaration", example: 'proyash kaj fetchData() { }' },
+    { keyword: "opekha", meaning: "wait/await", english: "await", description: "Wait for promise", example: 'opekha promise;' },
   ];
 
   return (
@@ -44,7 +46,7 @@ export default function Keywords() {
       <h1>Keywords Reference</h1>
 
       <p className="lead text-xl text-muted-foreground mt-4">
-        BanglaCode has 29 Bengali keywords written in Banglish (Bengali words using English/Latin script).
+        BanglaCode has 31 Bengali keywords written in Banglish (Bengali words using English/Latin script).
         This makes it easy to type on any keyboard while remaining familiar to Bengali speakers.
       </p>
 
@@ -260,10 +262,46 @@ kaj validateAge(age) {
 }`}
       />
 
+      <h3>Async/Await</h3>
+
+      <CodeBlock
+        code={`// proyash - async (marks a function as asynchronous)
+// opekha - await (waits for a promise to resolve)
+
+// Declare async function
+proyash kaj fetchData() {
+    opekha ghumaao(1000);  // Sleep for 1 second
+    ferao "Data fetched";
+}
+
+// Use async/await
+proyash kaj main() {
+    dekho("Starting...");
+    dhoro result = opekha fetchData();
+    dekho(result);  // Data fetched
+}
+
+main();
+
+// Parallel execution with sob_proyash
+proyash kaj loadAll() {
+    dhoro results = opekha sob_proyash([
+        fetchData(),
+        fetchData(),
+        fetchData()
+    ]);
+    dekho("All done!", results);
+}`}
+      />
+
+      <p className="mt-4 text-sm">
+        For detailed async/await documentation and examples, see the <a href="/docs/async-await" className="text-primary hover:underline">Async/Await guide</a>.
+      </p>
+
       <h2>Reserved Words</h2>
 
       <p>
-        All 29 keywords are reserved and cannot be used as variable names, function names,
+        All 31 keywords are reserved and cannot be used as variable names, function names,
         or identifiers. Attempting to use a keyword as an identifier will result in a syntax error.
       </p>
 

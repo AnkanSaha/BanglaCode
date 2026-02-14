@@ -1,0 +1,4 @@
+// Test file for .bong extension
+dhoro message = "Testing .bong extension";
+dekho(message);
+dekho("File extension test: SUCCESS ✓");

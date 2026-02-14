@@ -1,5 +1,4 @@
 // Example: HTTP Server in BanglaCode
-// Using server_chalu (সার্ভার চালু) builtin
 // Now with simpler response helpers: uttor() and json_uttor()
 
 dekho("Starting HTTP Server...");

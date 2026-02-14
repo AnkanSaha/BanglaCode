@@ -1,0 +1,6 @@
+// Main file with .bong extension importing .bangla module
+ano "module_test.bangla" hisabe mod;
+
+dhoro result = mod.greet("BanglaCode User");
+dekho(result);
+dekho("Cross-extension import test: SUCCESS ✓");

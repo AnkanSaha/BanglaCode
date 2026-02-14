@@ -2,9 +2,9 @@
 // প্রয়াস (proyash) = async, অপেক্ষা (opekha) = await
 
 // Async function demo
-proyash kaj fetchData() {
+pathao proyash kaj fetchData() {
     dekho("Starting async operation...");
-    opekha ghumaao(1000); // Sleep for 1 second
+    opekha ghumaao(1000);  // Simulate async delay (1 second)
     dekho("Async operation complete!");
     ferao "Data fetched successfully";
 }
@@ -14,7 +14,7 @@ dhoro result = opekha fetchData();
 dekho("Result:", result);
 
 // Demo with multiple async operations
-proyash kaj multipleAsync() {
+pathao proyash kaj multipleAsync() {
     dekho("Starting multiple async operations...");
 
     // Create multiple promises
