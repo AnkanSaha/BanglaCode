@@ -12,23 +12,26 @@ import (
 type ObjectType string
 
 const (
-	NUMBER_OBJ    = "NUMBER"
-	STRING_OBJ    = "STRING"
-	BOOLEAN_OBJ   = "BOOLEAN"
-	NULL_OBJ      = "NULL"
-	RETURN_OBJ    = "RETURN"
-	ERROR_OBJ     = "ERROR"
-	FUNCTION_OBJ  = "FUNCTION"
-	BUILTIN_OBJ   = "BUILTIN"
-	ARRAY_OBJ     = "ARRAY"
-	MAP_OBJ       = "MAP"
-	CLASS_OBJ     = "CLASS"
-	INSTANCE_OBJ  = "INSTANCE"
-	BREAK_OBJ     = "BREAK"
-	CONTINUE_OBJ  = "CONTINUE"
-	EXCEPTION_OBJ = "EXCEPTION"
-	MODULE_OBJ    = "MODULE"
-	PROMISE_OBJ   = "PROMISE"
+	NUMBER_OBJ        = "NUMBER"
+	STRING_OBJ        = "STRING"
+	BOOLEAN_OBJ       = "BOOLEAN"
+	NULL_OBJ          = "NULL"
+	RETURN_OBJ        = "RETURN"
+	ERROR_OBJ         = "ERROR"
+	FUNCTION_OBJ      = "FUNCTION"
+	BUILTIN_OBJ       = "BUILTIN"
+	ARRAY_OBJ         = "ARRAY"
+	MAP_OBJ           = "MAP"
+	CLASS_OBJ         = "CLASS"
+	INSTANCE_OBJ      = "INSTANCE"
+	BREAK_OBJ         = "BREAK"
+	CONTINUE_OBJ      = "CONTINUE"
+	EXCEPTION_OBJ     = "EXCEPTION"
+	MODULE_OBJ        = "MODULE"
+	PROMISE_OBJ       = "PROMISE"
+	DB_CONNECTION_OBJ = "DB_CONNECTION"
+	DB_RESULT_OBJ     = "DB_RESULT"
+	DB_POOL_OBJ       = "DB_POOL"
 )
 
 // Object represents any runtime value
@@ -286,6 +289,57 @@ func RejectPromise(promise *Promise, err Object) {
 	promise.Error = err
 	promise.Mu.Unlock()
 	promise.ErrorChan <- err
+}
+
+// DBConnection represents a database connection
+type DBConnection struct {
+	ID       string            // Unique connection identifier
+	DBType   string            // Database type: "postgres", "mysql", "mongodb", "redis"
+	Native   interface{}       // Underlying driver connection (*sql.DB, *mongo.Client, *redis.Client)
+	PoolID   string            // Reference to connection pool (if pooled)
+	Metadata map[string]Object // Connection metadata (host, port, database, etc.)
+	Mu       sync.RWMutex      // Thread-safe access
+}
+
+func (d *DBConnection) Type() ObjectType { return DB_CONNECTION_OBJ }
+func (d *DBConnection) Inspect() string {
+	d.Mu.RLock()
+	defer d.Mu.RUnlock()
+	return fmt.Sprintf("DB_CONNECTION(%s, id=%s)", d.DBType, d.ID)
+}
+
+// DBResult represents a database query result
+type DBResult struct {
+	Rows         []map[string]Object // Result rows as maps (column name -> value)
+	RowsAffected int64               // Rows affected by INSERT/UPDATE/DELETE
+	LastInsertID int64               // Last inserted ID (for SQL databases)
+	Error        *Error              // Query error (if any)
+}
+
+func (d *DBResult) Type() ObjectType { return DB_RESULT_OBJ }
+func (d *DBResult) Inspect() string {
+	if d.Error != nil {
+		return fmt.Sprintf("DB_RESULT(error: %s)", d.Error.Message)
+	}
+	return fmt.Sprintf("DB_RESULT(rows=%d, affected=%d)", len(d.Rows), d.RowsAffected)
+}
+
+// DBPool represents a connection pool
+type DBPool struct {
+	ID          string            // Unique pool identifier
+	DBType      string            // Database type
+	MaxConns    int               // Maximum connections
+	ActiveConns int               // Currently active connections
+	Config      map[string]Object // Pool configuration
+	Conns       []*DBConnection   // Pool of reusable connections
+	Mu          sync.RWMutex      // Thread-safe pool management
+}
+
+func (d *DBPool) Type() ObjectType { return DB_POOL_OBJ }
+func (d *DBPool) Inspect() string {
+	d.Mu.RLock()
+	defer d.Mu.RUnlock()
+	return fmt.Sprintf("DB_POOL(%s, active=%d/%d)", d.DBType, d.ActiveConns, d.MaxConns)
 }
 
 // Singleton objects for common values

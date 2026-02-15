@@ -891,5 +891,366 @@
       "}"
     ],
     "description": "File backup script template"
+  },
+  "PostgreSQL Connection": {
+    "prefix": "db-postgres",
+    "body": [
+      "dhoro ${1:conn} = db_jukto(\"postgres\", {",
+      "\t\"host\": \"${2:localhost}\",",
+      "\t\"port\": ${3:5432},",
+      "\t\"database\": \"${4:mydb}\",",
+      "\t\"user\": \"${5:postgres}\",",
+      "\t\"password\": \"${6:password}\"",
+      "});",
+      "$0"
+    ],
+    "description": "Connect to PostgreSQL database"
+  },
+  "MySQL Connection": {
+    "prefix": "db-mysql",
+    "body": [
+      "dhoro ${1:conn} = db_jukto(\"mysql\", {",
+      "\t\"host\": \"${2:localhost}\",",
+      "\t\"port\": ${3:3306},",
+      "\t\"database\": \"${4:mydb}\",",
+      "\t\"user\": \"${5:root}\",",
+      "\t\"password\": \"${6:password}\"",
+      "});",
+      "$0"
+    ],
+    "description": "Connect to MySQL database"
+  },
+  "MongoDB Connection": {
+    "prefix": "db-mongodb",
+    "body": [
+      "dhoro ${1:conn} = db_jukto(\"mongodb\", {",
+      "\t\"host\": \"${2:localhost}\",",
+      "\t\"port\": ${3:27017},",
+      "\t\"database\": \"${4:mydb}\"",
+      "});",
+      "$0"
+    ],
+    "description": "Connect to MongoDB database"
+  },
+  "Redis Connection": {
+    "prefix": "db-redis",
+    "body": [
+      "dhoro ${1:conn} = db_jukto(\"redis\", {",
+      "\t\"host\": \"${2:localhost}\",",
+      "\t\"port\": ${3:6379}",
+      "});",
+      "$0"
+    ],
+    "description": "Connect to Redis"
+  },
+  "Database Query": {
+    "prefix": "db-query",
+    "body": [
+      "dhoro ${1:result} = db_query(${2:conn}, \"${3:SELECT * FROM users}\");",
+      "ghuriye (dhoro i = 0; i < dorghyo(${1:result}[\"rows\"]); i = i + 1) {",
+      "\tdekho(${1:result}[\"rows\"][i]);",
+      "}",
+      "$0"
+    ],
+    "description": "Execute database query"
+  },
+  "Prepared Query": {
+    "prefix": "db-proshno",
+    "body": [
+      "dhoro ${1:result} = db_proshno(${2:conn}, \"${3:SELECT * FROM users WHERE id = \\$1}\", [${4:1}]);",
+      "$0"
+    ],
+    "description": "Execute prepared query (SQL injection safe)"
+  },
+  "Database Insert": {
+    "prefix": "db-exec-insert",
+    "body": [
+      "dhoro ${1:result} = db_exec(${2:conn}, \"INSERT INTO ${3:users} (${4:name}, ${5:email}) VALUES ('${6:John}', '${7:john@example.com}')\");",
+      "dekho(\"Rows affected:\", ${1:result}[\"rows_affected\"]);",
+      "$0"
+    ],
+    "description": "Execute INSERT statement"
+  },
+  "Connection Pool": {
+    "prefix": "db-pool",
+    "body": [
+      "// Create connection pool (reuses connections for better performance)",
+      "dhoro ${1:pool} = db_pool_banao(\"${2:postgres}\", {",
+      "\t\"host\": \"${3:localhost}\",",
+      "\t\"database\": \"${4:mydb}\"",
+      "}, ${5:10}); // Max connections",
+      "",
+      "// Get connection from pool",
+      "dhoro ${6:conn} = db_pool_nao(${1:pool});",
+      "",
+      "// Use connection",
+      "dhoro ${7:result} = db_query(${6:conn}, \"${8:SELECT * FROM users}\");",
+      "",
+      "// Return connection to pool (important!)",
+      "db_pool_ferot(${1:pool}, ${6:conn});",
+      "",
+      "// Close pool when done",
+      "db_pool_bondho(${1:pool});",
+      "$0"
+    ],
+    "description": "Database connection pool pattern"
+  },
+  "MongoDB Find": {
+    "prefix": "db-mongo-find",
+    "body": [
+      "dhoro ${1:result} = db_khojo_mongodb(${2:conn}, \"${3:users}\", {",
+      "\t\"${4:age}\": {\"\\$gt\": ${5:25}}",
+      "});",
+      "dekho(${1:result}[\"rows\"]);",
+      "$0"
+    ],
+    "description": "Find documents in MongoDB"
+  },
+  "MongoDB Insert": {
+    "prefix": "db-mongo-insert",
+    "body": [
+      "dhoro ${1:result} = db_dhokao_mongodb(${2:conn}, \"${3:users}\", {",
+      "\t\"${4:name}\": \"${5:Rahim}\",",
+      "\t\"${6:age}\": ${7:30}",
+      "});",
+      "$0"
+    ],
+    "description": "Insert document in MongoDB"
+  },
+  "Redis Set/Get": {
+    "prefix": "db-redis-setget",
+    "body": [
+      "// Set key-value",
+      "db_set_redis(${1:conn}, \"${2:key}\", \"${3:value}\");",
+      "",
+      "// Set with TTL (time to live in seconds)",
+      "db_set_redis(${1:conn}, \"${4:session}\", \"${5:data}\", ${6:3600});",
+      "",
+      "// Get value",
+      "dhoro ${7:value} = db_get_redis(${1:conn}, \"${2:key}\");",
+      "dekho(${7:value});",
+      "$0"
+    ],
+    "description": "Redis set and get operations"
+  },
+  "Database Transaction": {
+    "prefix": "db-transaction",
+    "body": [
+      "// Begin transaction",
+      "dhoro ${1:tx} = db_transaction_shuru_postgres(${2:conn});",
+      "",
+      "chesta {",
+      "\tdb_exec_postgres(${2:conn}, \"${3:INSERT INTO users ...}\");",
+      "\tdb_exec_postgres(${2:conn}, \"${4:UPDATE accounts ...}\");",
+      "\t",
+      "\t// Commit transaction",
+      "\tdb_commit_postgres(${1:tx});",
+      "\tdekho(\"Transaction completed successfully\");",
+      "} dhoro_bhul (error) {",
+      "\t// Rollback on error",
+      "\tdb_rollback_postgres(${1:tx});",
+      "\tdekho(\"Transaction rolled back:\", error);",
+      "}",
+      "$0"
+    ],
+    "description": "Database transaction pattern"
+  },
+  "Async Database Query": {
+    "prefix": "db-async",
+    "body": [
+      "proyash kaj ${1:fetchData}() {",
+      "\tdhoro conn = opekha db_jukto_async(\"${2:postgres}\", {",
+      "\t\t\"host\": \"${3:localhost}\",",
+      "\t\t\"database\": \"${4:mydb}\"",
+      "\t});",
+      "\t",
+      "\tdhoro result = opekha db_query_async(conn, \"${5:SELECT * FROM users}\");",
+      "\t",
+      "\topekha db_bandho_async(conn);",
+      "\tferao result;",
+      "}",
+      "",
+      "// Call async function",
+      "dhoro ${6:data} = opekha ${1:fetchData}();",
+      "dekho(${6:data});",
+      "$0"
+    ],
+    "description": "Async database query pattern"
+  },
+  "Database CRUD Example": {
+    "prefix": "db-crud-example",
+    "body": [
+      "// Complete CRUD example with PostgreSQL",
+      "dhoro conn = db_jukto(\"postgres\", {",
+      "\t\"host\": \"localhost\",",
+      "\t\"database\": \"myapp\"",
+      "});",
+      "",
+      "// CREATE - Insert new user",
+      "db_proshno(conn, \"INSERT INTO users (name, email) VALUES (\\$1, \\$2)\", [\"Rahim\", \"rahim@example.com\"]);",
+      "",
+      "// READ - Query users",
+      "dhoro users = db_query(conn, \"SELECT * FROM users\");",
+      "ghuriye (dhoro i = 0; i < dorghyo(users[\"rows\"]); i = i + 1) {",
+      "\tdekho(\"User:\", users[\"rows\"][i][\"name\"]);",
+      "}",
+      "",
+      "// UPDATE - Update user email",
+      "db_proshno(conn, \"UPDATE users SET email = \\$1 WHERE name = \\$2\", [\"new@example.com\", \"Rahim\"]);",
+      "",
+      "// DELETE - Delete user",
+      "db_proshno(conn, \"DELETE FROM users WHERE name = \\$1\", [\"Rahim\"]);",
+      "",
+      "// Close connection",
+      "db_bandho(conn);",
+      "$0"
+    ],
+    "description": "Complete database CRUD example"
+  },
+  "MongoDB Aggregation Pipeline": {
+    "prefix": "db-aggregate-mongodb",
+    "body": [
+      "dhoro pipeline = [",
+      "\t{\"\\$match\": {\"${1:field}\": \"${2:value}\"}},",
+      "\t{\"\\$group\": {\"_id\": \"\\$${3:groupBy}\", \"count\": {\"\\$sum\": 1}}},",
+      "\t{\"\\$sort\": {\"${4:sortField}\": ${5:-1}}}",
+      "];",
+      "dhoro ${6:result} = db_aggregate_mongodb(${7:conn}, \"${8:collection}\", pipeline);",
+      "$0"
+    ],
+    "description": "MongoDB aggregation pipeline for advanced queries"
+  },
+  "Bulk Insert (PostgreSQL/MySQL)": {
+    "prefix": "db-bulk-insert",
+    "body": [
+      "dhoro ${1:rows} = [",
+      "\t[\"${2:value1}\", ${3:value2}],",
+      "\t[\"${4:value3}\", ${5:value4}],",
+      "\t[\"${6:value5}\", ${7:value6}]",
+      "];",
+      "dhoro ${8:result} = db_bulk_insert_${9|postgres,mysql|}(${10:conn}, \"${11:table}\", [\"${12:col1}\", \"${13:col2}\"], ${1:rows});",
+      "dekho(\"Inserted\", ${8:result}[\"rows_affected\"], \"rows\");",
+      "$0"
+    ],
+    "description": "Efficient bulk insert (10-100x faster)"
+  },
+  "Redis Sorted Set (Leaderboard)": {
+    "prefix": "db-redis-zadd",
+    "body": [
+      "// Add members to sorted set with scores",
+      "db_zadd_redis(${1:conn}, \"${2:leaderboard}\", {",
+      "\t\"${3:player1}\": ${4:100},",
+      "\t\"${5:player2}\": ${6:95}",
+      "});",
+      "",
+      "// Get top 10 players",
+      "dhoro ${7:topPlayers} = db_zrange_redis(${1:conn}, \"${2:leaderboard}\", 0, 9);",
+      "$0"
+    ],
+    "description": "Redis sorted set for leaderboards/rankings"
+  },
+  "Redis Sets (Tags/Collections)": {
+    "prefix": "db-redis-sadd",
+    "body": [
+      "// Add members to set",
+      "db_sadd_redis(${1:conn}, \"${2:tags}\", [\"${3:tag1}\", \"${4:tag2}\", \"${5:tag3}\"]);",
+      "",
+      "// Get all members",
+      "dhoro ${6:members} = db_smembers_redis(${1:conn}, \"${2:tags}\");",
+      "",
+      "// Set operations",
+      "dhoro ${7:common} = db_sinter_redis(${1:conn}, [\"${8:set1}\", \"${9:set2}\"]);",
+      "$0"
+    ],
+    "description": "Redis sets for unique collections"
+  },
+  "Redis Atomic Counter": {
+    "prefix": "db-redis-incr",
+    "body": [
+      "// Atomic increment (thread-safe)",
+      "db_incr_redis(${1:conn}, \"${2:page:views}\");",
+      "db_incrby_redis(${1:conn}, \"${3:user:points}\", ${4:50});",
+      "",
+      "// Get counter value",
+      "dhoro ${5:views} = db_get_redis(${1:conn}, \"${2:page:views}\");",
+      "$0"
+    ],
+    "description": "Redis atomic counters for metrics"
+  },
+  "MongoDB Find with Options": {
+    "prefix": "db-mongodb-find-options",
+    "body": [
+      "dhoro ${1:result} = db_khojo_options_mongodb(${2:conn}, \"${3:collection}\", ",
+      "\t{\"${4:field}\": {\"\\$gte\": ${5:18}}},",
+      "\t{\"sort\": {\"${6:sortField}\": ${7:-1}}, \"limit\": ${8:10}, \"skip\": ${9:0}}",
+      ");",
+      "$0"
+    ],
+    "description": "MongoDB find with sort, limit, skip options"
+  },
+  "MongoDB Create Index": {
+    "prefix": "db-mongodb-index",
+    "body": [
+      "// Create index for faster queries",
+      "db_create_index_mongodb(${1:conn}, \"${2:collection}\", {\"${3:field}\": ${4:1}});",
+      "$0"
+    ],
+    "description": "Create MongoDB index for performance"
+  },
+  "Load .env File": {
+    "prefix": "env-load",
+    "body": [
+      "// Load environment variables from .env file",
+      "env_load(\".env\");",
+      "$0"
+    ],
+    "description": "Load .env file"
+  },
+  "Auto-Load .env by Environment": {
+    "prefix": "env-load-auto",
+    "body": [
+      "// Auto-load .env file based on environment",
+      "env_load_auto(\"${1|dev,uat,staging,prod|}\");  // Tries .env.${1}, then .env",
+      "",
+      "// Get environment variables",
+      "dhoro ${2:api_key} = env_get(\"${3:API_KEY}\");",
+      "dhoro ${4:db_host} = env_get_default(\"${5:DB_HOST}\", \"${6:localhost}\");",
+      "$0"
+    ],
+    "description": "Auto-load environment-specific .env file"
+  },
+  "Get Environment Variable": {
+    "prefix": "env-get",
+    "body": [
+      "dhoro ${1:value} = env_get(\"${2:KEY}\");",
+      "$0"
+    ],
+    "description": "Get environment variable"
+  },
+  "Get Environment Variable with Default": {
+    "prefix": "env-get-default",
+    "body": [
+      "dhoro ${1:value} = env_get_default(\"${2:KEY}\", \"${3:default_value}\");",
+      "$0"
+    ],
+    "description": "Get environment variable with default value"
+  },
+  "Complete .env Example": {
+    "prefix": "env-example",
+    "body": [
+      "// Load environment configuration",
+      "env_load_auto(\"${1:prod}\");  // Tries .env.${1}, then .env",
+      "",
+      "// Get configuration from .env",
+      "dhoro api_url = env_get_default(\"API_URL\", \"http://localhost:3000\");",
+      "dhoro api_key = env_get(\"API_KEY\");",
+      "dhoro db_host = env_get_default(\"DB_HOST\", \"localhost\");",
+      "dhoro debug = env_get_default(\"DEBUG\", \"false\");",
+      "",
+      "dekho(\"API URL:\", api_url);",
+      "dekho(\"Debug Mode:\", debug);",
+      "$0"
+    ],
+    "description": "Complete .env usage example"
   }
 }

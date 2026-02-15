@@ -12,12 +12,12 @@ proyash kaj runUDPClient() {
     chesta {
         // Send multiple UDP packets
         ghuriye (dhoro i = 1; i <= 5; i = i + 1) {
-            dhoro message = "UDP Packet #" + jongate(i) + " from BanglaCode";
+            // dhoro message = "UDP Packet #" + jongate(i) + " from BanglaCode";
 
             dekho("[Sending #", i, "]:", message);
 
             // Send UDP packet (async)
-            opekha udp_pathao("localhost", 9000, message);
+            opekha udp_pathao("localhost", 9000, "Hello");
 
             dekho("  Packet sent!");
 
@@ -53,9 +53,9 @@ proyash kaj runUDPClientWithListener() {
     // Now send packets with return address hint
     dekho("Sending packets...");
     ghuriye (dhoro i = 1; i <= 3; i = i + 1) {
-        dhoro message = "Request #" + jongate(i);
-        dekho("  Sending:", message);
-        opekha udp_pathao("localhost", 9000, message);
+        // dhoro message = "Request #" + jongate(i);
+        dekho("  Sending:", " Hello from client with listener");
+        opekha udp_pathao("localhost", 9000, "Hello from client with listener");
         ghumaao(500);
     }
 

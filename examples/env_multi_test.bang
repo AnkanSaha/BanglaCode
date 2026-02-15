@@ -1,0 +1,33 @@
+// Test multi-environment .env loading
+
+dekho("=== Testing Multi-Environment .env Loading ===");
+dekho("");
+
+// Test 1: Load production environment
+dekho("Test 1: Loading production environment...");
+env_load_auto("prod");  // Will load .env.prod
+
+dhoro api_key = env_get("API_KEY");
+dhoro api_url = env_get("API_URL");
+dhoro app_name = env_get("APP_NAME");
+
+dekho("API Key:", api_key);
+dekho("API URL:", api_url);
+dekho("App Name:", app_name);
+dekho("");
+
+// Clear and test fallback
+env_clear();
+
+// Test 2: Load non-existent environment (should fallback to .env)
+dekho("Test 2: Loading 'staging' environment (doesn't exist, should fallback to .env)...");
+env_load_auto("staging");  // Will fallback to .env
+
+dhoro fallback_key = env_get("API_KEY");
+dhoro fallback_url = env_get("API_URL");
+
+dekho("API Key (from fallback):", fallback_key);
+dekho("API URL (from fallback):", fallback_url);
+dekho("");
+
+dekho("=== All tests passed! ===");

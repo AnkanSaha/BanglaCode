@@ -4,9 +4,11 @@
 
 # BanglaCode
 
-### 🇮🇳 The First Production-Ready Bengali Programming Language
+### 🇮🇳 A Full-Featured Educational Programming Language in Bengali
 
-**Write code in Bengali. Think in Bengali. Build in Bengali.**
+**Write code in Bengali. Think in Bengali. Learn in Bengali.**
+
+> *An educational language powerful enough for real projects — inspired by BhaiLang & Vedic, but with production-grade features.*
 
 [![Version](https://img.shields.io/github/v/release/nexoral/BanglaCode?style=for-the-badge&color=blue&logo=github)](https://github.com/nexoral/BanglaCode/releases)
 [![License](https://img.shields.io/github/license/nexoral/BanglaCode?style=for-the-badge&color=green)](https://github.com/nexoral/BanglaCode/blob/main/LICENSE)
@@ -22,19 +24,35 @@
 
 ## 🌟 Why BanglaCode?
 
-**BanglaCode** is a high-performance, general-purpose programming language designed for **300+ million Bengali speakers worldwide**. It combines the familiarity of Bengali keywords with modern language features, delivering production-grade performance powered by Go.
+**BanglaCode** is an **educational programming language** designed for **300+ million Bengali speakers worldwide**. While it's not competing with industry-standard languages like JavaScript or Python, it goes far beyond typical toy languages by offering production-grade features for real-world learning and projects.
 
-### 💪 Production-Ready Features
+### 🎓 Educational, But Powerful
+
+**Inspired by:** [BhaiLang](https://github.com/DulLabs/bhai-lang) (Hindi) and [Vedic](https://github.com/vedic-lang/vedic) (Sanskrit) — regional programming languages that introduced native-language coding to India.
+
+**The Difference:** While BhaiLang and Vedic are excellent toy languages with basic features, **BanglaCode is a full-featured educational language** that enables you to:
+
+✅ **Build real backends** - HTTP servers, REST APIs, WebSocket servers
+✅ **Connect to databases** - PostgreSQL, MySQL, MongoDB, Redis with connection pooling
+✅ **Write modular code** - Import/export system, code organization, reusable modules
+✅ **Handle complex logic** - OOP, async/await, error handling, promises
+✅ **Access system resources** - File I/O, networking, process management
+
+**Perfect for:** Bengali-speaking students learning programming concepts, educators teaching CS fundamentals, and hobbyists building projects in their native language.
+
+**Not a replacement for:** Production enterprise applications (use JavaScript, Python, Go, etc. for that). BanglaCode is a learning tool that happens to be powerful enough for real projects.
+
+### 💪 Features Beyond Typical Educational Languages
 
 <table>
 <tr>
 <td width="50%">
 
-**🚀 Performance**
-- **3-4x faster** than Python
-- **6x faster startup** (~5ms)
-- Go-powered native execution
-- Zero-cost abstractions
+**🚀 Fast & Efficient**
+- Go-powered interpreter
+- Quick startup time
+- Efficient execution
+- Lightweight runtime
 
 </td>
 <td width="50%">
@@ -50,11 +68,13 @@
 <tr>
 <td width="50%">
 
-**🔧 95+ Built-in Functions**
+**🔧 135+ Built-in Functions**
 - String & Array operations
 - Math & Utility functions
 - HTTP server & JSON support
 - **Networking (TCP, UDP, WebSocket)**
+- **Database (PostgreSQL, MySQL, MongoDB, Redis)**
+- **Environment Variables (.env files)**
 - **Complete OS-level access**
 
 </td>
@@ -79,23 +99,6 @@
 **The Problem:** Bengali students can think logically but struggle with English-based programming syntax.
 
 **The Solution:** BanglaCode bridges this gap with Bengali keywords (`dhoro`, `jodi`, `kaj`) while maintaining C-like structure familiar to CS students.
-
----
-
-## ⚡ Performance Benchmarks
-
-BanglaCode is built for **speed** and **efficiency**:
-
-| Operation | BanglaCode | Python 3.11 | Node.js | Improvement |
-|-----------|------------|-------------|---------|-------------|
-| **Startup Time** | ~5ms | ~30ms | ~40ms | **6x faster** |
-| **Loop (1M iterations)** | ~50ms | ~200ms | ~80ms | **4x faster** |
-| **Recursive Fibonacci(30)** | ~35ms | ~150ms | ~60ms | **4.3x faster** |
-| **JSON Parsing (1MB)** | ~12ms | ~45ms | ~25ms | **3.8x faster** |
-| **Memory Footprint** | ~8MB | ~30MB | ~40MB | **75% less** |
-| **HTTP Request (10K)** | ~800ms | ~2.5s | ~1.2s | **3x faster** |
-
-*Benchmarked on AMD Ryzen 5 5600H, 16GB RAM, Linux 6.8*
 
 ---
 
@@ -426,9 +429,80 @@ dhoro isSymlink = symlink_ki("/path/to/check");
 dhoro linkTarget = symlink_poro("/path/to/symlink");
 ```
 
+### 🔟 Database Connectivity (NEW!)
+
+BanglaCode supports production-grade database connectors with **connection pooling** for maximum performance:
+
+```banglacode
+// PostgreSQL with connection pool (50-100x faster than new connections)
+dhoro pool = db_pool_banao("postgres", {
+    "host": "localhost",
+    "port": 5432,
+    "database": "myapp",
+    "user": "admin",
+    "password": "secret"
+}, 10); // Max 10 connections
+
+// Get connection from pool
+dhoro conn = db_pool_nao(pool);
+
+// Execute query
+dhoro users = db_query(conn, "SELECT * FROM users WHERE age > 25");
+
+// Iterate results
+ghuriye (dhoro i = 0; i < dorghyo(users["rows"]); i = i + 1) {
+    dhoro user = users["rows"][i];
+    dekho("User:", user["name"], "Age:", user["age"]);
+}
+
+// Prepared queries (SQL injection safe)
+dhoro result = db_proshno(conn, "INSERT INTO users (name, email) VALUES ($1, $2)",
+    ["Rahim", "rahim@example.com"]);
+
+// Return connection to pool (reused for next query)
+db_pool_ferot(pool, conn);
+
+// MongoDB document operations
+dhoro mongoConn = db_jukto("mongodb", {
+    "host": "localhost",
+    "database": "mydb"
+});
+
+dhoro docs = db_khojo_mongodb(mongoConn, "users", {
+    "age": {"$gt": 25},
+    "city": "Dhaka"
+});
+
+db_dhokao_mongodb(mongoConn, "users", {
+    "name": "Karim",
+    "age": 30,
+    "city": "Dhaka"
+});
+
+// Redis caching
+dhoro redisConn = db_jukto("redis", {"host": "localhost"});
+
+db_set_redis(redisConn, "user:1", "Rahim Ahmed");
+db_expire_redis(redisConn, "user:1", 3600); // 1 hour TTL
+
+dhoro cachedUser = db_get_redis(redisConn, "user:1");
+dekho("Cached user:", cachedUser);
+
+// Async database queries
+proyash kaj fetchUsers() {
+    dhoro conn = opekha db_jukto_async("postgres", {...});
+    dhoro users = opekha db_query_async(conn, "SELECT * FROM users");
+    opekha db_bandho_async(conn);
+    ferao users;
+}
+
+dhoro result = opekha fetchUsers();
+dekho("Fetched users:", dorghyo(result["rows"]));
+```
+
 ---
 
-## 📚 95+ Built-in Functions
+## 📚 130+ Built-in Functions
 
 ### 🖨️ Output & Input
 - `dekho(...)` - Print to console
@@ -550,6 +624,74 @@ dhoro linkTarget = symlink_poro("/path/to/symlink");
 - `websocket_jukto(url)` - Connect to WebSocket (async)
 - `websocket_pathao(conn, message)` - Send message
 - `websocket_bondho(conn)` - Close WebSocket connection
+
+### 🗄️ Database Functions (NEW!)
+
+BanglaCode provides production-grade database connectors with **connection pooling** and both **sync/async APIs**:
+
+**Universal Functions (Work with all databases):**
+- `db_jukto(type, config)` - Connect to database
+- `db_jukto_async(type, config)` - Connect async
+- `db_bandho(conn)` - Close connection
+- `db_bandho_async(conn)` - Close async
+- `db_query(conn, sql)` - Execute SELECT query
+- `db_query_async(conn, sql)` - Query async
+- `db_exec(conn, sql)` - Execute INSERT/UPDATE/DELETE
+- `db_exec_async(conn, sql)` - Execute async
+- `db_proshno(conn, sql, params)` - Prepared query (SQL injection safe)
+- `db_proshno_async(conn, sql, params)` - Prepared query async
+
+**Connection Pool Functions (50-100x faster):**
+- `db_pool_banao(type, config, maxConns)` - Create connection pool
+- `db_pool_nao(pool)` - Get connection from pool
+- `db_pool_ferot(pool, conn)` - Return connection to pool
+- `db_pool_bondho(pool)` - Close pool
+- `db_pool_tothyo(pool)` - Get pool statistics
+
+**PostgreSQL Specific:**
+- `db_jukto_postgres(config)` - PostgreSQL connection
+- `db_query_postgres(conn, sql)` - Execute query
+- `db_exec_postgres(conn, sql)` - Execute statement
+- `db_proshno_postgres(conn, sql, params)` - Prepared statement
+- `db_transaction_shuru_postgres(conn)` - Begin transaction
+- `db_commit_postgres(tx)` - Commit transaction
+- `db_rollback_postgres(tx)` - Rollback transaction
+
+**MySQL Specific:**
+- `db_jukto_mysql(config)` - MySQL connection
+- `db_query_mysql(conn, sql)` - Execute query
+- `db_exec_mysql(conn, sql)` - Execute statement
+- `db_proshno_mysql(conn, sql, params)` - Prepared statement
+- `db_transaction_shuru_mysql(conn)` - Begin transaction
+- `db_commit_mysql(tx)` - Commit transaction
+- `db_rollback_mysql(tx)` - Rollback transaction
+
+**MongoDB Specific:**
+- `db_jukto_mongodb(config)` - MongoDB connection
+- `db_khojo_mongodb(conn, collection, filter)` - Find documents
+- `db_khojo_async_mongodb(conn, collection, filter)` - Find async
+- `db_dhokao_mongodb(conn, collection, doc)` - Insert document
+- `db_dhokao_async_mongodb(conn, collection, doc)` - Insert async
+- `db_update_mongodb(conn, collection, filter, update)` - Update documents
+- `db_update_async_mongodb(conn, collection, filter, update)` - Update async
+- `db_mujhe_mongodb(conn, collection, filter)` - Delete documents
+- `db_mujhe_async_mongodb(conn, collection, filter)` - Delete async
+
+**Redis Specific:**
+- `db_jukto_redis(config)` - Redis connection
+- `db_set_redis(conn, key, value, ttl)` - Set key-value
+- `db_set_async_redis(conn, key, value, ttl)` - Set async
+- `db_get_redis(conn, key)` - Get value
+- `db_get_async_redis(conn, key)` - Get async
+- `db_del_redis(conn, key)` - Delete key
+- `db_expire_redis(conn, key, seconds)` - Set expiration
+- `db_lpush_redis(conn, key, value)` - List push left
+- `db_rpush_redis(conn, key, value)` - List push right
+- `db_lpop_redis(conn, key)` - List pop left
+- `db_rpop_redis(conn, key)` - List pop right
+- `db_hset_redis(conn, key, field, value)` - Hash set field
+- `db_hget_redis(conn, key, field)` - Hash get field
+- `db_hgetall_redis(conn, key)` - Hash get all fields
 
 ### ⏱️ Time Functions
 - `somoy()` - Current timestamp (ms)
@@ -679,9 +821,10 @@ BanglaCode/
 │   ├── ast/            # Abstract Syntax Tree nodes
 │   ├── object/         # Runtime values & environment
 │   └── evaluator/      # Tree-walking interpreter
-│       ├── builtins/   # 95+ built-in functions
-│       │   ├── system/ # 50+ OS-level functions
-│       │   └── network/ # TCP, UDP, WebSocket (NEW!)
+│       ├── builtins/   # 130+ built-in functions
+│       │   ├── system/   # 50+ OS-level functions
+│       │   ├── network/  # TCP, UDP, WebSocket
+│       │   └── database/ # PostgreSQL, MySQL, MongoDB, Redis (NEW!)
 │       ├── async.go    # Async/await implementation
 │       ├── classes.go  # OOP support
 │       ├── modules.go  # Import/export system
@@ -845,9 +988,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ### 📊 Project Stats
 - **300M+** potential Bengali-speaking users
-- **95+** built-in functions (including TCP, UDP, WebSocket networking)
+- **130+** built-in functions (database, networking, system access)
 - **29** Bengali keywords
-- **3-4x** faster than Python
+- **Educational** language with production-grade features
 
 </td>
 </tr>

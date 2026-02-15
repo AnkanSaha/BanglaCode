@@ -1,0 +1,32 @@
+// Example: Using Environment Variables in BanglaCode
+// This demonstrates how to load and use .env files
+
+// Load environment variables from .env file
+dekho("Loading .env file...");
+env_load(".env");
+
+// Get environment variables
+dhoro api_key = env_get_default("API_KEY", "default-key");
+dhoro api_url = env_get_default("API_URL", "http://localhost:3000");
+dhoro app_name = env_get_default("APP_NAME", "My App");
+dhoro debug = env_get_default("DEBUG", "false");
+
+dekho("");
+dekho("=== Environment Configuration ===");
+dekho("App Name:", app_name);
+dekho("API URL:", api_url);
+dekho("API Key:", api_key);
+dekho("Debug Mode:", debug);
+dekho("=================================");
+dekho("");
+
+// Set a runtime environment variable
+env_set("RUNTIME_VAR", "This was set at runtime");
+dhoro runtime_val = env_get("RUNTIME_VAR");
+dekho("Runtime Variable:", runtime_val);
+
+// Get all environment variables
+dekho("");
+dekho("All environment variables:");
+dhoro all_env = env_all();
+dekho(all_env);

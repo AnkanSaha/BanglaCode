@@ -8,6 +8,52 @@ const fs = require('fs');
  * Created by Ankan from West Bengal, India
  */
 
+/**
+ * Helper function to count arguments correctly, respecting string boundaries
+ * @param {string} argsStr - The argument string from inside parentheses
+ * @returns {number} - The correct number of arguments
+ */
+function countArguments(argsStr) {
+    if (!argsStr || argsStr.trim() === '') {
+        return 0;
+    }
+
+    let count = 1;
+    let inString = false;
+    let stringChar = '';
+    let depth = 0; // Track parentheses/brackets/braces depth
+
+    for (let i = 0; i < argsStr.length; i++) {
+        const char = argsStr[i];
+        const prevChar = i > 0 ? argsStr[i - 1] : '';
+
+        // Toggle string state for single or double quotes
+        if ((char === '"' || char === "'") && prevChar !== '\\') {
+            if (!inString) {
+                inString = true;
+                stringChar = char;
+            } else if (char === stringChar) {
+                inString = false;
+                stringChar = '';
+            }
+        }
+
+        // Track nested structures (arrays, maps, function calls)
+        if (!inString) {
+            if (char === '(' || char === '[' || char === '{') {
+                depth++;
+            } else if (char === ')' || char === ']' || char === '}') {
+                depth--;
+            } else if (char === ',' && depth === 0) {
+                // Only count commas at depth 0 (not inside nested structures)
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
 // All BanglaCode keywords
 const keywords = [
     { label: 'dhoro', kind: vscode.CompletionItemKind.Keyword, detail: 'চলক ঘোষণা (ধরো) - Variable', insertText: 'dhoro ${1:name} = ${2:value};' },
@@ -50,6 +96,7 @@ const builtinFunctions = [
     // টাইপ ফাংশন
     { label: 'dhoron', kind: vscode.CompletionItemKind.Function, detail: 'ধরন - ডেটা টাইপ জানো', insertText: 'dhoron(${1:value})', documentation: 'মানের ধরন রিটার্ন করে' },
     { label: 'lipi', kind: vscode.CompletionItemKind.Function, detail: 'লিপি - স্ট্রিং এ রূপান্তর', insertText: 'lipi(${1:value})', documentation: 'মানকে স্ট্রিং এ রূপান্তর করে' },
+    { label: 'jongate', kind: vscode.CompletionItemKind.Function, detail: 'জনগতে - স্ট্রিং এ রূপান্তর', insertText: 'jongate(${1:value})', documentation: 'মানকে স্ট্রিং এ রূপান্তর করে (lipi এর alias, সাধারণত সংখ্যা কনক্যাটেনেশনের জন্য ব্যবহৃত)' },
     { label: 'sonkha', kind: vscode.CompletionItemKind.Function, detail: 'সংখ্যা - নাম্বার এ রূপান্তর', insertText: 'sonkha(${1:value})', documentation: 'মানকে সংখ্যায় রূপান্তর করে' },
     { label: 'dorghyo', kind: vscode.CompletionItemKind.Function, detail: 'দৈর্ঘ্য - লেন্থ নাও', insertText: 'dorghyo(${1:value})', documentation: 'স্ট্রিং বা অ্যারের দৈর্ঘ্য রিটার্ন করে' },
 
@@ -103,6 +150,27 @@ const builtinFunctions = [
     { label: 'poro_async', kind: vscode.CompletionItemKind.Function, detail: 'পড়ো অ্যাসিঙ্ক - ফাইল পড়ো অ্যাসিঙ্ক', insertText: 'poro_async(${1:"filename"})', documentation: 'অ্যাসিঙ্ক্রোনাস ফাইল পড়ে (প্রমিস রিটার্ন করে)' },
     { label: 'lekho_async', kind: vscode.CompletionItemKind.Function, detail: 'লেখো অ্যাসিঙ্ক - ফাইল লেখো অ্যাসিঙ্ক', insertText: 'lekho_async(${1:"filename"}, ${2:content})', documentation: 'অ্যাসিঙ্ক্রোনাস ফাইলে লেখে (প্রমিস রিটার্ন করে)' },
     { label: 'sob_proyash', kind: vscode.CompletionItemKind.Function, detail: 'সব প্রয়াস - Promise.all', insertText: 'sob_proyash(${1:promisesArray})', documentation: 'সব প্রমিসের জন্য অপেক্ষা করে (Promise.all এর মতো)' },
+
+    // TCP নেটওয়ার্ক ফাংশন
+    { label: 'tcp_server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি সার্ভার চালু - TCP Server', insertText: 'tcp_server_chalu(${1:port}, ${2:handler})', documentation: 'নির্দিষ্ট পোর্টে TCP সার্ভার চালু করে। হ্যান্ডলার ফাংশন প্রতিটি সংযোগের জন্য কল হয়।' },
+    { label: 'tcp_jukto', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি যুক্ত - TCP Connect', insertText: 'opekha tcp_jukto(${1:"host"}, ${2:port})', documentation: 'TCP সার্ভারের সাথে সংযোগ তৈরি করে (অ্যাসিঙ্ক - প্রমিস রিটার্ন করে)। সংযোগ অবজেক্ট রিটার্ন করে।' },
+    { label: 'tcp_pathao', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি পাঠাও - TCP Send', insertText: 'tcp_pathao(${1:conn}, ${2:"message"})', documentation: 'TCP সংযোগে ডেটা পাঠায়। conn হল সংযোগ অবজেক্ট।' },
+    { label: 'tcp_lekho', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি লেখো - TCP Write', insertText: 'tcp_lekho(${1:conn}, ${2:"message"})', documentation: 'TCP সংযোগে ডেটা লেখে (tcp_pathao এর সমতুল্য)। conn হল সংযোগ অবজেক্ট।' },
+    { label: 'tcp_shuno', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি শুনো - TCP Read', insertText: 'opekha tcp_shuno(${1:conn})', documentation: 'TCP সংযোগ থেকে ডেটা পড়ে (অ্যাসিঙ্ক - প্রমিস রিটার্ন করে)। প্রাপ্ত স্ট্রিং রিটার্ন করে।' },
+    { label: 'tcp_bondho', kind: vscode.CompletionItemKind.Function, detail: 'টিসিপি বন্ধ - TCP Close', insertText: 'tcp_bondho(${1:conn})', documentation: 'TCP সংযোগ বন্ধ করে। conn হল সংযোগ অবজেক্ট।' },
+
+    // UDP নেটওয়ার্ক ফাংশন
+    { label: 'udp_server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'ইউডিপি সার্ভার চালু - UDP Server', insertText: 'udp_server_chalu(${1:port}, ${2:handler})', documentation: 'নির্দিষ্ট পোর্টে UDP সার্ভার চালু করে। হ্যান্ডলার ফাংশন প্রতিটি প্যাকেটের জন্য কল হয়।' },
+    { label: 'udp_pathao', kind: vscode.CompletionItemKind.Function, detail: 'ইউডিপি পাঠাও - UDP Send', insertText: 'udp_pathao(${1:"host"}, ${2:port}, ${3:"message"})', documentation: 'UDP প্যাকেট পাঠায় নির্দিষ্ট হোস্ট এবং পোর্টে।' },
+    { label: 'udp_uttor', kind: vscode.CompletionItemKind.Function, detail: 'ইউডিপি উত্তর - UDP Reply', insertText: 'udp_uttor(${1:packet}, ${2:"response"})', documentation: 'UDP প্যাকেটের উত্তর পাঠায়। packet হল রিসিভড প্যাকেট অবজেক্ট।' },
+    { label: 'udp_shuno', kind: vscode.CompletionItemKind.Function, detail: 'ইউডিপি শুনো - UDP Listen', insertText: 'udp_shuno(${1:port}, ${2:handler})', documentation: 'UDP পোর্টে শোনা শুরু করে (udp_server_chalu এর সমতুল্য)।' },
+    { label: 'udp_bondho', kind: vscode.CompletionItemKind.Function, detail: 'ইউডিপি বন্ধ - UDP Close', insertText: 'udp_bondho(${1:server})', documentation: 'UDP সার্ভার বন্ধ করে।' },
+
+    // WebSocket নেটওয়ার্ক ফাংশন
+    { label: 'websocket_server_chalu', kind: vscode.CompletionItemKind.Function, detail: 'ওয়েবসকেট সার্ভার চালু - WebSocket Server', insertText: 'websocket_server_chalu(${1:port}, ${2:handler})', documentation: 'নির্দিষ্ট পোর্টে WebSocket সার্ভার চালু করে। হ্যান্ডলার ফাংশন প্রতিটি মেসেজের জন্য কল হয়।' },
+    { label: 'websocket_jukto', kind: vscode.CompletionItemKind.Function, detail: 'ওয়েবসকেট যুক্ত - WebSocket Connect', insertText: 'opekha websocket_jukto(${1:"ws://host:port"})', documentation: 'WebSocket সার্ভারের সাথে সংযোগ তৈরি করে (অ্যাসিঙ্ক - প্রমিস রিটার্ন করে)।' },
+    { label: 'websocket_pathao', kind: vscode.CompletionItemKind.Function, detail: 'ওয়েবসকেট পাঠাও - WebSocket Send', insertText: 'websocket_pathao(${1:conn}, ${2:"message"})', documentation: 'WebSocket সংযোগে মেসেজ পাঠায়।' },
+    { label: 'websocket_bondho', kind: vscode.CompletionItemKind.Function, detail: 'ওয়েবসকেট বন্ধ - WebSocket Close', insertText: 'websocket_bondho(${1:conn})', documentation: 'WebSocket সংযোগ বন্ধ করে।' },
 ];
 
 /**
@@ -400,8 +468,18 @@ function activate(context) {
         'banglacode',
         {
             provideCompletionItems(document, position, token, context) {
+                const line = document.lineAt(position.line).text;
+                const linePrefix = line.substring(0, position.character);
+
+                // Skip completions if we're inside an import statement string
+                // This allows the importPathProvider to handle file/folder suggestions
+                const insideImportString = linePrefix.match(/ano\s+["'][^"']*$/);
+                if (insideImportString) {
+                    return undefined;
+                }
+
                 const completions = [];
-                
+
                 // Add keywords
                 for (const kw of keywords) {
                     const item = new vscode.CompletionItem(kw.label, kw.kind);
@@ -614,7 +692,7 @@ function activate(context) {
                                 title: 'Re-trigger completions'
                             };
                             completions.push(item);
-                        } else if (entry.name.endsWith('.bang')) {
+                        } else if (entry.name.endsWith('.bang') || entry.name.endsWith('.bangla') || entry.name.endsWith('.bong')) {
                             const item = new vscode.CompletionItem(
                                 entry.name,
                                 vscode.CompletionItemKind.File
@@ -1181,8 +1259,8 @@ function activate(context) {
                 continue;
             }
 
-            // Count arguments (simple approach - count commas + 1, unless empty)
-            const argCount = argsStr ? argsStr.split(',').length : 0;
+            // Count arguments (correctly handles commas inside strings)
+            const argCount = countArguments(argsStr);
 
             // Check local functions first
             if (funcDefs.has(funcName)) {
@@ -1264,7 +1342,7 @@ function activate(context) {
                             const params = funcInModule[1].trim();
                             const paramNames = params.split(',').map(p => p.trim()).join(', ');
                             const expectedCount = params ? params.split(',').length : 0;
-                            const actualCount = argsStr ? argsStr.split(',').length : 0;
+                            const actualCount = countArguments(argsStr);
 
                             if (actualCount !== expectedCount) {
                                 const pos = document.positionAt(match.index);
@@ -1349,7 +1427,7 @@ function activate(context) {
                     // Check if it's an exported function from this module
                     if (exportedFuncs.has(funcName)) {
                         const def = exportedFuncs.get(funcName);
-                        const argCount = argsStr ? argsStr.split(',').length : 0;
+                        const argCount = countArguments(argsStr);
 
                         if (argCount !== def.paramCount) {
                             const pos = document.positionAt(callMatch.index);

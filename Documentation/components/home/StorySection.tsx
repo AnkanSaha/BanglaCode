@@ -26,7 +26,7 @@ const timeline = [
     title: "The Mission",
     year: "The Goal",
     description:
-      "BanglaCode was born to democratize programming education. To help students in schools and colleges across Bengal learn coding without fighting a language barrier first.",
+      "Inspired by BhaiLang (Hindi) and Vedic (Sanskrit), BanglaCode was born as an educational language for Bengali speakers. Unlike those toy languages, we built a full-featured language for real learning—with databases, servers, and modules.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
   },

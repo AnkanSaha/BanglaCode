@@ -293,7 +293,70 @@
         {
           "name": "support.function.builtin.system.js",
           "match": "\\b(disk_akar|disk_bebohrito|disk_mukt)\\b"
-        }
+        },
+        {
+          "name": "support.function.builtin.env.js",
+          "match": "\\b(env_load|env_load_auto|env_get|env_get_default|env_set|env_all|env_clear)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.js",
+          "match": "\\b(db_jukto|db_jukto_async|db_bandho|db_bandho_async)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.js",
+          "match": "\\b(db_query|db_query_async|db_exec|db_exec_async|db_proshno|db_proshno_async)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.postgres.js",
+          "match": "\\b(db_jukto_postgres|db_bandho_postgres|db_query_postgres|db_exec_postgres|db_proshno_postgres)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.postgres.js",
+          "match": "\\b(db_query_async_postgres|db_exec_async_postgres|db_proshno_async_postgres)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.postgres.js",
+          "match": "\\b(db_transaction_shuru_postgres|db_commit_postgres|db_rollback_postgres)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mysql.js",
+          "match": "\\b(db_jukto_mysql|db_bandho_mysql|db_query_mysql|db_exec_mysql|db_proshno_mysql)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mysql.js",
+          "match": "\\b(db_query_async_mysql|db_exec_async_mysql|db_proshno_async_mysql)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mysql.js",
+          "match": "\\b(db_transaction_shuru_mysql|db_commit_mysql|db_rollback_mysql)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mongodb.js",
+          "match": "\\b(db_jukto_mongodb|db_bandho_mongodb|db_khojo_mongodb|db_dhokao_mongodb)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mongodb.js",
+          "match": "\\b(db_update_mongodb|db_mujhe_mongodb|db_khojo_async_mongodb|db_dhokao_async_mongodb)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.mongodb.js",
+          "match": "\\b(db_update_async_mongodb|db_mujhe_async_mongodb)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.redis.js",
+          "match": "\\b(db_jukto_redis|db_bandho_redis|db_set_redis|db_get_redis|db_del_redis|db_expire_redis)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.redis.js",
+          "match": "\\b(db_set_async_redis|db_get_async_redis|db_lpush_redis|db_rpush_redis|db_lpop_redis|db_rpop_redis)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.redis.js",
+          "match": "\\b(db_hset_redis|db_hget_redis|db_hgetall_redis)\\b"
+        },
+        {
+          "name": "support.function.builtin.database.pool.js",
+          "match": "\\b(db_pool_banao|db_pool_nao|db_pool_ferot|db_pool_bondho|db_pool_tothyo)\\b"
       ]
     },
     "functions": {

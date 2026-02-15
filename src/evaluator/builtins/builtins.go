@@ -3,6 +3,7 @@ package builtins
 import (
 	"BanglaCode/src/object"
 
+	"BanglaCode/src/evaluator/builtins/database"
 	"BanglaCode/src/evaluator/builtins/system"
 )
 
@@ -16,6 +17,11 @@ var Builtins = map[string]*object.Builtin{}
 func init() {
 	// Register system built-in functions
 	for name, fn := range system.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Register database built-in functions
+	for name, fn := range database.Builtins {
 		Builtins[name] = fn
 	}
 }

@@ -21,16 +21,16 @@ const features = [
   },
   {
     icon: Cpu,
-    title: "3-4x Faster than Python",
+    title: "Fast & Efficient",
     description:
-      "Lightning-fast execution with a Go-powered tree-walking interpreter. 6x faster startup, efficient memory usage.",
+      "Go-powered tree-walking interpreter for quick execution. Lightweight runtime with efficient memory usage.",
     gradient: "from-purple-500 to-pink-500",
   },
   {
     icon: Terminal,
-    title: "80+ Built-in Functions",
+    title: "130+ Built-in Functions",
     description:
-      "Comprehensive standard library: math, strings, arrays, HTTP, JSON, file I/O, and complete OS-level system access.",
+      "Comprehensive library: math, strings, arrays, HTTP servers, JSON, file I/O, database connectors (PostgreSQL, MySQL, MongoDB, Redis), and OS-level access.",
     gradient: "from-yellow-500 to-orange-500",
   },
   {
@@ -88,7 +88,7 @@ export default function FeaturesSection() {
             </span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            A complete programming language with modern features, designed from the ground up for Bengali speakers.
+            An educational programming language with production-grade features—perfect for learning, but powerful enough for real projects.
           </p>
         </div>
 

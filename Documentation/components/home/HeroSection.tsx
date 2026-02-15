@@ -71,8 +71,9 @@ export default function HeroSection({ version }: HeroSectionProps) {
           <Typewriter
             options={{
               strings: [
-                "Write code in your mother tongue.",
-                "Learn programming concepts naturally.",
+                "An educational language for learning.",
+                "Inspired by BhaiLang & Vedic, but more powerful.",
+                "Build backends. Connect databases. Write modules.",
                 "Built for 300 million Bengali speakers.",
                 "Made in West Bengal, India 🇮🇳",
               ],
