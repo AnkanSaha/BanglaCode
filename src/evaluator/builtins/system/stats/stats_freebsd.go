@@ -1,6 +1,6 @@
 //go:build freebsd
 
-package system
+package stats
 
 import (
 	"syscall"

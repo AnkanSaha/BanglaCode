@@ -46,6 +46,17 @@ func init() {
 		},
 	}
 
+	// To string alias - jongate (জনগতে - join/concatenate helper for numbers)
+	// Alias for lipi - commonly used for number to string conversion in concatenation
+	Builtins["jongate"] = &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. got=%d, want=1", len(args))
+			}
+			return &object.String{Value: args[0].Inspect()}
+		},
+	}
+
 	// To number - sonkha (সংখ্যা - number)
 	Builtins["sonkha"] = &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {

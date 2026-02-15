@@ -85,8 +85,8 @@ proyash kaj runInteractiveClient() {
     }
 }
 
-// Run the basic client
-runWebSocketClient();
+// Run the basic client (must await the async function!)
+opekha runWebSocketClient();
 
 // Uncomment to test interactive client
-// runInteractiveClient();
+// opekha runInteractiveClient();

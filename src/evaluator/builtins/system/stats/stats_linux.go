@@ -1,12 +1,12 @@
-//go:build darwin
+//go:build linux
 
-package system
+package stats
 
 import (
 	"syscall"
 )
 
-// getDiskStats returns disk statistics for a given path (Darwin/macOS-specific)
+// getDiskStats returns disk statistics for a given path (Linux-specific)
 func getDiskStats(path string) (total, free, avail uint64, err error) {
 	var stat syscall.Statfs_t
 	if err := syscall.Statfs(path, &stat); err != nil {

@@ -19,10 +19,10 @@ proyash kaj runTCPClient() {
 
         // Send multiple messages
         ghuriye (dhoro i = 1; i <= 5; i = i + 1) {
-            dhoro message = "Hello from BanglaCode! Message #" + jongate(i);
+            // dhoro message = "Hello from BanglaCode! Message #" + jongate(i);
 
-            dekho("[Sending #", i, "]:", message);
-            tcp_lekho(conn, message);
+            dekho("[Sending #", i, "]:", "Hello from BanglaCode!");
+            tcp_lekho(conn, "Hello from BanglaCode!");
 
             // Read response (async)
             dekho("  Waiting for response...");
@@ -46,5 +46,5 @@ proyash kaj runTCPClient() {
     }
 }
 
-// Run the client
-runTCPClient();
+// Run the client (must await the async function!)
+opekha runTCPClient();

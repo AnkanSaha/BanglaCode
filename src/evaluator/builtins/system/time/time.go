@@ -1,19 +1,32 @@
-package system
+package time
 
 import (
 	"BanglaCode/src/object"
 	"fmt"
 	"os"
 	"runtime"
-	"time"
+	stdtime "time"
 )
+
+// Builtins is the map that holds all time built-in functions
+var Builtins = make(map[string]*object.Builtin, 10)
+
+// registerBuiltin is a helper function to register a built-in function
+func registerBuiltin(name string, fn object.BuiltinFunction) {
+	Builtins[name] = &object.Builtin{Fn: fn}
+}
+
+// newError creates an error object with a formatted message
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
 
 func init() {
 	// ==================== Time Operations ====================
 
 	// shomoy_ekhon (সময় এখন) - Get current Unix timestamp
 	registerBuiltin("shomoy_ekhon", func(args ...object.Object) object.Object {
-		return &object.Number{Value: float64(time.Now().Unix())}
+		return &object.Number{Value: float64(stdtime.Now().Unix())}
 	})
 
 	// shomoy_format (সময় ফরম্যাট) - Format timestamp to string
@@ -27,10 +40,10 @@ func init() {
 		}
 
 		timestamp := int64(args[0].(*object.Number).Value)
-		t := time.Unix(timestamp, 0)
+		t := stdtime.Unix(timestamp, 0)
 
 		// Default format: RFC3339
-		format := time.RFC3339
+		format := stdtime.RFC3339
 		if len(args) > 1 {
 			if args[1].Type() != object.STRING_OBJ {
 				return newError("format must be STRING, got %s", args[1].Type())
@@ -54,7 +67,7 @@ func init() {
 		timeStr := args[0].(*object.String).Value
 
 		// Default format: RFC3339
-		format := time.RFC3339
+		format := stdtime.RFC3339
 		if len(args) > 1 {
 			if args[1].Type() != object.STRING_OBJ {
 				return newError("format must be STRING, got %s", args[1].Type())
@@ -62,7 +75,7 @@ func init() {
 			format = args[1].(*object.String).Value
 		}
 
-		t, err := time.Parse(format, timeStr)
+		t, err := stdtime.Parse(format, timeStr)
 		if err != nil {
 			return newError("failed to parse time: %s", err.Error())
 		}
@@ -111,7 +124,7 @@ func init() {
 			if err == nil {
 				var uptimeFloat float64
 				_, _ = fmt.Sscanf(string(data), "%f", &uptimeFloat)
-				bootTime = time.Now().Unix() - int64(uptimeFloat)
+				bootTime = stdtime.Now().Unix() - int64(uptimeFloat)
 			}
 		} else {
 			// Other platforms
@@ -127,7 +140,7 @@ func init() {
 
 	// timezone (টাইমজোন) - Get current timezone
 	registerBuiltin("timezone", func(args ...object.Object) object.Object {
-		zone, _ := time.Now().Zone()
+		zone, _ := stdtime.Now().Zone()
 		return &object.String{Value: zone}
 	})
 }

@@ -1,11 +1,25 @@
-package system
+package network
 
 import (
 	"BanglaCode/src/object"
+	"fmt"
 	"net"
 	"sync"
 	"time"
 )
+
+// Builtins is the map that holds all network built-in functions
+var Builtins = make(map[string]*object.Builtin, 10)
+
+// registerBuiltin is a helper function to register a built-in function
+func registerBuiltin(name string, fn object.BuiltinFunction) {
+	Builtins[name] = &object.Builtin{Fn: fn}
+}
+
+// newError creates an error object with a formatted message
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
 
 var (
 	interfaceCache      []net.Interface

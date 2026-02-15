@@ -1,27 +1,24 @@
-//go:build openbsd
+//go:build darwin
 
-package system
+package stats
 
 import (
 	"syscall"
 )
 
-// getDiskStats returns disk statistics for a given path (OpenBSD-specific)
+// getDiskStats returns disk statistics for a given path (Darwin/macOS-specific)
 func getDiskStats(path string) (total, free, avail uint64, err error) {
 	var stat syscall.Statfs_t
 	if err := syscall.Statfs(path, &stat); err != nil {
 		return 0, 0, 0, err
 	}
 
-	// OpenBSD Statfs_t fields
-	blockSize := uint64(stat.F_bsize)
-
 	// Total size = block size * total blocks
-	total = stat.F_blocks * blockSize
+	total = stat.Blocks * uint64(stat.Bsize)
 	// Free space = block size * free blocks
-	free = stat.F_bfree * blockSize
+	free = stat.Bfree * uint64(stat.Bsize)
 	// Available space = block size * available blocks
-	avail = uint64(stat.F_bavail) * blockSize
+	avail = stat.Bavail * uint64(stat.Bsize)
 
 	return total, free, avail, nil
 }

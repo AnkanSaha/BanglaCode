@@ -36,8 +36,3 @@ tcp_server_chalu(8080, handleConnection);
 dekho("TCP Server is running!");
 dekho("Waiting for connections... (Press Ctrl+C to stop)");
 dekho("");
-
-// Keep server running
-jotokkhon (sotti) {
-    ghumaao(1000); // Sleep 1 second
-}

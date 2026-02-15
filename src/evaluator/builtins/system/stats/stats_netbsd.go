@@ -1,6 +1,6 @@
 //go:build netbsd
 
-package system
+package stats
 
 import (
 	"errors"

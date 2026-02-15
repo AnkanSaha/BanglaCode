@@ -1,12 +1,26 @@
-package system
+package info
 
 import (
 	"BanglaCode/src/object"
+	"fmt"
 	"os"
 	"os/user"
 	"runtime"
 	"sync"
 )
+
+// Builtins is the map that holds all info built-in functions
+var Builtins = make(map[string]*object.Builtin, 10)
+
+// registerBuiltin is a helper function to register a built-in function
+func registerBuiltin(name string, fn object.BuiltinFunction) {
+	Builtins[name] = &object.Builtin{Fn: fn}
+}
+
+// newError creates an error object with a formatted message
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
 
 // Performance optimization: Cache system info that doesn't change
 var (

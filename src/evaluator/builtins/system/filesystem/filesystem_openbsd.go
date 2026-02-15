@@ -1,6 +1,6 @@
 //go:build openbsd
 
-package system
+package filesystem
 
 import (
 	"os"

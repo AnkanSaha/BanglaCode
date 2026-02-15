@@ -1,22 +1,62 @@
 package system
 
 import (
+	"BanglaCode/src/evaluator/builtins/system/env"
+	"BanglaCode/src/evaluator/builtins/system/filesystem"
+	"BanglaCode/src/evaluator/builtins/system/info"
+	"BanglaCode/src/evaluator/builtins/system/network"
+	"BanglaCode/src/evaluator/builtins/system/path"
+	"BanglaCode/src/evaluator/builtins/system/process"
+	"BanglaCode/src/evaluator/builtins/system/stats"
+	"BanglaCode/src/evaluator/builtins/system/time"
 	"BanglaCode/src/object"
-	"fmt"
 )
 
 // Builtins is the map that holds all system built-in functions
-// Each file in this package registers its functions in this map via init()
+// Functions from all subdirectory packages are merged into this map
 var Builtins = make(map[string]*object.Builtin, 60)
 
-// registerBuiltin is a helper function to register a built-in function
-// Used by all files in this package to add their functions to the Builtins map
-func registerBuiltin(name string, fn object.BuiltinFunction) {
-	Builtins[name] = &object.Builtin{Fn: fn}
-}
+func init() {
+	// Merge all subdirectory builtins into the main Builtins map
+	// This allows all system functions to be accessed through system.Builtins
 
-// newError creates an error object with a formatted message
-// Helper function used across all system built-in implementations
-func newError(format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf(format, a...)}
+	// Filesystem operations (file I/O, directories, temp files, symlinks)
+	for name, fn := range filesystem.Builtins {
+		Builtins[name] = fn
+	}
+
+	// System statistics (memory, CPU, disk usage)
+	for name, fn := range stats.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Path operations (join, split, absolute paths, etc.)
+	for name, fn := range path.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Process execution (run commands, get PID, etc.)
+	for name, fn := range process.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Network information (interfaces, IP addresses, etc.)
+	for name, fn := range network.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Time operations (current time, formatting, parsing, uptime)
+	for name, fn := range time.Builtins {
+		Builtins[name] = fn
+	}
+
+	// Environment variables (get, set, list)
+	for name, fn := range env.Builtins {
+		Builtins[name] = fn
+	}
+
+	// System information (hostname, username, OS, architecture)
+	for name, fn := range info.Builtins {
+		Builtins[name] = fn
+	}
 }

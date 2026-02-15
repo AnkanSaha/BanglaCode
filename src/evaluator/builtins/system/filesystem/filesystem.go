@@ -1,4 +1,4 @@
-package system
+package filesystem
 
 import (
 	"BanglaCode/src/object"
@@ -7,6 +7,19 @@ import (
 	"os/user"
 	"strconv"
 )
+
+// Builtins is the map that holds all filesystem built-in functions
+var Builtins = make(map[string]*object.Builtin, 20)
+
+// registerBuiltin is a helper function to register a built-in function
+func registerBuiltin(name string, fn object.BuiltinFunction) {
+	Builtins[name] = &object.Builtin{Fn: fn}
+}
+
+// newError creates an error object with a formatted message
+func newError(format string, a ...interface{}) *object.Error {
+	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
 
 func init() {
 	// ==================== File System Operations ====================
