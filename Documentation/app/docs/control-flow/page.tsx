@@ -1,3 +1,4 @@
+import CodeBlock from "@/components/CodeBlock";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -21,6 +22,72 @@ export default function ControlFlow() {
           <span className="text-yellow-200">dekho</span>(<span className="text-green-400">"Minor"</span>);
           &#125;</code></pre>
       </div>
+
+      <h2>Switch Statement (`bikolpo`)</h2>
+      <p>
+        Use <code>bikolpo</code> (switch) with <code>khetre</code> (case) clauses and <code>manchito</code> (default):
+      </p>
+
+      <CodeBlock
+        code={`// Basic switch statement
+bikolpo (day) {
+    khetre 1 {
+        dekho("Monday");
+        thamo;  // Break to avoid fall-through
+    }
+    khetre 2 {
+        dekho("Tuesday");
+        thamo;
+    }
+    khetre 3 {
+        dekho("Wednesday");
+        thamo;
+    }
+    manchito {
+        dekho("Other day");
+    }
+}
+
+// Switch with expressions
+dhoro score = 85;
+bikolpo (score / 10) {
+    khetre 9 {
+        dekho("Grade: A");
+        thamo;
+    }
+    khetre 8 {
+        dekho("Grade: B");
+        thamo;
+    }
+    khetre 7 {
+        dekho("Grade: C");
+        thamo;
+    }
+    manchito {
+        dekho("Grade: F");
+    }
+}
+
+// Switch with string values
+dhoro action = "save";
+bikolpo (action) {
+    khetre "save" {
+        dekho("Saving file...");
+        thamo;
+    }
+    khetre "delete" {
+        dekho("Deleting file...");
+        thamo;
+    }
+    khetre "edit" {
+        dekho("Editing file...");
+        thamo;
+    }
+    manchito {
+        dekho("Unknown action");
+    }
+}`}
+      />
 
       <h2>Loops</h2>
 

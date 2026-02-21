@@ -65,6 +65,27 @@
               "match": "\\\\."
             }
           ]
+        },
+        {
+          "name": "string.template.js",
+          "begin": "`",
+          "end": "`",
+          "patterns": [
+            {
+              "name": "meta.embedded.expression.js",
+              "begin": "\\$\\{",
+              "end": "\\}",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            },
+            {
+              "name": "constant.character.escape.js",
+              "match": "\\\\."
+            }
+          ]
         }
       ]
     },
@@ -141,6 +162,10 @@
         {
           "name": "keyword.operator.logical.js",
           "match": "\\b(ebong|ba|na)\\b"
+        },
+        {
+          "name": "keyword.control.switch.js",
+          "match": "\\b(bikolpo|khetre|manchito)\\b"
         }
       ]
     },
@@ -157,6 +182,10 @@
         {
           "name": "keyword.control.trycatch.js",
           "match": "\\b(chesta|dhoro_bhul|shesh|felo)\\b"
+        },
+        {
+          "name": "keyword.control.switch.js",
+          "match": "\\b(bikolpo|khetre|manchito)\\b"
         }
       ]
     },
@@ -189,6 +218,14 @@
         {
           "name": "support.function.js",
           "match": "\\b(dhoron|lipi|sonkha|dorghyo)\\b"
+        },
+        {
+          "name": "support.function.array.js",
+          "match": "\\b(manchitro|chhanno|sonkuchito|proti)\\b"
+        },
+        {
+          "name": "support.function.object.js",
+          "match": "\\b(maan|jora|mishra)\\b"
         },
         {
           "name": "support.function.js",

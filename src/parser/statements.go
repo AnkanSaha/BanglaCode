@@ -36,6 +36,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseTryCatchStatement()
 	case lexer.FELO:
 		return p.parseThrowStatement()
+	case lexer.BIKOLPO:
+		return p.parseSwitchStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -410,4 +412,73 @@ func (p *Parser) parseThrowStatement() *ast.ThrowStatement {
 	}
 
 	return stmt
+}
+
+// parseSwitchStatement parses "bikolpo (expression) { khetre value: ... manchito: ... }"
+func (p *Parser) parseSwitchStatement() *ast.SwitchStatement {
+	stmt := &ast.SwitchStatement{Token: p.curToken}
+
+	// Expect opening parenthesis
+	if !p.expectPeek(lexer.LPAREN) {
+		return nil
+	}
+
+	// Parse the expression to match against
+	p.nextToken()
+	stmt.Expr = p.parseExpression(LOWEST)
+
+	// Expect closing parenthesis
+	if !p.expectPeek(lexer.RPAREN) {
+		return nil
+	}
+
+	// Expect opening brace
+	if !p.expectPeek(lexer.LBRACE) {
+		return nil
+	}
+
+	// Parse cases and default
+	stmt.Cases = []*ast.CaseClause{}
+
+	p.nextToken()
+	for !p.curTokenIs(lexer.RBRACE) && !p.curTokenIs(lexer.EOF) {
+		if p.curTokenIs(lexer.KHETRE) {
+			caseClause := p.parseCaseClause()
+			if caseClause != nil {
+				stmt.Cases = append(stmt.Cases, caseClause)
+			}
+			p.nextToken()
+		} else if p.curTokenIs(lexer.MANCHITO) {
+			// Parse default case (no colon in simplified syntax)
+			// Expect opening brace
+			if !p.expectPeek(lexer.LBRACE) {
+				return nil
+			}
+
+			stmt.Default = p.parseBlockStatement()
+			p.nextToken()
+		} else {
+			return nil
+		}
+	}
+
+	return stmt
+}
+
+// parseCaseClause parses a single "khetre value { ... }" clause
+func (p *Parser) parseCaseClause() *ast.CaseClause {
+	clause := &ast.CaseClause{Token: p.curToken}
+
+	// Move to the value expression
+	p.nextToken()
+	clause.Value = p.parseExpression(LOWEST)
+
+	// Expect opening brace (no colon in simplified syntax)
+	if !p.expectPeek(lexer.LBRACE) {
+		return nil
+	}
+
+	clause.Body = p.parseBlockStatement()
+
+	return clause
 }

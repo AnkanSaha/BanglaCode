@@ -64,6 +64,11 @@ func (p *Parser) parseStringLiteral() ast.Expression {
 	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
+// parseTemplateLiteral parses a template literal with ${expression} interpolation
+func (p *Parser) parseTemplateLiteral() ast.Expression {
+	return &ast.TemplateLiteral{Token: p.curToken, Value: p.curToken.Literal}
+}
+
 // parseBooleanLiteral parses sotti/mittha
 func (p *Parser) parseBooleanLiteral() ast.Expression {
 	return &ast.BooleanLiteral{Token: p.curToken, Value: p.curTokenIs(lexer.SOTTI)}

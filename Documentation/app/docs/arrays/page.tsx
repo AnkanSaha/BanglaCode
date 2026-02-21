@@ -178,6 +178,171 @@ dekho(joro(words, "-"));    // "Hello-World-BanglaCode"
 dekho(joro(words, ""));     // "HelloWorldBanglaCode"`}
       />
 
+      <h2>Array Higher-Order Methods</h2>
+
+      <h3>manchitro - Map</h3>
+
+      <p>
+        Transforms each element in an array using a callback function. Returns a new array with the transformed elements.
+      </p>
+
+      <CodeBlock
+        code={`// Double each number
+dhoro numbers = [1, 2, 3, 4, 5];
+dhoro doubled = manchitro(numbers, kaj(x) {
+    ferao x * 2;
+});
+dekho(doubled);  // [2, 4, 6, 8, 10]
+
+// Extract property from objects
+dhoro people = [
+    {"naam": "Rahim", "age": 25},
+    {"naam": "Karim", "age": 30}
+];
+dhoro names = manchitro(people, kaj(person) {
+    ferao person["naam"];
+});
+dekho(names);  // ["Rahim", "Karim"]
+
+// Using index parameter
+dhoro squared = manchitro(numbers, kaj(x, i) {
+    ferao x * x;
+});
+dekho(squared);  // [1, 4, 9, 16, 25]`}
+      />
+
+      <h3>chhanno - Filter</h3>
+
+      <p>
+        Filters array elements based on a condition. Returns a new array containing only elements where the callback returns true.
+      </p>
+
+      <CodeBlock
+        code={`// Filter even numbers
+dhoro numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+dhoro evens = chhanno(numbers, kaj(x) {
+    ferao x % 2 == 0;
+});
+dekho(evens);  // [2, 4, 6, 8, 10]
+
+// Filter by condition
+dhoro scores = [45, 78, 92, 35, 88, 55];
+dhoro passing = chhanno(scores, kaj(score) {
+    ferao score >= 50;
+});
+dekho(passing);  // [78, 92, 88, 55]
+
+// Filter with index
+dhoro colors = ["Red", "Green", "Blue", "Yellow"];
+dhoro result = chhanno(colors, kaj(color, index) {
+    ferao index % 2 == 0;  // Keep items at even indices
+});
+dekho(result);  // ["Red", "Blue"]`}
+      />
+
+      <h3>sonkuchito - Reduce</h3>
+
+      <p>
+        Reduces array to a single value by applying a function to accumulate the result. Takes an optional initial value.
+      </p>
+
+      <CodeBlock
+        code={`// Sum all numbers
+dhoro numbers = [1, 2, 3, 4, 5];
+dhoro sum = sonkuchito(numbers, kaj(acc, x) {
+    ferao acc + x;
+}, 0);
+dekho(sum);  // 15
+
+// Calculate product
+dhoro product = sonkuchito(numbers, kaj(acc, x) {
+    ferao acc * x;
+}, 1);
+dekho(product);  // 120
+
+// Build a string
+dhoro words = ["Hello", "World", "BanglaCode"];
+dhoro sentence = sonkuchito(words, kaj(acc, word) {
+    jodi (acc == "") {
+        ferao word;
+    }
+    ferao acc + " " + word;
+}, "");
+dekho(sentence);  // "Hello World BanglaCode"
+
+// Count occurrences
+dhoro arr = [1, 2, 2, 3, 3, 3, 4];
+dhoro counts = sonkuchito(arr, kaj(acc, x) {
+    acc[lipi(x)] = (acc[lipi(x)] || 0) + 1;
+    ferao acc;
+}, {});
+dekho(counts);  // {"1": 1, "2": 2, "3": 3, "4": 1}`}
+      />
+
+      <h3>proti - ForEach</h3>
+
+      <p>
+        Executes a callback function for each element. Returns null. Useful for side effects like logging.
+      </p>
+
+      <CodeBlock
+        code={`// Print each element
+dhoro fruits = ["Apple", "Banana", "Mango"];
+proti(fruits, kaj(fruit) {
+    dekho("- " + fruit);
+});
+// Output:
+// - Apple
+// - Banana
+// - Mango
+
+// Enumerate with index
+dhoro items = ["First", "Second", "Third"];
+proti(items, kaj(item, index) {
+    dekho((index + 1) + ". " + item);
+});
+// Output:
+// 1. First
+// 2. Second
+// 3. Third
+
+// Side effects (mutations)
+dhoro counter = 0;
+proti([10, 20, 30], kaj(x) {
+    counter = counter + 1;
+});
+dekho("Processed:", counter);  // Processed: 3`}
+      />
+
+      <h2>Chaining Higher-Order Methods</h2>
+
+      <CodeBlock
+        code={`// Chain multiple operations
+dhoro numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Filter > Map > Reduce: Get sum of squares of even numbers
+dhoro evens = chhanno(numbers, kaj(x) { ferao x % 2 == 0; });
+dhoro squares = manchitro(evens, kaj(x) { ferao x * x; });
+dhoro sumOfSquares = sonkuchito(squares, kaj(acc, x) { ferao acc + x; }, 0);
+dekho(sumOfSquares);  // 220 (4 + 16 + 36 + 64 + 100)
+
+// Practical: Process user data
+dhoro users = [
+    {"naam": "Rahim", "age": 25, "active": sotti},
+    {"naam": "Karim", "age": 17, "active": mittha},
+    {"naam": "Jamil", "age": 30, "active": sotti}
+];
+
+// Get names of active adults
+dhoro activeAdults = chhanno(users, kaj(user) {
+    ferao user["active"] ebong user["age"] >= 18;
+});
+dhoro activeNames = manchitro(activeAdults, kaj(user) {
+    ferao user["naam"];
+});
+dekho(activeNames);  // ["Rahim", "Jamil"]`}
+      />
+
       <h2>Iterating Over Arrays</h2>
 
       <CodeBlock

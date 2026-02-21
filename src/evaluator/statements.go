@@ -189,3 +189,39 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 
 	return result
 }
+
+// evalSwitchStatement evaluates a switch statement
+func evalSwitchStatement(node *ast.SwitchStatement, env *object.Environment) object.Object {
+	// Evaluate the switch expression once
+	switchValue := Eval(node.Expr, env)
+	if isError(switchValue) {
+		return switchValue
+	}
+
+	// Try each case
+	for _, caseClause := range node.Cases {
+		caseValue := Eval(caseClause.Value, env)
+		if isError(caseValue) {
+			return caseValue
+		}
+
+		// Check if values are equal using objectsEqual from helpers
+		if objectsEqual(switchValue, caseValue) {
+			result := Eval(caseClause.Body, env)
+
+			// If result is break, exit switch (return NULL)
+			if result == object.BREAK {
+				return object.NULL
+			}
+
+			return result
+		}
+	}
+
+	// Execute default case if no match
+	if node.Default != nil {
+		return Eval(node.Default, env)
+	}
+
+	return object.NULL
+}

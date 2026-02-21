@@ -277,3 +277,47 @@ func (ts *ThrowStatement) String() string {
 	out.WriteString(";")
 	return out.String()
 }
+
+// SwitchStatement represents: bikolpo (expression) { khetre case: ... manchito: ... }
+type SwitchStatement struct {
+	Token   lexer.Token     // the BIKOLPO token
+	Expr    Expression      // the expression to match against
+	Cases   []*CaseClause   // list of case clauses
+	Default *BlockStatement // default case (optional)
+}
+
+func (ss *SwitchStatement) statementNode()       {}
+func (ss *SwitchStatement) TokenLiteral() string { return ss.Token.Literal }
+func (ss *SwitchStatement) String() string {
+	var out bytes.Buffer
+	out.WriteString("bikolpo (")
+	out.WriteString(ss.Expr.String())
+	out.WriteString(") { ")
+	for _, c := range ss.Cases {
+		out.WriteString(c.String())
+	}
+	if ss.Default != nil {
+		out.WriteString("manchito: ")
+		out.WriteString(ss.Default.String())
+	}
+	out.WriteString(" }")
+	return out.String()
+}
+
+// CaseClause represents a single case in a switch statement
+type CaseClause struct {
+	Token  lexer.Token    // the KHETRE token
+	Value  Expression     // the value to match
+	Body   *BlockStatement // code to execute
+}
+
+func (cc *CaseClause) statementNode()       {}
+func (cc *CaseClause) TokenLiteral() string { return cc.Token.Literal }
+func (cc *CaseClause) String() string {
+	var out bytes.Buffer
+	out.WriteString("khetre ")
+	out.WriteString(cc.Value.String())
+	out.WriteString(": ")
+	out.WriteString(cc.Body.String())
+	return out.String()
+}

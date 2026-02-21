@@ -487,29 +487,3 @@ func Keys(conn *object.DBConnection, pattern string) ([]string, error) {
 	return client.Keys(ctx, pattern).Result()
 }
 
-// Helper functions
-
-func extractString(config *object.Map, key string, defaultValue string) string {
-	if val, ok := config.Pairs[key]; ok {
-		if str, ok := val.(*object.String); ok {
-			return str.Value
-		}
-	}
-	return defaultValue
-}
-
-func extractNumber(config *object.Map, key string, defaultValue float64) float64 {
-	if val, ok := config.Pairs[key]; ok {
-		if num, ok := val.(*object.Number); ok {
-			return num.Value
-		}
-	}
-	return defaultValue
-}
-
-var connIDCounter int64
-
-func generateConnID() string {
-	connIDCounter++
-	return fmt.Sprintf("redis-%d", connIDCounter)
-}

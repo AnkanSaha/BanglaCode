@@ -1,4 +1,4 @@
-package redis
+package mongodb
 
 import (
 	"BanglaCode/src/object"
@@ -27,8 +27,8 @@ func extractNumber(config *object.Map, key string, defaultValue float64) float64
 
 var connIDCounter int64
 
-// generateConnID generates a unique connection ID for tracking Redis clients
+// generateConnID generates a unique connection ID for tracking MongoDB clients
 func generateConnID() string {
 	connIDCounter++
-	return fmt.Sprintf("redis-%d", connIDCounter)
+	return fmt.Sprintf("mongodb-%d", connIDCounter)
 }

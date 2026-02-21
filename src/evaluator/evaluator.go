@@ -77,6 +77,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.ContinueStatement:
 		return object.CONTINUE
 
+	case *ast.SwitchStatement:
+		return evalSwitchStatement(node, env)
+
 	// ==================== Classes & Modules ====================
 
 	case *ast.ClassDeclaration:
@@ -103,6 +106,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+
+	case *ast.TemplateLiteral:
+		return evalTemplateLiteral(node, env)
 
 	case *ast.BooleanLiteral:
 		return object.NativeBoolToBooleanObject(node.Value)

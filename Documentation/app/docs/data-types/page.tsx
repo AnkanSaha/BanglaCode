@@ -186,6 +186,56 @@ dhoro csv = "a,b,c,d";
 dekho(bhag(csv, ","));       // ["a", "b", "c", "d"]`}
       />
 
+      <h3>Template Literals</h3>
+
+      <p>
+        Template literals use backticks (`) and allow embedded expressions with ${`{...}`} syntax:
+      </p>
+
+      <CodeBlock
+        code={`// Basic interpolation
+dhoro name = "Rahim";
+dhoro greeting = \`Hello \${name}!\`;
+dekho(greeting);  // "Hello Rahim!"
+
+// Multiple expressions
+dhoro age = 25;
+dhoro city = "Dhaka";
+dhoro intro = \`My name is \${name}, I'm \${age} years old, from \${city}\`;
+dekho(intro);  // "My name is Rahim, I'm 25 years old, from Dhaka"
+
+// Arithmetic in expressions
+dhoro num1 = 10;
+dhoro num2 = 20;
+dekho(\`Sum: \${num1 + num2}\`);        // "Sum: 30"
+dekho(\`Product: \${num1 * num2}\`);    // "Product: 200"
+
+// Function calls in expressions
+kaj square(x) {
+    ferao x * x;
+}
+dekho(\`5 squared is \${square(5)}\`);  // "5 squared is 25"
+
+// Array and object access
+dhoro colors = ["Red", "Green", "Blue"];
+dekho(\`First color: \${colors[0]}\`);  // "First color: Red"
+
+dhoro person = {"naam": "Rahim", "age": 25};
+dekho(\`Person: \${person["naam"]}\`);  // "Person: Rahim"
+
+// Conditional expressions
+dhoro x = 10;
+dekho(\`Value is \${jodi (x > 5) { ferao "big"; } nahole { ferao "small"; }}\`);
+
+// Chaining template literals
+dhoro greeting1 = \`Hello\`;
+dhoro greeting2 = \`\${greeting1} \${name}!\`;
+dekho(greeting2);  // "Hello Rahim!"
+
+// Multiple interpolations
+dekho(\`\${1} + \${2} = \${1 + 2}\`);  // "1 + 2 = 3"`}
+      />
+
       <h2>Booleans</h2>
 
       <p>

@@ -400,6 +400,167 @@ dekho(query);
 // SELECT id, name, email FROM users WHERE active = 1 ORDER BY name ASC LIMIT 10`}
       />
 
+      <h2>Object Utility Methods</h2>
+
+      <p>
+        BanglaCode provides built-in utility methods for working with objects (maps):
+      </p>
+
+      <h3>maan - Get Object Values</h3>
+
+      <p>
+        Returns an array containing all values from an object:
+      </p>
+
+      <CodeBlock
+        code={`dhoro person = {
+    "naam": "Rahim",
+    "age": 25,
+    "city": "Dhaka"
+};
+
+dhoro values = maan(person);
+dekho(values);  // ["Rahim", 25, "Dhaka"]
+
+// Use values in higher-order functions
+dhoro doubled = manchitro(values, kaj(val) {
+    jodi (dhoron(val) == "NUMBER") {
+        ferao val * 2;
+    }
+    ferao val;
+});
+dekho(doubled);  // ["Rahim", 50, "Dhaka"]`}
+      />
+
+      <h3>jora - Get Object Entries</h3>
+
+      <p>
+        Returns an array of [key, value] pairs from an object:
+      </p>
+
+      <CodeBlock
+        code={`dhoro settings = {
+    "theme": "dark",
+    "notifications": sotti,
+    "fontSize": 14
+};
+
+dhoro entries = jora(settings);
+dekho(entries);
+// [["theme", "dark"], ["notifications", sotti], ["fontSize", 14]]
+
+// Iterate over entries
+proti(entries, kaj(entry) {
+    dekho(entry[0], ":", entry[1]);
+});
+// Output:
+// theme : dark
+// notifications : sotti
+// fontSize : 14
+
+// Filter entries and rebuild object
+dhoro filtered = chhanno(entries, kaj(entry) {
+    ferao entry[0] != "fontSize";  // Exclude fontSize
+});
+dekho(filtered);
+// [["theme", "dark"], ["notifications", sotti]]`}
+      />
+
+      <h3>mishra - Merge Objects</h3>
+
+      <p>
+        Merges one or more source objects into a target object. Modifies the target in-place.
+      </p>
+
+      <CodeBlock
+        code={`// Basic merge
+dhoro obj1 = {"a": 1, "b": 2};
+dhoro obj2 = {"c": 3};
+dhoro obj3 = {"d": 4};
+
+mishra(obj1, obj2, obj3);
+dekho(obj1);  // {"a": 1, "b": 2, "c": 3, "d": 4}
+
+// Later values override earlier ones
+dhoro target = {"name": "Rahim", "age": 25};
+dhoro update = {"age": 26, "city": "Dhaka"};
+
+mishra(target, update);
+dekho(target);  // {"name": "Rahim", "age": 26, "city": "Dhaka"}
+
+// Practical: Merge default config with user config
+dhoro defaultConfig = {
+    "theme": "light",
+    "fontSize": 12,
+    "language": "bn"
+};
+
+dhoro userConfig = {
+    "theme": "dark",
+    "fontSize": 14
+};
+
+dhoro finalConfig = {"theme": "light", "fontSize": 12, "language": "bn"};
+mishra(finalConfig, userConfig);
+dekho(finalConfig);
+// {"theme": "dark", "fontSize": 14, "language": "bn"}`}
+      />
+
+      <h2>Common Object Patterns</h2>
+
+      <h3>Transform Object Values</h3>
+
+      <CodeBlock
+        code={`dhoro prices = {
+    "apple": 50,
+    "banana": 30,
+    "mango": 80
+};
+
+// Apply discount to all prices
+dhoro values = maan(prices);
+dhoro discounted = manchitro(values, kaj(price) {
+    ferao price * 0.9;  // 10% discount
+});
+
+dekho(discounted);  // [45, 27, 72]`}
+      />
+
+      <h3>Filter Object Properties</h3>
+
+      <CodeBlock
+        code={`dhoro user = {
+    "name": "Rahim",
+    "email": "rahim@example.com",
+    "password": "secret123",
+    "phone": "01712345678",
+    "_internal": "data"
+};
+
+// Remove private fields (starting with _) and sensitive fields
+dhoro filtered = chhanno(jora(user), kaj(entry) {
+    dhoro key = entry[0];
+    ferao key != "password" ebong key[0] != "_";
+});
+
+dekho(filtered);
+// [["name", "Rahim"], ["email", "rahim@example.com"], ["phone", "01712345678"]]`}
+      />
+
+      <h3>Build Object Dynamically</h3>
+
+      <CodeBlock
+        code={`// Reduce key-value pairs into object
+dhoro entries = [["id", 1], ["name", "Rahim"], ["active", sotti]];
+
+dhoro obj = sonkuchito(entries, kaj(acc, entry) {
+    acc[entry[0]] = entry[1];
+    ferao acc;
+}, {});
+
+dekho(obj);  // {"id": 1, "name": "Rahim", "active": sotti}`}
+      />
+
       <DocNavigation currentPath="/docs/methods" />
     </div>
   );

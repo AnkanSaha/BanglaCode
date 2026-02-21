@@ -18,9 +18,10 @@ const (
 	EOF     = "EOF"
 
 	// Identifiers and literals
-	IDENT  = "IDENT"  // variable names, function names
-	NUMBER = "NUMBER" // 123, 45.67
-	STRING = "STRING" // "hello", 'world'
+	IDENT    = "IDENT"     // variable names, function names
+	NUMBER   = "NUMBER"    // 123, 45.67
+	STRING   = "STRING"    // "hello", 'world'
+	TEMPLATE = "TEMPLATE"  // `hello ${name}`, template literals
 
 	// Operators
 	ASSIGN   = "="
@@ -91,6 +92,9 @@ const (
 	FELO       = "FELO"       // throw
 	PROYASH    = "PROYASH"    // async (প্রয়াস - attempt/endeavor)
 	OPEKHA     = "OPEKHA"     // await (অপেক্ষা - wait)
+	BIKOLPO    = "BIKOLPO"    // switch (বিকল্প - alternative)
+	KHETRE     = "KHETRE"     // case (ক্ষেত্রে - in case of)
+	MANCHITO   = "MANCHITO"   // default (মানচিত্র - default)
 )
 
 // keywords maps Banglish keywords to their token types
@@ -124,6 +128,9 @@ var keywords = map[string]TokenType{
 	"felo":       FELO,
 	"proyash":    PROYASH,
 	"opekha":     OPEKHA,
+	"bikolpo":    BIKOLPO,
+	"khetre":     KHETRE,
+	"manchito":   MANCHITO,
 }
 
 // LookupIdent checks if an identifier is a keyword

@@ -28,6 +28,16 @@ func (sl *StringLiteral) expressionNode()      {}
 func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
 func (sl *StringLiteral) String() string       { return sl.Token.Literal }
 
+// TemplateLiteral represents a template literal with interpolation: `hello ${name}`
+type TemplateLiteral struct {
+	Token lexer.Token // the backtick token
+	Value string      // the raw template string including ${...} parts
+}
+
+func (tl *TemplateLiteral) expressionNode()      {}
+func (tl *TemplateLiteral) TokenLiteral() string { return tl.Token.Literal }
+func (tl *TemplateLiteral) String() string       { return "`" + tl.Value + "`" }
+
 // BooleanLiteral represents sotti or mittha
 type BooleanLiteral struct {
 	Token lexer.Token

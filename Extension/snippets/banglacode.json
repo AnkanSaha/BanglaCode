@@ -243,6 +243,42 @@
     ],
     "description": "Iterate over array"
   },
+  "Array Map (manchitro)": {
+    "prefix": "manchitro",
+    "body": [
+      "dhoro ${1:result} = manchitro(${2:arr}, kaj(${3:item}) {",
+      "\tferao ${4:item}} * 2;",
+      "});"
+    ],
+    "description": "Transform array elements with map function (মানচিত্র)"
+  },
+  "Array Filter (chhanno)": {
+    "prefix": "chhanno",
+    "body": [
+      "dhoro ${1:result} = chhanno(${2:arr}, kaj(${3:item}) {",
+      "\tferao ${3:item} > ${4:0};",
+      "});"
+    ],
+    "description": "Filter array elements by condition (ছাঁনো)"
+  },
+  "Array Reduce (sonkuchito)": {
+    "prefix": "sonkuchito",
+    "body": [
+      "dhoro ${1:result} = sonkuchito(${2:arr}, kaj(${3:acc}, ${4:item}) {",
+      "\tferao ${3:acc} + ${4:item};",
+      "}, ${5:0});"
+    ],
+    "description": "Reduce array to single value (সঙ্কুচিত)"
+  },
+  "Array ForEach (proti)": {
+    "prefix": "proti",
+    "body": [
+      "proti(${1:arr}, kaj(${2:item}, ${3:index}) {",
+      "\tdekho(${3:index}, \":\", ${2:item});",
+      "});"
+    ],
+    "description": "Execute function for each array element (প্রতি)"
+  },
   "Map Iterate": {
     "prefix": "map-ghuri",
     "body": [
@@ -254,6 +290,69 @@
       "}"
     ],
     "description": "Iterate over map keys"
+  },
+  "Object Values (maan)": {
+    "prefix": "maan",
+    "body": [
+      "dhoro ${1:values} = maan(${2:obj});",
+      "dekho(${1:values});"
+    ],
+    "description": "Get all values from object (মান)"
+  },
+  "Object Entries (jora)": {
+    "prefix": "jora",
+    "body": [
+      "dhoro ${1:entries} = jora(${2:obj});",
+      "ghuriye (dhoro ${3:i} = 0; ${3:i} < dorghyo(${1:entries}); ${3:i} = ${3:i} + 1) {",
+      "\tdhoro ${4:pair} = ${1:entries}[${3:i}];",
+      "\tdekho(${4:pair}[0], \":\", ${4:pair}[1]);",
+      "}"
+    ],
+    "description": "Get key-value pairs from object (জোড়া)"
+  },
+  "Object Assign (mishra)": {
+    "prefix": "mishra",
+    "body": [
+      "dhoro ${1:target} = {\"a\": 1};",
+      "dhoro ${2:source} = {\"b\": 2};",
+      "mishra(${1:target}, ${2:source});",
+      "dekho(${1:target});"
+    ],
+    "description": "Merge objects (মিশ্র)"
+  },
+  "Switch Statement (bikolpo)": {
+    "prefix": "bikolpo",
+    "body": [
+      "bikolpo (${1:expression}) {",
+      "\tkhetre ${2:value1} {",
+      "\t\t${3:// code}",
+      "\t\tthamo;",
+      "\t}",
+      "\tkhetre ${4:value2} {",
+      "\t\t${5:// code}",
+      "\t\tthamo;",
+      "\t}",
+      "\tmanchito {",
+      "\t\t${6:// default code}",
+      "\t}",
+      "}"
+    ],
+    "description": "Switch/case statement (বিকল্প)"
+  },
+  "Template Literal": {
+    "prefix": "template",
+    "body": [
+      "`${1:text} ${2:variable}`"
+    ],
+    "description": "Template literal with interpolation"
+  },
+  "Template Literal with Expression": {
+    "prefix": "template-expr",
+    "body": [
+      "dhoro ${1:name} = \"${2:World}\";",
+      "dhoro ${3:message} = `Hello ${${1:name}}, ${4:5 + 3}`;"
+    ],
+    "description": "Template literal with variable and expression interpolation"
   },
   "HTTP Server": {
     "prefix": "server",

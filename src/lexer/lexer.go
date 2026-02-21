@@ -188,6 +188,13 @@ func (l *Lexer) NextToken() Token {
 		tok.Column = l.column
 		l.readChar() // advance past closing quote
 		return tok
+	case '`':
+		tok.Type = TEMPLATE
+		tok.Literal = l.readTemplate()
+		tok.Line = l.line
+		tok.Column = l.column
+		l.readChar() // advance past closing backtick
+		return tok
 	case 0:
 		tok = NewToken(EOF, "", l.line, l.column)
 	default:
@@ -252,6 +259,39 @@ func (l *Lexer) readString(quote byte) string {
 			l.readChar() // skip escaped character
 		}
 	}
+	str := l.input[position:l.position]
+	return str
+}
+
+// readTemplate reads a template literal with ${expression} interpolation
+func (l *Lexer) readTemplate() string {
+	position := l.position + 1 // skip opening backtick
+	braceDepth := 0
+
+	for {
+		l.readChar()
+		if l.ch == 0 {
+			break // end of input
+		}
+
+		// Track brace depth for ${...} expressions
+		if l.ch == '$' && l.peekChar() == '{' {
+			l.readChar() // consume '{'
+			braceDepth++
+		} else if l.ch == '{' && braceDepth > 0 {
+			braceDepth++
+		} else if l.ch == '}' && braceDepth > 0 {
+			braceDepth--
+		} else if l.ch == '`' && braceDepth == 0 {
+			break // found closing backtick (not in expression)
+		}
+
+		// Handle escape sequences
+		if l.ch == '\\' {
+			l.readChar() // skip escaped character
+		}
+	}
+
 	str := l.input[position:l.position]
 	return str
 }

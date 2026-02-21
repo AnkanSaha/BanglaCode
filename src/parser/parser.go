@@ -39,6 +39,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(lexer.IDENT, p.parseIdentifier)
 	p.registerPrefix(lexer.NUMBER, p.parseNumberLiteral)
 	p.registerPrefix(lexer.STRING, p.parseStringLiteral)
+	p.registerPrefix(lexer.TEMPLATE, p.parseTemplateLiteral)
 	p.registerPrefix(lexer.SOTTI, p.parseBooleanLiteral)
 	p.registerPrefix(lexer.MITTHA, p.parseBooleanLiteral)
 	p.registerPrefix(lexer.KHALI, p.parseNullLiteral)

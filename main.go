@@ -72,10 +72,10 @@ func printHelp() {
 
 func printVersion() {
 	fmt.Println("\033[1;36m╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║               BanglaCode v7.0.3                        ║")
+	fmt.Println("║               BanglaCode v7.1.0                        ║")
 	fmt.Println("║     A Programming Language in Bengali (Banglish)      ║")
 	fmt.Println("╠════════════════════════════════════════════════════════╣\033[0m")
-	fmt.Println("\033[1;36m║\033[0m  📦 \033[1mVersion:\033[0m      \033[1;32m7.0.3\033[0m                                 \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  📦 \033[1mVersion:\033[0m      \033[1;32m7.1.0\033[0m                                 \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  👨‍💻 \033[1mAuthor:\033[0m       \033[1;35mAnkan Saha\033[0m                            \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  🌍 \033[1mFrom:\033[0m         \033[1;37mWest Bengal, India\033[0m                    \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  🔗 \033[1mGitHub:\033[0m       \033[1;34mhttps://github.com/nexoral/BanglaCode\033[0m \033[1;36m║\033[0m")

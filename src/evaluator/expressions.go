@@ -2,8 +2,12 @@ package evaluator
 
 import (
 	"BanglaCode/src/ast"
+	"BanglaCode/src/lexer"
 	"BanglaCode/src/object"
+	"BanglaCode/src/parser"
 	"math"
+	"strconv"
+	"strings"
 )
 
 // evalUnaryExpression evaluates unary expressions (!, -, na)
@@ -411,4 +415,104 @@ func evalSpreadElement(node *ast.SpreadElement, env *object.Environment) object.
 	}
 
 	return evaluated
+}
+
+// evalTemplateLiteral evaluates template literals with ${expression} interpolation
+func evalTemplateLiteral(node *ast.TemplateLiteral, env *object.Environment) object.Object {
+	template := node.Value
+	var result strings.Builder
+
+	i := 0
+	for i < len(template) {
+		// Look for ${...}
+		if i < len(template)-1 && template[i] == '$' && template[i+1] == '{' {
+			// Find matching closing brace
+			braceDepth := 1
+			start := i + 2
+			j := start
+
+			for j < len(template) && braceDepth > 0 {
+				if template[j] == '{' {
+					braceDepth++
+				} else if template[j] == '}' {
+					braceDepth--
+				}
+				if braceDepth > 0 {
+					j++
+				}
+			}
+
+			if braceDepth != 0 {
+				return newError("unclosed template expression in template literal")
+			}
+
+			// Extract and evaluate the expression
+			exprCode := template[start:j]
+			exprValue := evalTemplateExpression(exprCode, env)
+			if isError(exprValue) {
+				return exprValue
+			}
+
+			// Convert result to string and append
+			strValue := objectToString(exprValue)
+			result.WriteString(strValue)
+
+			i = j + 1 // skip closing }
+		} else {
+			// Regular character
+			result.WriteByte(template[i])
+			i++
+		}
+	}
+
+	return &object.String{Value: result.String()}
+}
+
+// evalTemplateExpression evaluates a code expression extracted from template literal
+func evalTemplateExpression(code string, env *object.Environment) object.Object {
+	// Parse the expression as a mini program
+	l := lexer.New(code)
+	p := parser.New(l)
+	program := p.ParseProgram()
+
+	if len(p.Errors()) > 0 {
+		return newError("error parsing template expression: %v", p.Errors())
+	}
+
+	if len(program.Statements) == 0 {
+		return newError("invalid template expression")
+	}
+
+	// Extract expression from the first statement
+	exprStmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		return newError("template expression must be an expression, not a statement")
+	}
+
+	// Evaluate the expression
+	result := Eval(exprStmt.Expression, env)
+	return result
+}
+
+// objectToString converts an object to its string representation
+func objectToString(obj object.Object) string {
+	switch obj := obj.(type) {
+	case *object.String:
+		return obj.Value
+	case *object.Number:
+		// Format number: remove .0 for integers
+		if obj.Value == float64(int64(obj.Value)) {
+			return strconv.FormatInt(int64(obj.Value), 10)
+		}
+		return strconv.FormatFloat(obj.Value, 'f', -1, 64)
+	case *object.Boolean:
+		if obj == object.TRUE {
+			return "sotti"
+		}
+		return "mittha"
+	case *object.Null:
+		return ""
+	default:
+		return obj.Inspect()
+	}
 }
