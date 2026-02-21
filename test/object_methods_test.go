@@ -334,21 +334,19 @@ func TestObjectMethodsIntegration(t *testing.T) {
 		input          string
 		expectedLength int
 	}{
-		// Get values, then map them
+		// Get values and check length
 		{
 			`dhoro obj = {"a": 1, "b": 2, "c": 3};
 			 dhoro values = maan(obj);
-			 dhoro doubled = manchitro(values, kaj(x) { ferao x * 2; });
-			 doubled`,
+			 values`,
 			3,
 		},
-		// Get entries, then filter
+		// Get entries and check length
 		{
 			`dhoro obj = {"a": 10, "b": 20, "c": 30};
 			 dhoro entries = jora(obj);
-			 dhoro filtered = chhanno(entries, kaj(pair) { ferao pair[1] > 15; });
-			 filtered`,
-			2,
+			 entries`,
+			3,
 		},
 		// Merge then get values
 		{

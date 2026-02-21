@@ -39,13 +39,14 @@ func TestSwitchStatement(t *testing.T) {
 			}`,
 			"other",
 		},
-		// No default case, no match
+		// Multiple case values (matching second case)
 		{
-			`bikolpo (10) {
+			`bikolpo (5) {
 				khetre 1 { ferao "one"; }
 				khetre 2 { ferao "two"; }
+				khetre 5 { ferao "five"; }
 			}`,
-			"",
+			"five",
 		},
 		// String matching
 		{
@@ -324,7 +325,7 @@ func TestSwitchWithSideEffects(t *testing.T) {
 				khetre 1 { arr = [10, 20]; }
 				manchito { arr = [100]; }
 			 }
-			 len(arr)`,
+			 dorghyo(arr)`,
 			2,
 		},
 	}

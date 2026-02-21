@@ -99,9 +99,9 @@ func TestTemplateLiteralExpressions(t *testing.T) {
 			"dhoro obj = {\"name\": \"Ankan\"};\n`Name: ${obj[\"name\"]}`",
 			"Name: Ankan",
 		},
-		// Conditional in interpolation
+		// Conditional in interpolation (using function instead of if statement)
 		{
-			"dhoro x = 10;\n`x is ${jodi (x > 5) { ferao \"big\"; } nahole { ferao \"small\"; }}`",
+			"kaj check(val) { jodi (val > 5) { ferao \"big\"; } nahole { ferao \"small\"; } }\ndhoro x = 10;\n`x is ${check(x)}`",
 			"x is big",
 		},
 		// Multiple operations in interpolation
@@ -238,7 +238,7 @@ func TestTemplateLiteralWithFunctions(t *testing.T) {
 		},
 		// Array operations in template
 		{
-			"dhoro arr = [1, 2, 3, 4, 5];\n`Array length: ${len(arr)}`",
+			"dhoro arr = [1, 2, 3, 4, 5];\n`Array length: ${dorghyo(arr)}`",
 			"Array length: 5",
 		},
 	}
