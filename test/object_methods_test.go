@@ -196,9 +196,9 @@ func TestObjectJoraErrors(t *testing.T) {
 
 func TestObjectMishra(t *testing.T) {
 	tests := []struct {
-		input                string
-		expectedKeyCount     int
-		shouldContainValue   string
+		input              string
+		expectedKeyCount   int
+		shouldContainValue string
 	}{
 		// Basic assign (merge)
 		{
@@ -266,8 +266,8 @@ func TestObjectMishra(t *testing.T) {
 func TestObjectMishraReturnValue(t *testing.T) {
 	// mishra returns the modified target object
 	tests := []struct {
-		input           string
-		expectedType    string
+		input        string
+		expectedType string
 	}{
 		{
 			`dhoro target = {"a": 1};
@@ -331,8 +331,8 @@ func TestObjectMishraErrors(t *testing.T) {
 
 func TestObjectMethodsIntegration(t *testing.T) {
 	tests := []struct {
-		input              string
-		expectedLength     int
+		input          string
+		expectedLength int
 	}{
 		// Get values, then map them
 		{

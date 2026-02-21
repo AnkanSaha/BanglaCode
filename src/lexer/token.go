@@ -18,10 +18,10 @@ const (
 	EOF     = "EOF"
 
 	// Identifiers and literals
-	IDENT    = "IDENT"     // variable names, function names
-	NUMBER   = "NUMBER"    // 123, 45.67
-	STRING   = "STRING"    // "hello", 'world'
-	TEMPLATE = "TEMPLATE"  // `hello ${name}`, template literals
+	IDENT    = "IDENT"    // variable names, function names
+	NUMBER   = "NUMBER"   // 123, 45.67
+	STRING   = "STRING"   // "hello", 'world'
+	TEMPLATE = "TEMPLATE" // `hello ${name}`, template literals
 
 	// Operators
 	ASSIGN   = "="

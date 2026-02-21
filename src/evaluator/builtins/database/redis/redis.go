@@ -486,4 +486,3 @@ func Keys(conn *object.DBConnection, pattern string) ([]string, error) {
 
 	return client.Keys(ctx, pattern).Result()
 }
-

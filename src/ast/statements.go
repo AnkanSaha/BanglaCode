@@ -306,9 +306,9 @@ func (ss *SwitchStatement) String() string {
 
 // CaseClause represents a single case in a switch statement
 type CaseClause struct {
-	Token  lexer.Token    // the KHETRE token
-	Value  Expression     // the value to match
-	Body   *BlockStatement // code to execute
+	Token lexer.Token     // the KHETRE token
+	Value Expression      // the value to match
+	Body  *BlockStatement // code to execute
 }
 
 func (cc *CaseClause) statementNode()       {}

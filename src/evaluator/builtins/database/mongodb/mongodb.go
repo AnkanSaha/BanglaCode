@@ -476,4 +476,3 @@ func InsertMany(conn *object.DBConnection, collectionName string, docs *object.A
 		RowsAffected: int64(len(result.InsertedIDs)),
 	}, nil
 }
-
