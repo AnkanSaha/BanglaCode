@@ -11,7 +11,7 @@
     "deploy:cf": "wrangler deploy --env=\"\""
   },
   "dependencies": {
-    "@opennextjs/cloudflare": "^1.16.3",
+    "@opennextjs/cloudflare": "^1.16.5",
     "clsx": "^2.1.1",
     "framer-motion": "^12.33.0",
     "lucide-react": "^0.563.0",
