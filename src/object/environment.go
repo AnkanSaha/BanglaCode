@@ -1,11 +1,14 @@
 package object
 
+import "sync"
+
 // Environment represents a scope for variable bindings
 type Environment struct {
 	store     map[string]Object
 	constants map[string]bool // tracks which variables are constants
 	outer     *Environment    // parent scope
 	global    *Environment    // reference to global (root) environment
+	mu        sync.RWMutex
 }
 
 // NewEnvironment creates a new environment
@@ -38,60 +41,87 @@ func (e *Environment) GetGlobal() *Environment {
 
 // Get retrieves a variable from the environment
 func (e *Environment) Get(name string) (Object, bool) {
+	e.mu.RLock()
 	obj, ok := e.store[name]
-	if !ok && e.outer != nil {
-		obj, ok = e.outer.Get(name)
+	outer := e.outer
+	e.mu.RUnlock()
+	if ok {
+		return obj, true
 	}
-	return obj, ok
+	if outer != nil {
+		return outer.Get(name)
+	}
+	return nil, false
 }
 
 // Set assigns a variable in the environment
 func (e *Environment) Set(name string, val Object) Object {
+	e.mu.Lock()
 	e.store[name] = val
+	e.mu.Unlock()
 	return val
 }
 
 // SetConstant assigns a constant in the environment
 func (e *Environment) SetConstant(name string, val Object) Object {
+	e.mu.Lock()
 	e.store[name] = val
 	e.constants[name] = true
+	e.mu.Unlock()
 	return val
 }
 
 // SetGlobal assigns a variable in the global environment
 func (e *Environment) SetGlobal(name string, val Object) Object {
 	global := e.GetGlobal()
+	global.mu.Lock()
 	global.store[name] = val
+	global.mu.Unlock()
 	return val
 }
 
 // IsConstant checks if a variable is a constant
 func (e *Environment) IsConstant(name string) bool {
-	if constant, ok := e.constants[name]; ok && constant {
+	e.mu.RLock()
+	constant, ok := e.constants[name]
+	outer := e.outer
+	e.mu.RUnlock()
+	if ok && constant {
 		return true
 	}
-	if e.outer != nil {
-		return e.outer.IsConstant(name)
+	if outer != nil {
+		return outer.IsConstant(name)
 	}
 	return false
 }
 
 // Update updates a variable in the environment (searches outer scopes)
 func (e *Environment) Update(name string, val Object) Object {
+	e.mu.Lock()
 	_, ok := e.store[name]
 	if ok {
 		e.store[name] = val
+		e.mu.Unlock()
 		return val
 	}
-	if e.outer != nil {
-		return e.outer.Update(name, val)
+	outer := e.outer
+	e.mu.Unlock()
+	if outer != nil {
+		return outer.Update(name, val)
 	}
-	// If variable doesn't exist, create it in current scope
+	e.mu.Lock()
 	e.store[name] = val
+	e.mu.Unlock()
 	return val
 }
 
 // All returns all variables in the current scope (not including outer scopes)
 func (e *Environment) All() map[string]Object {
-	return e.store
+	e.mu.RLock()
+	defer e.mu.RUnlock()
+	out := make(map[string]Object, len(e.store))
+	for k, v := range e.store {
+		out[k] = v
+	}
+	return out
 }

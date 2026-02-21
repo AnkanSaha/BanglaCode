@@ -10,8 +10,13 @@ var (
 	timerMu     sync.Mutex
 	nextTimerID float64 = 1
 	timeouts            = map[int]chan struct{}{}
-	intervals           = map[int]chan struct{}{}
+	intervals           = map[int]*intervalControl{}
 )
+
+type intervalControl struct {
+	stop chan struct{}
+	done chan struct{}
+}
 
 func init() {
 	registerSetTimeout()
@@ -52,18 +57,23 @@ func registerSetInterval() {
 			ms = 1
 		}
 
-		id, stopCh := newTimerID(false)
+		id, ctrl := newIntervalID()
 		go func() {
 			ticker := time.NewTicker(time.Duration(ms) * time.Millisecond)
 			defer ticker.Stop()
+			defer close(ctrl.done)
 			for {
 				select {
 				case <-ticker.C:
+					select {
+					case <-ctrl.stop:
+						removeInterval(id)
+						return
+					default:
+					}
 					EvalFunc(cb, cbArgs)
-				case <-stopCh:
-					timerMu.Lock()
-					delete(intervals, id)
-					timerMu.Unlock()
+				case <-ctrl.stop:
+					removeInterval(id)
 					return
 				}
 			}
@@ -74,13 +84,13 @@ func registerSetInterval() {
 
 func registerClearTimeout() {
 	Builtins["clearTimeout"] = &object.Builtin{Fn: func(args ...object.Object) object.Object {
-		return clearTimer(args, true)
+		return clearTimeoutTimer(args)
 	}}
 }
 
 func registerClearInterval() {
 	Builtins["clearInterval"] = &object.Builtin{Fn: func(args ...object.Object) object.Object {
-		return clearTimer(args, false)
+		return clearIntervalTimer(args)
 	}}
 }
 
@@ -112,13 +122,25 @@ func newTimerID(timeout bool) (int, chan struct{}) {
 	stopCh := make(chan struct{}, 1)
 	if timeout {
 		timeouts[id] = stopCh
-	} else {
-		intervals[id] = stopCh
 	}
 	return id, stopCh
 }
 
-func clearTimer(args []object.Object, timeout bool) object.Object {
+func newIntervalID() (int, *intervalControl) {
+	timerMu.Lock()
+	defer timerMu.Unlock()
+
+	id := int(nextTimerID)
+	nextTimerID++
+	ctrl := &intervalControl{
+		stop: make(chan struct{}),
+		done: make(chan struct{}),
+	}
+	intervals[id] = ctrl
+	return id, ctrl
+}
+
+func clearTimeoutTimer(args []object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1", len(args))
 	}
@@ -128,24 +150,46 @@ func clearTimer(args []object.Object, timeout bool) object.Object {
 	id := int(args[0].(*object.Number).Value)
 
 	timerMu.Lock()
-	defer timerMu.Unlock()
+	ch, ok := timeouts[id]
+	if ok {
+		select {
+		case ch <- struct{}{}:
+		default:
+		}
+		delete(timeouts, id)
+	}
+	timerMu.Unlock()
+	return object.NULL
+}
 
-	if timeout {
-		if ch, ok := timeouts[id]; ok {
-			select {
-			case ch <- struct{}{}:
-			default:
-			}
-			delete(timeouts, id)
-		}
-	} else {
-		if ch, ok := intervals[id]; ok {
-			select {
-			case ch <- struct{}{}:
-			default:
-			}
-			delete(intervals, id)
-		}
+func clearIntervalTimer(args []object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	if args[0].Type() != object.NUMBER_OBJ {
+		return newError("argument must be NUMBER timer id, got %s", args[0].Type())
+	}
+	id := int(args[0].(*object.Number).Value)
+
+	timerMu.Lock()
+	ctrl, ok := intervals[id]
+	timerMu.Unlock()
+	if ok {
+		close(ctrl.stop)
+		<-ctrl.done
 	}
 	return object.NULL
+}
+
+func removeInterval(id int) {
+	timerMu.Lock()
+	delete(intervals, id)
+	timerMu.Unlock()
+}
+
+func clearTimer(args []object.Object, timeout bool) object.Object {
+	if timeout {
+		return clearTimeoutTimer(args)
+	}
+	return clearIntervalTimer(args)
 }
