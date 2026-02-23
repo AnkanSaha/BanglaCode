@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-const Version = "9.0.1"
+const Version = "9.1.0"
 
 const PROMPT = "\033[1;33m>> \033[0m"
 

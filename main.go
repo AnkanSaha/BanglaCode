@@ -6,6 +6,7 @@ import (
 	"os/user"
 	"path/filepath"
 
+	"BanglaCode/src/Update"
 	"BanglaCode/src/evaluator"
 	"BanglaCode/src/evaluator/builtins"
 	"BanglaCode/src/lexer"
@@ -27,7 +28,12 @@ func main() {
 		return
 	}
 
-	// Check for flags
+	// Check for commands and flags
+	if len(os.Args) == 2 && update.CheckUpdateCommand(os.Args[1:], "update") {
+		update.Updater()
+		return
+	}
+
 	if os.Args[1] == "--help" || os.Args[1] == "-h" {
 		printHelp()
 		return
@@ -55,6 +61,7 @@ func printHelp() {
 	fmt.Println("\033[1;33m▸ Usage:\033[0m")
 	fmt.Println("  \033[1;32mbanglacode\033[0m                  Start interactive REPL")
 	fmt.Println("  \033[1;32mbanglacode <file>\033[0m           Execute a BanglaCode file")
+	fmt.Println("  \033[1;32mbanglacode update\033[0m           Update to the latest version")
 	fmt.Println("  \033[1;32mbanglacode --help, -h\033[0m       Show this help message")
 	fmt.Println("  \033[1;32mbanglacode --version, -v\033[0m    Show version information")
 	fmt.Println("")
@@ -66,6 +73,7 @@ func printHelp() {
 	fmt.Println("  \033[0;34m$\033[0m banglacode hello.bang       \033[2m# Run hello.bang file\033[0m")
 	fmt.Println("  \033[0;34m$\033[0m banglacode app.bangla       \033[2m# Run app.bangla file\033[0m")
 	fmt.Println("  \033[0;34m$\033[0m banglacode server.bong      \033[2m# Run server.bong file\033[0m")
+	fmt.Println("  \033[0;34m$\033[0m banglacode update           \033[2m# Update to latest version\033[0m")
 	fmt.Println("")
 	fmt.Println("\033[1;36m╚══════════════════════════════════════════════════════════════════╝\033[0m")
 	fmt.Println("  📄 For more information, see \033[1;35mSYNTAX.md\033[0m")
@@ -74,10 +82,10 @@ func printHelp() {
 
 func printVersion() {
 	fmt.Println("\033[1;36m╔════════════════════════════════════════════════════════╗")
-	fmt.Println("║               BanglaCode v9.0.1                        ║")
+	fmt.Println("║               BanglaCode v9.1.0                        ║")
 	fmt.Println("║     A Programming Language in Bengali (Banglish)      ║")
 	fmt.Println("╠════════════════════════════════════════════════════════╣\033[0m")
-	fmt.Println("\033[1;36m║\033[0m  📦 \033[1mVersion:\033[0m      \033[1;32m9.0.1\033[0m                                 \033[1;36m║\033[0m")
+	fmt.Println("\033[1;36m║\033[0m  📦 \033[1mVersion:\033[0m      \033[1;32m9.1.0\033[0m                                 \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  👨‍💻 \033[1mAuthor:\033[0m       \033[1;35mAnkan Saha\033[0m                            \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  🌍 \033[1mFrom:\033[0m         \033[1;37mWest Bengal, India\033[0m                    \033[1;36m║\033[0m")
 	fmt.Println("\033[1;36m║\033[0m  🔗 \033[1mGitHub:\033[0m       \033[1;34mhttps://github.com/nexoral/BanglaCode\033[0m \033[1;36m║\033[0m")
